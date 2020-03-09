@@ -1,4 +1,8 @@
 
+# Qt project files
+tada-hdt-entity.qbs
+tada-hdt-entity.qbs.user
+
 # Generated files
 build
 bin
