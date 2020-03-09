@@ -38,14 +38,10 @@ $(OBJS_ABS): $(SOURCES_ABS) $(OUT_DIRS)
 	mv *.o build/
 
 
-bin:	 
-	mkdir -p $@
-
-build:
-	mkdir -p $@
 
 
-cov:
+
+cov:	
 	$(CC) $(CXXFLAGS) -c -fprofile-arcs -ftest-coverage -fPIC  $(TSOURCES_ABS)
 	mv *.o build/
 	$(CC) $(CXXFLAGS) -o $(COVAPP) -fprofile-arcs -ftest-coverage $(TOBJS_ABS) $(TLIBS) 
@@ -73,6 +69,12 @@ test:
 	mv *.o build/
 	$(CC) -o $(TESTAPP) $(TOBJS_ABS) $(TLIBS)
 	$(TESTAPP)
+
+bin:	 
+	mkdir -p $@
+
+build:
+	mkdir -p $@
 
 clean:
 	-rm -Rf build
