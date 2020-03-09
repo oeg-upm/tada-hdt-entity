@@ -1,0 +1,7 @@
+FROM ahmad88me/googletest:latest
+RUN mkdir -p app
+WORKDIR /app
+
+COPY scripts scripts
+
+RUN sh scripts/setup.sh
