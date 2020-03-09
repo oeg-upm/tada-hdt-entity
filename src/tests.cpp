@@ -1,6 +1,6 @@
 
 #include <gtest/gtest.h>
-#include "Entity.h"
+#include "entity.h"
 
 namespace {
 
