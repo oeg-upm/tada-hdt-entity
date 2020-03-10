@@ -8,7 +8,7 @@ NOMSOURCES = entity.cpp
 SOURCES = $(NOMSOURCES) main.cpp
 TSOURCES = $(NONSOURCES) tests.cpp
 
-LIBS = -lhdt -pthread -leasylogger
+LIBS = -lhdt -pthread -leasylogger -ltabularparser
 TLIBS = $(LIBS) -lgtest
 
 CC = g++
