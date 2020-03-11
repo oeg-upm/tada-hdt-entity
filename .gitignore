@@ -3,6 +3,7 @@
 tada-hdt-entity.qbs
 tada-hdt-entity.qbs.user
 *.autosave
+*.log
 
 # Generated files
 build

@@ -28,6 +28,7 @@ class EntityAnn {
         std::list<string>* annotate_column(std::list<std::list<string>*>* data, unsigned idx);
         std::list<string>* get_entities_of_value(string value);
         std::list<string>* get_leaf_classes(string entity_uri);
+        bool is_ancestor_of(string a, string b);
 
     private:
         EasyLogger* m_logger;

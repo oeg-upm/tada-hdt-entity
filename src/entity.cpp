@@ -51,16 +51,49 @@ if the types of en entity e are [C,A], it would return only C.
 */
 std::list<string>* EntityAnn::get_leaf_classes(string entity_uri) {
     IteratorTripleString* itt;
-    TripleString* triple;
+    TripleString* triple = nullptr;
     std::list<string>* leaves = new std::list<string>;
+    std::unordered_map<string, bool>* candidates = new std::unordered_map<string, bool>;
+    std::unordered_map<string, bool>* to_be_deleted = new std::unordered_map<string, bool>;
+    string prev_class="", curr_class="";
     itt = hdt->search(entity_uri.c_str(), rdf_type.c_str(), "");
+    m_logger->log("in function get leaf classes");
+    m_logger->log("entity uri: <"+entity_uri+">");
+    m_logger->log("rdf_type: <"+rdf_type+">");
     while(itt->hasNext()) {
         triple = itt->next();
-        leaves->push_back(triple->getSubject());
-        delete triple;
+        curr_class = triple->getObject();
+        this->add_class_to_ancestor_lookup(curr_class);
+        m_logger->log("curr class uri: <"+curr_class+">");
+        candidates->insert({curr_class,true});
+        for(auto it=candidates->cbegin();it!=candidates->cend();it++){
+            if(this->is_ancestor_of(it->first,curr_class)){
+                to_be_deleted->insert({it->first,true});
+            }
+            else if(this->is_ancestor_of(curr_class,it->first)){
+                // if curr class is not in the to_be_deleted then add it
+                if(to_be_deleted->find(curr_class)==to_be_deleted->cend()){
+                    to_be_deleted->insert({curr_class,true});
+                }
+            }
+        }
+        for(auto it=to_be_deleted->cbegin();it!=to_be_deleted->cend();it++){
+            m_logger->log("to erase: <"+it->first+">");
+            candidates->erase(it->first);
+        }
+        to_be_deleted->clear();
+    }// while loop
+
+    for(auto it=candidates->cbegin();it!=candidates->cend();it++){
+        leaves->push_back(it->first);
     }
     delete itt;
     return leaves;
+}
+
+bool EntityAnn::is_ancestor_of(string a, string b) {
+    std::unordered_map<string, bool>* a_ancestors = m_ancestor_lookup.at(a);
+    return a_ancestors->find(b)!=a_ancestors->cend();
 }
 
 // return the ancestors for the given tclass (whether it is already in the lookup or not)
@@ -87,7 +120,7 @@ std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string
             // add parent ancestors
             ancestors->insert({it->first, true});
         }
-        delete triple;
+//        delete triple;
     }
     delete itt;
     return ancestors;

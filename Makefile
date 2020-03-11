@@ -48,6 +48,8 @@ cov:
 	$(COVAPP)
 	lcov --directory . --capture --output-file coverage.info
 	lcov --remove coverage.info '/usr/*' --output-file coverage.info
+	# This is to ignore the xcode directory (will have no effect on linux)
+	lcov --remove coverage.info '/Applications/Xcode.app/*' --output-file coverage.info
 	lcov --list coverage.info
 
 
@@ -80,4 +82,4 @@ clean:
 	-rm -Rf build
 	-rm -Rf bin
 	-rm -Rf $(COVCLEANFILES)
-
+	-rm -Rf test.hdt test.hdt.index.v1-1 test.log

@@ -9,6 +9,8 @@
 
 dbr:boxer1 rdf:type dbo:Boxer  .
 dbr:boxer2 rdf:type dbo:Boxer  .
+dbr:boxer2 rdf:type dbo:Athlete  .
+dbr:boxer2 rdf:type dbo:Person .
 dbr:boxer3 rdf:type dbo:Boxer  .
 
 dbr:amaboxer4 rdf:type dbo:AmateurBoxer  .
