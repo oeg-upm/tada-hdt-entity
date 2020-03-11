@@ -7,6 +7,9 @@ tada-hdt-entity.qbs.user
 # Generated files
 build
 bin
+*.hdt
+*.hdt.index.v1-1
+
 
 # Tests/Coverage output
 *.gcda

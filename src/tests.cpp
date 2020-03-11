@@ -3,9 +3,9 @@
 #include "entity.h"
 
 
-string input_file = "sample_golf.ttl";
-string log_file = "tests.log";
-string hdt_file = "sample_golf.hdt";
+string input_file = "test.ttl";
+string log_file = "test.log";
+string hdt_file = "test.hdt";
 
 
 
@@ -48,7 +48,7 @@ namespace {
 
 
 int main(int argc, char **argv) {
-//    ttl_to_hdt(input_file);
+    ttl_to_hdt(input_file);
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
