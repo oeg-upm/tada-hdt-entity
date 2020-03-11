@@ -2,6 +2,7 @@
 # Qt project files
 tada-hdt-entity.qbs
 tada-hdt-entity.qbs.user
+*.autosave
 
 # Generated files
 build

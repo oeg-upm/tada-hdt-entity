@@ -3,8 +3,7 @@
 
 #include <list>
 #include <string>
-#include <map>
-
+#include <unordered_map>
 #include "tnode.h"
 
 using namespace std;
@@ -19,8 +18,11 @@ using namespace std;
 // Graph as adjacency list with pointer to the parent
 class Graph {
     public:
+        Graph();
+        void add_edge(TNode *from_node, TNode *to_node);
+        TNode* get_node(string uri);
     private:
-
+        std::unordered_map<string,TNode*>* m_graph;
 };
 #endif
 

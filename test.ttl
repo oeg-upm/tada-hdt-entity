@@ -1,0 +1,27 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix dbpp: <http://dbpedia.org/ontology/Person/> .
+@prefix dbr: <http://dbpedia.org/resource/> .
+@prefix dbp: <http://dbpedia.org/property/> .
+
+
+
+dbr:boxer1 rdf:type dbo:Boxer  .
+dbr:boxer2 rdf:type dbo:Boxer  .
+dbr:boxer3 rdf:type dbo:Boxer  .
+
+dbr:amaboxer4 rdf:type dbo:AmateurBoxer  .
+dbr:amaboxer5 rdf:type dbo:AmateurBoxer  .
+dbr:amaboxer6 rdf:type dbo:AmateurBoxer  .
+
+
+
+
+dbo:Boxer rdfs:subClassOf dbo:Athlete .
+dbo:AmateurBoxer rdfs:subClassOf dbo:Boxer .
+dbo:GoldPlayer rdfs:subClassOf dbo:Athlete .
+dbo:Athlete rdfs:subClassOf dbo:Person .
+dbo:Person rdfs:subClassOf dbo:Agent .
+dbo:Company rdfs:subClassOf dbo:Organisation .
+dbo:Organisation rdfs:subClassOf dbo:Agent .
