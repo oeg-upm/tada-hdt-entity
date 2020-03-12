@@ -1,12 +1,12 @@
 
 OUT_DIRS = build bin
-NOMOBJS = entity.o
+NOMOBJS = entity.o graph.o
 OBJS = $(NOMOBJS) main.o
 TOBJS = $(NOMOBJS) tests.o
 
-NOMSOURCES = entity.cpp 
+NOMSOURCES = entity.cpp graph.cpp  
 SOURCES = $(NOMSOURCES) main.cpp
-TSOURCES = $(NONSOURCES) tests.cpp
+TSOURCES = $(NOMSOURCES) tests.cpp
 
 LIBS = -lhdt -pthread -leasylogger -ltabularparser
 TLIBS = $(LIBS) -lgtest
