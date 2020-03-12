@@ -9,7 +9,7 @@ using namespace std;
 
 class TNode {
     public:
-        TNode();
+        TNode(string uri);
 
         string uri;
         double ic, lc, fc; // coverage related variables

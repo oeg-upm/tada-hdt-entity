@@ -65,8 +65,45 @@ namespace {
         classes = ea->get_leaf_classes(resource_uri);
         ASSERT_EQ(1, classes->size());
         ASSERT_STREQ(classes->front().c_str(), class_uri.c_str());
+        delete ea;
+    }
 
+    TEST(EntityTest, GetEntities){
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+        std::list<string>* entities;
+        string label = "\"boxer1\"";
+        entities = ea->get_entities_of_value(label);
+        ASSERT_EQ(entities->size(), 1);
+        delete ea;
+    }
 
+    TEST(EntityTest, IntermediateScoresSingleClass) {
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+        std::list<string>* classes;
+        string class_uri = dbo_prefix+"Boxer";
+        string resource_uri = dbr_prefix+"boxer1";
+        TNode * tnode;
+        string label = "\"boxer1\"";
+        // entity with one class
+        ea->compute_intermediate_coverage(label);
+        tnode =  ea->get_tnode(class_uri);
+        ASSERT_NE(tnode, nullptr);
+        ASSERT_EQ(1.0, tnode->tc);
+        delete ea;
+    }
+
+    TEST(EntityTest, IntermediateScoresMultiClass) {
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+        std::list<string>* classes;
+        string class_uri = dbo_prefix+"Boxer";
+        string resource_uri = dbr_prefix+"boxer1";
+        TNode * tnode;
+        string label = "\"golferboxer1\"";
+        // entity with two classes
+        ea->compute_intermediate_coverage(label);
+        tnode =  ea->get_tnode(class_uri);
+        ASSERT_NE(tnode, nullptr);
+        ASSERT_DOUBLE_EQ(0.5, tnode->tc);
         delete ea;
     }
 

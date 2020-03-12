@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_map>
 #include "tnode.h"
+#include <easy_logger/easy_logger.h>
+
 
 using namespace std;
 
@@ -18,11 +20,16 @@ using namespace std;
 // Graph as adjacency list with pointer to the parent
 class Graph {
     public:
-        Graph();
-        void add_edge(TNode *from_node, TNode *to_node);
+        Graph(EasyLogger*);
+        bool add_edge(TNode *from_node, TNode *to_node);
+        bool add_edge(string from_uri, string to_uri);
         TNode* get_node(string uri);
+        bool add_node(string uri);
+        bool add_node(TNode* tnode);
+        void print_nodes();
     private:
         std::unordered_map<string,TNode*>* m_graph;
+        EasyLogger* m_logger;
 };
 #endif
 

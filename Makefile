@@ -1,10 +1,10 @@
 
 OUT_DIRS = build bin
-NOMOBJS = entity.o graph.o
-OBJS = $(NOMOBJS) main.o
+NOMOBJS = entity.o graph.o tnode.o
+OBJS = $(NOMOBJS) main.o 
 TOBJS = $(NOMOBJS) tests.o
 
-NOMSOURCES = entity.cpp graph.cpp  
+NOMSOURCES = entity.cpp graph.cpp tnode.cpp  
 SOURCES = $(NOMSOURCES) main.cpp
 TSOURCES = $(NOMSOURCES) tests.cpp
 

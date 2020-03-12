@@ -7,11 +7,28 @@
 
 
 
+dbr:boxer1 rdfs:label "boxer1" .
+dbr:boxer2 rdfs:label "boxer2" .
+dbr:boxer3 rdfs:label "boxer3" .
+
+dbr:golferboxer1 rdfs:label "golferboxer1" .
+
+dbr:amaboxer4 rdfs:label "amaboxer4"  .
+dbr:amaboxer5 rdfs:label "amaboxer5"  .
+dbr:amaboxer6 rdfs:label "amaboxer6"  .
+
+
+
+
+
 dbr:boxer1 rdf:type dbo:Boxer  .
 dbr:boxer2 rdf:type dbo:Boxer  .
 dbr:boxer2 rdf:type dbo:Athlete  .
 dbr:boxer2 rdf:type dbo:Person .
 dbr:boxer3 rdf:type dbo:Boxer  .
+
+dbr:golferboxer1 rdf:type dbo:Boxer .
+dbr:golferboxer1 rdf:type dbo:GolfPlayer .
 
 dbr:amaboxer4 rdf:type dbo:AmateurBoxer  .
 dbr:amaboxer5 rdf:type dbo:AmateurBoxer  .
@@ -22,7 +39,7 @@ dbr:amaboxer6 rdf:type dbo:AmateurBoxer  .
 
 dbo:Boxer rdfs:subClassOf dbo:Athlete .
 dbo:AmateurBoxer rdfs:subClassOf dbo:Boxer .
-dbo:GoldPlayer rdfs:subClassOf dbo:Athlete .
+dbo:GolfPlayer rdfs:subClassOf dbo:Athlete .
 dbo:Athlete rdfs:subClassOf dbo:Person .
 dbo:Person rdfs:subClassOf dbo:Agent .
 dbo:Company rdfs:subClassOf dbo:Organisation .
