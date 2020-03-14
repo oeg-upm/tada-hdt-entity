@@ -175,6 +175,7 @@ void EntityAnn::compute_intermediate_coverage(string cell_value) {
             if(tnode == nullptr) {
                 cout<< "Error: in compute_intermediate_coverage, tnode <"+tnode->uri+"> is null\n\n";
             }
+//            m_logger->log("updateing tc for: "+);
             tnode->tc += 1.0 / (Q_size * Z_size);
             //            m_logger->log("compute_intermediate_coverage> tnode: <"+tnode->uri+">"+" tc: "+to_string(tnode->tc));
             //m_graph->add_edge(*it2,);
@@ -222,6 +223,56 @@ TNode* EntityAnn::update_graph(string class_uri) {
     }
     return tnode;
 }
+
+double EntityAnn::compute_Lc_for_node(TNode* tnode){
+    double d;
+    m_logger->log("compute_Lc_for_node> "+tnode->uri);
+    if(tnode->lc==0.0){
+        m_logger->log("compute_Lc_for_node> in if "+tnode->uri);
+        for(auto it=tnode->children->cbegin();it!=tnode->children->cend();it++){
+            d = this->compute_Lc_for_node(it->second);
+            tnode->lc += d;
+            m_logger->log("compute_Lc_for_node> "+tnode->uri+ " append "+it->second->uri+" with value "+to_string(d));
+
+//            tnode->lc = tnode->lc + this->compute_Lc_for_node(it->second);
+        }
+        // if the tnode is a leave node
+        if(tnode->lc == 0.0){
+            m_logger->log("compute_Lc_for_node> is a child "+tnode->uri);
+            tnode->lc = tnode->ic;
+        }
+    }
+    return tnode->lc;
+}
+
+void EntityAnn::compute_Lc_for_all(){
+    std::list<TNode*> *roots = m_graph->get_candidate_roots();
+    for(auto it=roots->cbegin();it!=roots->cend();it++){
+        this->compute_Lc_for_node(*it);
+    }
+//    std::list<TNode*> *leaves = m_graph->get_leaves();
+//    for(auto it=leaves->cbegin();it!=leaves->cend();it++){
+//        this->compute_Lc_for_node(*it);
+//    }
+}
+
+void EntityAnn::compute_Ic_for_all(){
+    std::list<TNode*> *roots = m_graph->get_candidate_roots();
+    for(auto it=roots->cbegin();it!=roots->cend();it++){
+        this->compute_Ic_for_node(*it);
+    }
+}
+
+
+void EntityAnn::compute_Ic_for_node(TNode* tnode){
+    if(tnode->ic==0.0){
+        tnode->ic = tnode->tc;
+        for(auto it=tnode->children->cbegin();it!=tnode->children->cend();it++){
+            this->compute_Ic_for_node(it->second);
+        }
+    }
+}
+
 
 
 

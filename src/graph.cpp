@@ -89,6 +89,7 @@ void Graph::print_nodes(){
         for(auto it2=it->second->children->cbegin();it2!=it->second->children->cend();it2++){
             cout<<it2->second->uri<< " ";
         }
+        cout<<*(it->second);
     }
     cout << "\n=======END=======\n";
 }

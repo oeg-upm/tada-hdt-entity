@@ -28,10 +28,14 @@ class EntityAnn {
         bool is_ancestor_of(string a, string b);
         TNode* get_tnode(string uri);
         void compute_intermediate_coverage(string cell_value);
+        double compute_Lc_for_node(TNode*);
+        void compute_Lc_for_all();
 //        void compute_Ic_for_all();
         Graph* get_graph();
         TNode* update_graph(string class_uri);
         void update_graph(std::list<string>* class_uris);
+        void compute_Ic_for_all();
+        void compute_Ic_for_node(TNode* tnode);
 
     private:
         EasyLogger* m_logger;

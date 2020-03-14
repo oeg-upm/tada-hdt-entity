@@ -18,4 +18,11 @@ TNode::TNode(string auri){
 }
 
 
-
+std::ostream& operator<<(std::ostream& out, const TNode& tnode)
+{
+//   cout << "In the << operator"<<endl;
+   return out << tnode.uri << " { ic:"<<tnode.ic<<", Lc:"<<tnode.lc<<", fc:"<<tnode.fc<< ", tc: "<< tnode.tc <<" }" ;
+    //return out;
+//    out << "abc";
+//    return out;
+}

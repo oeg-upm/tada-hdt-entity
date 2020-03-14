@@ -19,7 +19,7 @@ class TNode {
         double is, ls, fs; // specificity related variables
         std::unordered_map<string,TNode*> *parents; // sometimes there are multiple parents
         std::unordered_map<string,TNode*> *children; // childs
-
+//        std::ostream& operator<<(std::ostream& out, const TNode& tnode);
 //        TNode& operator=(const TNode& other){
 //            if (this != &other) {
 //                this->uri = other.uri;
@@ -35,9 +35,16 @@ class TNode {
 //            }
 //            return *this;
 //        }
-    private:
+   // private:
 
 };
+std::ostream& operator<<(std::ostream& out, const TNode& tnode);
+//std::ostream& operator<<(std::ostream& os, const T& obj)
+//std::ostream& operator<<(std::ostream& out, const TNode& tnode)
+//{
+////   return out << tnode.uri << " { ic:"<<tnode.is<<", Lc:"<<tnode.lc<<"fc:"<<tnode.fc<<" }" ;
+//    return out;
+//}
 
 //inline bool operator==(const TNode& lhs, const TNode& rhs){
 //    return lhs.uri == rhs.uri;
