@@ -98,6 +98,8 @@ std::list<TNode*>* Graph::get_candidate_roots(){
     std::list<TNode*>* roots = new std::list<TNode*>;
     for(auto it=m_graph->cbegin();it!=m_graph->cend();it++){
         if(it->second->parents->size() == 0){
+//            cout<< "root: "<<it->first<<endl;
+            m_logger->log("candidate root: "+it->first);
             roots->push_back(it->second);
         }
     }
