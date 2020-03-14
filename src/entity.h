@@ -17,11 +17,6 @@ const string rdf_type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 const string rdfs_subclassof = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
 const string rdfs_label = "http://www.w3.org/2000/01/rdf-schema#label";
 
-//// This is used to store and permits a quick
-//typedef struct AnsNode{
-//    string uri;
-//    struct AnsNode* next;
-//} AnsNode;
 
 class EntityAnn {
 
@@ -33,6 +28,10 @@ class EntityAnn {
         bool is_ancestor_of(string a, string b);
         TNode* get_tnode(string uri);
         void compute_intermediate_coverage(string cell_value);
+//        void compute_Ic_for_all();
+        Graph* get_graph();
+        TNode* update_graph(string class_uri);
+        void update_graph(std::list<string>* class_uris);
 
     private:
         EasyLogger* m_logger;

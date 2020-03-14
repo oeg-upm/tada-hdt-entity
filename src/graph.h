@@ -26,10 +26,14 @@ class Graph {
         TNode* get_node(string uri);
         bool add_node(string uri);
         bool add_node(TNode* tnode);
+        std::list<TNode*>* get_candidate_roots();
+        std::list<TNode*>* get_leaves();
         void print_nodes();
     private:
         std::unordered_map<string,TNode*>* m_graph;
         EasyLogger* m_logger;
+        TNode* m_root;
+
 };
 #endif
 

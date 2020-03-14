@@ -19,13 +19,9 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
         auto cell_ptr = (*it)->cbegin();
         std::advance(cell_ptr, idx);
         this->compute_intermediate_coverage(*cell_ptr);
-        //cell_value = *cell_ptr;
-        //this->get_entities_of_value(*cell_ptr);
     }
     return NULL;
 }
-
-
 
 
 
@@ -86,7 +82,6 @@ std::list<string>* EntityAnn::get_leaf_classes(string entity_uri) {
                 if(to_be_deleted->find(curr_class)==to_be_deleted->cend()) {
                     m_logger->log("case2: <"+curr_class+"> is ancestor of <"+it->first+">");
                     to_be_deleted->insert({curr_class, true});
-
                 }
             }
         }
@@ -119,19 +114,18 @@ std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string
     std::unordered_map<string, bool>* ancestors;
     // the tclass is already added to the lookup table
     if(m_ancestor_lookup.find(tclass)!=m_ancestor_lookup.cend()) {
-//        m_logger->log("add_class_to_ancestor_lookup> the class already exists: <"+tclass+">");
+        //        m_logger->log("add_class_to_ancestor_lookup> the class already exists: <"+tclass+">");
         return m_ancestor_lookup.at(tclass);
     }
-//    m_logger->log("add_class_to_ancestor_lookup> the class is being added to the lookup: <"+tclass+">");
+    //    m_logger->log("add_class_to_ancestor_lookup> the class is being added to the lookup: <"+tclass+">");
     ancestors = new std::unordered_map<string, bool>;
     m_ancestor_lookup.insert({tclass, ancestors});
-//    itt = hdt->search("", rdfs_subclassof.c_str(), tclass.c_str());
-    itt = hdt->search(tclass.c_str(),rdfs_subclassof.c_str(),"");
-
+    //    itt = hdt->search("", rdfs_subclassof.c_str(), tclass.c_str());
+    itt = hdt->search(tclass.c_str(), rdfs_subclassof.c_str(), "");
     while(itt->hasNext()) {
         triple = itt->next();
         parent = triple->getObject();
-//        parent = triple->getSubject();
+        //        parent = triple->getSubject();
         ancestors->insert({parent, true});
         pancestors = this->add_class_to_ancestor_lookup(parent);
         // for each parent
@@ -159,26 +153,30 @@ void EntityAnn::compute_intermediate_coverage(string cell_value) {
     m_logger->log("compute_intermediate_coverage> number of entities: "+to_string(entities->size()));
     for(auto it=entities->cbegin(); it!=entities->cend(); it++) {
         classes = this->get_leaf_classes(*it); // Q(e): *it = e
+        this->update_graph(classes);
         Q_size = classes->size();
         m_logger->log("compute_intermediate_coverage> got the QSIZE ");
-        for(auto it2=classes->cbegin();it2!=classes->cend();it2++){
+        for(auto it2=classes->cbegin(); it2!=classes->cend(); it2++) {
             // add the class to the lookup if not added yet
             this->add_class_to_ancestor_lookup(*it2);
             // add edges
-            m_logger->log("compute_intermediate_coverage> add edges");
-            for(auto it3=m_ancestor_lookup.at(*it2)->cbegin();it3!=m_ancestor_lookup.at(*it2)->cend();it3++){
-                m_logger->log("compute_intermediate_coverage> add edge: "+(*it2)+" ---- "+it3->first);
-                m_graph->add_edge(*it2,it3->first);
-                m_logger->log("compute_intermediate_coverage> edge is added: "+(*it2)+" ---- "+it3->first);
-            }
-//            m_logger->log("compute_intermediate_coverage> to get the node  ");
-//            m_logger->log("compute_intermediate_coverage> get node: "+(*it2));
+            //            m_logger->log("compute_intermediate_coverage> add edges");
+            //            for(auto it3=m_ancestor_lookup.at(*it2)->cbegin();it3!=m_ancestor_lookup.at(*it2)->cend();it3++){
+            //                m_logger->log("compute_intermediate_coverage> add edge: "+it3->first+" ---- "+(*it2));
+            //                m_graph->add_edge(it3->first,*it2);
+            //                m_logger->log("compute_intermediate_coverage> edge is added: "+it3->first+" ---- "+(*it2));
+            ////                m_logger->log("compute_intermediate_coverage> add edge: "+(*it2)+" ---- "+it3->first);
+            ////                m_graph->add_edge(*it2,it3->first);
+            ////                m_logger->log("compute_intermediate_coverage> edge is added: "+(*it2)+" ---- "+it3->first);
+            //            }
+            //            m_logger->log("compute_intermediate_coverage> to get the node  ");
+            //            m_logger->log("compute_intermediate_coverage> get node: "+(*it2));
             tnode = m_graph->get_node(*it2);
-            if(tnode == nullptr){
+            if(tnode == nullptr) {
                 cout<< "Error: in compute_intermediate_coverage, tnode <"+tnode->uri+"> is null\n\n";
             }
             tnode->tc += 1.0 / (Q_size * Z_size);
-//            m_logger->log("compute_intermediate_coverage> tnode: <"+tnode->uri+">"+" tc: "+to_string(tnode->tc));
+            //            m_logger->log("compute_intermediate_coverage> tnode: <"+tnode->uri+">"+" tc: "+to_string(tnode->tc));
             //m_graph->add_edge(*it2,);
             //tnode = m_ancestor_lookup.at(*it2);
         }
@@ -186,9 +184,48 @@ void EntityAnn::compute_intermediate_coverage(string cell_value) {
 }
 
 
-TNode* EntityAnn::get_tnode(string uri){
-//    m_graph->print_nodes();
+TNode* EntityAnn::get_tnode(string uri) {
+    //    m_graph->print_nodes();
     return m_graph->get_node(uri);
 }
+
+
+Graph* EntityAnn::get_graph() {
+    return m_graph;
+}
+
+void EntityAnn::update_graph(std::list<string>* classes) {
+    for(auto it=classes->cbegin(); it!=classes->cend(); it++) {
+        this->update_graph(*it);
+    }
+}
+
+TNode* EntityAnn::update_graph(string class_uri) {
+    IteratorTripleString* itt;
+    TripleString* triple = nullptr;
+    string parent;
+    TNode* pnode;
+    TNode* tnode = m_graph->get_node(class_uri);
+    if(tnode==nullptr) {
+        m_logger->log("update_graph> add class: "+class_uri);
+        tnode = new TNode(class_uri);
+        itt = hdt->search(class_uri.c_str(), rdfs_subclassof.c_str(), "");
+        while(itt->hasNext()) {
+            triple = itt->next();
+            parent = triple->getObject();
+            m_logger->log("update_graph> parent: "+parent);
+            pnode = this->update_graph(parent);
+            m_logger->log("update_graph> adding a link "+parent+" -------- "+class_uri);
+            m_graph->add_edge(pnode,tnode);
+        }
+        delete itt;
+    }
+    return tnode;
+}
+
+
+
+
+
 
 

@@ -8,7 +8,9 @@
 Graph::Graph(EasyLogger* m) {
     m_graph = new std::unordered_map<string, TNode*>;
     m_logger = m;
+    m_root = nullptr;
 }
+
 
 bool Graph::add_edge(TNode* from_node, TNode* to_node) {
 //    // add nodes if they do not exists
@@ -36,6 +38,7 @@ bool Graph::add_edge(TNode* from_node, TNode* to_node) {
     return added;
 }
 
+
 bool Graph::add_edge(string from_uri, string to_uri){
     m_logger->log("add uri: "+from_uri);
     this->add_node(from_uri);
@@ -45,6 +48,7 @@ bool Graph::add_edge(string from_uri, string to_uri){
     TNode* to_node = m_graph->at(to_uri);
     return this->add_edge(from_node, to_node);
 }
+
 
 bool Graph::add_node(string uri){
     TNode * tnode;
@@ -56,6 +60,7 @@ bool Graph::add_node(string uri){
     }
     return false;
 }
+
 
 bool Graph::add_node(TNode* tnode){
     // if this is a new uri
@@ -76,10 +81,38 @@ TNode* Graph::get_node(string uri) {
     return nullptr;
 }
 
+
 void Graph::print_nodes(){
     cout<< "printing nodes: "<<endl;
     for(auto it=m_graph->cbegin();it!=m_graph->cend();it++){
-        cout<<it->first<<endl;
+        cout<<"\n"<<it->first<< ": ";
+        for(auto it2=it->second->children->cbegin();it2!=it->second->children->cend();it2++){
+            cout<<it2->second->uri<< " ";
+        }
     }
-    cout << "=======END=======\n";
+    cout << "\n=======END=======\n";
 }
+
+
+std::list<TNode*>* Graph::get_candidate_roots(){
+    std::list<TNode*>* roots = new std::list<TNode*>;
+    for(auto it=m_graph->cbegin();it!=m_graph->cend();it++){
+        if(it->second->parents->size() == 0){
+            roots->push_back(it->second);
+        }
+    }
+    return roots;
+}
+
+
+std::list<TNode*>* Graph::get_leaves(){
+    std::list<TNode*>* leaves = new std::list<TNode*>;
+    for(auto it=m_graph->cbegin();it!=m_graph->cend();it++){
+        if(it->second->children->size() == 0){
+            leaves->push_back(it->second);
+        }
+    }
+    return leaves;
+}
+
+
