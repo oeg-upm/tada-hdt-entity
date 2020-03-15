@@ -219,6 +219,37 @@ namespace {
         delete ea;
     }
 
+    TEST(EntityTest, ClassEntityCounts) {
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+        std::list<string>* classes;
+        string parent_uri = dbo_prefix+"Athlete";
+        string grand_uri = dbo_prefix+"Person";
+        string class_uri = dbo_prefix+"Boxer";
+        string resource_uri = dbr_prefix+"golferboxer1";
+        TNode* tnode, *boxer_tnode, *amature_tnode,*agent_tnode,*person_tnode;
+        string label = "\"golferboxer1\"";
+        label = "\"amaboxer4\"";
+        ea->compute_intermediate_coverage(label);
+        ea->compute_Ic_for_all();
+        ea->compute_Lc_for_all();
+        ea->get_graph()->print_nodes();
+        ea->get_graph()->pick_root();
+        ASSERT_STREQ((dbo_prefix+"Agent").c_str(),ea->get_graph()->get_root()->uri.c_str());
+        ea->compute_classes_entities_counts();
+        ea->compute_Is_for_all();
+        ea->compute_Ls_for_all();
+        ea->get_graph()->print_nodes();
+        boxer_tnode = ea->get_graph()->get_node(dbo_prefix+"Boxer");
+        amature_tnode = ea->get_graph()->get_node(dbo_prefix+"AmateurBoxer");
+        agent_tnode = ea->get_graph()->get_node(dbo_prefix+"Agent");
+        person_tnode = ea->get_graph()->get_node(dbo_prefix+"Person");
+        ASSERT_LT(boxer_tnode->ls, person_tnode->ls);
+        ASSERT_LT(boxer_tnode->ls, agent_tnode->ls);
+        ASSERT_GT(boxer_tnode->is, amature_tnode->is);
+        ASSERT_GT(boxer_tnode->ls, amature_tnode->ls);
+        delete ea;
+    }
+
 }//namespace
 
 

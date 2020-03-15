@@ -20,6 +20,10 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
         std::advance(cell_ptr, idx);
         this->compute_intermediate_coverage(*cell_ptr);
     }
+    this->compute_Ic_for_all();
+    this->compute_Lc_for_all();
+    this->m_graph->pick_root();
+    compute_classes_entities_counts();
     return NULL;
 }
 
@@ -175,7 +179,7 @@ void EntityAnn::compute_intermediate_coverage(string cell_value) {
             if(tnode == nullptr) {
                 cout<< "Error: in compute_intermediate_coverage, tnode <"+tnode->uri+"> is null\n\n";
             }
-//            m_logger->log("updateing tc for: "+);
+            //            m_logger->log("updateing tc for: "+);
             tnode->tc += 1.0 / (Q_size * Z_size);
             //            m_logger->log("compute_intermediate_coverage> tnode: <"+tnode->uri+">"+" tc: "+to_string(tnode->tc));
             //m_graph->add_edge(*it2,);
@@ -217,27 +221,26 @@ TNode* EntityAnn::update_graph(string class_uri) {
             m_logger->log("update_graph> parent: "+parent);
             pnode = this->update_graph(parent);
             m_logger->log("update_graph> adding a link "+parent+" -------- "+class_uri);
-            m_graph->add_edge(pnode,tnode);
+            m_graph->add_edge(pnode, tnode);
         }
         delete itt;
     }
     return tnode;
 }
 
-double EntityAnn::compute_Lc_for_node(TNode* tnode){
+double EntityAnn::compute_Lc_for_node(TNode* tnode) {
     double d;
     m_logger->log("compute_Lc_for_node> "+tnode->uri);
-    if(tnode->lc==0.0){
+    if(tnode->lc==0.0) {
         m_logger->log("compute_Lc_for_node> in if "+tnode->uri);
-        for(auto it=tnode->children->cbegin();it!=tnode->children->cend();it++){
+        for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
             d = this->compute_Lc_for_node(it->second);
             tnode->lc += d;
             m_logger->log("compute_Lc_for_node> "+tnode->uri+ " append "+it->second->uri+" with value "+to_string(d));
-
-//            tnode->lc = tnode->lc + this->compute_Lc_for_node(it->second);
+            //            tnode->lc = tnode->lc + this->compute_Lc_for_node(it->second);
         }
         // if the tnode is a leave node
-        if(tnode->lc == 0.0){
+        if(tnode->lc == 0.0) {
             m_logger->log("compute_Lc_for_node> is a child "+tnode->uri);
             tnode->lc = tnode->ic;
         }
@@ -245,29 +248,29 @@ double EntityAnn::compute_Lc_for_node(TNode* tnode){
     return tnode->lc;
 }
 
-void EntityAnn::compute_Lc_for_all(){
-    std::list<TNode*> *roots = m_graph->get_candidate_roots();
-    for(auto it=roots->cbegin();it!=roots->cend();it++){
+void EntityAnn::compute_Lc_for_all() {
+    std::list<TNode*>* roots = m_graph->get_candidate_roots();
+    for(auto it=roots->cbegin(); it!=roots->cend(); it++) {
         this->compute_Lc_for_node(*it);
     }
-//    std::list<TNode*> *leaves = m_graph->get_leaves();
-//    for(auto it=leaves->cbegin();it!=leaves->cend();it++){
-//        this->compute_Lc_for_node(*it);
-//    }
+    //    std::list<TNode*> *leaves = m_graph->get_leaves();
+    //    for(auto it=leaves->cbegin();it!=leaves->cend();it++){
+    //        this->compute_Lc_for_node(*it);
+    //    }
 }
 
-void EntityAnn::compute_Ic_for_all(){
-    std::list<TNode*> *roots = m_graph->get_candidate_roots();
-    for(auto it=roots->cbegin();it!=roots->cend();it++){
+void EntityAnn::compute_Ic_for_all() {
+    std::list<TNode*>* roots = m_graph->get_candidate_roots();
+    for(auto it=roots->cbegin(); it!=roots->cend(); it++) {
         this->compute_Ic_for_node(*it);
     }
 }
 
 
-void EntityAnn::compute_Ic_for_node(TNode* tnode){
-    if(tnode->ic==0.0){
+void EntityAnn::compute_Ic_for_node(TNode* tnode) {
+    if(tnode->ic==0.0) {
         tnode->ic = tnode->tc;
-        for(auto it=tnode->children->cbegin();it!=tnode->children->cend();it++){
+        for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
             this->compute_Ic_for_node(it->second);
         }
     }
@@ -275,6 +278,90 @@ void EntityAnn::compute_Ic_for_node(TNode* tnode){
 
 
 
+
+void EntityAnn::compute_classes_entities_counts() {
+    IteratorTripleString* itt;
+    unsigned long num_of_entities;
+    for(auto it=m_graph->m_graph->cbegin(); it!=m_graph->m_graph->cend(); it++) {
+        itt = hdt->search("", rdf_type.c_str(), it->first.c_str());
+        num_of_entities = static_cast<unsigned long>(itt->estimatedNumResults());
+        m_logger->log("entities of "+it->first+" is: "+to_string(num_of_entities));
+        m_classes_entities_count.insert({it->first, num_of_entities});
+        delete itt;
+    }
+    propagate_counts(this->m_graph->get_root());
+}
+
+// include the counts of the childs because HDT does not perform reasoning
+unsigned long EntityAnn::propagate_counts(TNode* tnode) {
+    unsigned long count=m_classes_entities_count.at(tnode->uri);
+    for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
+        count += this->propagate_counts(it->second);
+    }
+    m_classes_entities_count.at(tnode->uri) = count;
+    m_logger->log("propagate_counts> "+tnode->uri+" #"+to_string(count));
+    return count;
+}
+
+
+void EntityAnn::compute_Is_for_all() {
+    //    std::list<TNode*>* roots = m_graph->get_candidate_roots();
+    //    for(auto it=roots->cbegin(); it!=roots->cend(); it++) {
+    //        this->compute_Is_for_node(*it);
+    //    }
+    TNode* r = m_graph->get_root();
+    r->is = 1;
+    this->compute_Is_for_node(r);
+}
+
+
+void EntityAnn::compute_Is_for_node(TNode* tnode) {
+    TNode* ch = nullptr;
+    double ch_count;
+    unsigned long p_count = m_classes_entities_count.at(tnode->uri);
+    for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
+        ch = it->second;
+        ch_count = static_cast<double>(m_classes_entities_count.at(ch->uri));
+        ch->is = ch_count / p_count;
+        m_logger->log("Is for node: "+tnode->uri+", "+to_string(ch_count)+" / "+to_string(p_count)+" = "+to_string(ch->is));
+        this->compute_Is_for_node(ch);
+    }
+}
+
+
+void EntityAnn::compute_Ls_for_all() {
+    std::list<TNode*>* leaves = m_graph->get_leaves();
+    for(auto it=leaves->cbegin(); it!=leaves->cend(); it++) {
+        this->compute_Ls_for_node(*it);
+    }
+}
+
+double EntityAnn::compute_Ls_for_node(TNode* tnode) {
+    double ls = tnode->ls;
+    double ls_2, ls_max;
+    TNode* p;
+    if(ls == 0.0) {
+        if(tnode->parents->size() == 0) { // root
+            tnode->ls = 1;
+            m_logger->log("Ls> root is: "+tnode->uri);
+        }
+        else {
+            p = tnode->parents->cbegin()->second;
+            ls_max = this->compute_Ls_for_node(p);
+            for(auto it=tnode->parents->cbegin(); it!=tnode->parents->cend(); it++) {
+                ls_2 = this->compute_Ls_for_node(it->second);
+                if(ls_2>ls_max) {
+                    p = it->second;
+                    ls_max = ls_2;
+                }
+            }
+            ls = tnode->is * p->ls;
+            tnode->ls = ls;
+            m_logger->log("Ls> is: "+to_string(tnode->is)+" parent Ls: "+to_string(p->ls)+" parent: "+p->uri);
+        }
+    }
+    return ls;
+}
 
 
 

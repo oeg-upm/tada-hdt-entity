@@ -28,9 +28,12 @@ class Graph {
         bool add_node(TNode* tnode);
         std::list<TNode*>* get_candidate_roots();
         std::list<TNode*>* get_leaves();
+        void pick_root();
         void print_nodes();
-    private:
+        TNode* get_root();
+
         std::unordered_map<string,TNode*>* m_graph;
+    private:
         EasyLogger* m_logger;
         TNode* m_root;
 

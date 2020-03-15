@@ -118,4 +118,21 @@ std::list<TNode*>* Graph::get_leaves(){
     return leaves;
 }
 
+void Graph::pick_root(){
+    std::list<TNode*> * roots = this->get_candidate_roots();
+    TNode* tnode = roots->front();
+    for(auto it=roots->cbegin();it!=roots->cend();it++){
+        if((*it)->lc > tnode->lc){
+            tnode = *it;
+        }
+    }
+    m_root = tnode;
+    m_logger->log("The root is: "+m_root->uri);
+}
+
+TNode* Graph::get_root(){
+    return m_root;
+}
+
+
 
