@@ -85,7 +85,8 @@ TNode* Graph::get_node(string uri) {
 void Graph::print_nodes(){
     cout<< "printing nodes: "<<endl;
     for(auto it=m_graph->cbegin();it!=m_graph->cend();it++){
-        cout<<"\n"<<it->first<< ": ";
+        //cout<<"\n"<<it->first<< ": ";
+        cout<< "\n";
         for(auto it2=it->second->children->cbegin();it2!=it->second->children->cend();it2++){
             cout<<it2->second->uri<< " ";
         }

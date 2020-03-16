@@ -13,21 +13,94 @@ EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir) {
 }
 
 
+EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir, double alpha) {
+    m_alpha = alpha;
+    EntityAnn( hdt_file_dir,  log_file_dir);
+}
+
+
+std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* data, unsigned idx, double alpha) {
+    m_alpha = alpha;
+    return this->annotate_column(data, idx);
+}
+
+
 std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* data, unsigned idx) {
+    unsigned long m=0;
     //string cell_value;
-    for(auto it=data->cbegin(); it!=data->cend(); it++) {
-        auto cell_ptr = (*it)->cbegin();
-        std::advance(cell_ptr, idx);
-        this->compute_intermediate_coverage(*cell_ptr);
+
+
+    std::list<std::list<string>*>::iterator ito = data->begin();
+
+
+    std::advance(ito, idx);
+
+    (*ito)->cbegin();
+//    for(auto it =(*ito)->cbegin(); it!=(*ito)->cend();it++ ){
+//        if(it==(*ito)->cbegin()){
+//            continue;
+//        }
+//        cout<<*it << " | ";
+//    }
+
+//    return nullptr;
+
+////    for(auto it=col_ptr->cbegin(); it!=col_ptr->cend(); it++) {
+//    for(auto it=data->cbegin(); it!=data->cend(); it++) {
+//        for(auto it2 = (*it)->cbegin();it2!=(*it)->cend();it2++){
+//            cout << (*it2)<< "| ";
+//        }
+//        cout << " ***\n";
+////        cout << (*it)->front() << " | ";
+////        cout<<"empty";
+//    }
+//    return nullptr;
+
+
+
+
+//    for(auto it=data->cbegin(); it!=data->cend(); it++) {
+//        auto cell_ptr = (*it)->cbegin();
+
+////        auto cell_ptr = (*it)->cbegin();
+//        m_logger->log("cell: "+*cell_ptr);
+//        std::advance(cell_ptr, idx);
+//        m_logger->log("advanced cell: "+*cell_ptr);
+//        if(this->compute_intermediate_coverage(*cell_ptr)) {
+//            m++;
+//        }
+//    }
+
+    string l;
+
+    for(auto it =(*ito)->cbegin(); it!=(*ito)->cend();it++ ){
+        if(it==(*ito)->cbegin()){
+            continue;
+        }
+        m_logger->log("cell value: "+(*it));
+        l = *it;
+        // add double quotes which are needed for hdt
+        if(l[0] != '\"'){
+            l = "\""+l+"\"";
+        }
+        if(this->compute_intermediate_coverage(l)) {
+            m++;
+        }
+        //cout<<*it << " | ";
     }
+
+
+
     this->compute_Ic_for_all();
     this->compute_Lc_for_all();
     this->m_graph->pick_root();
-    compute_classes_entities_counts();
-    compute_Is_for_all();
-    compute_Ls_for_all();
-
-    return NULL;
+    this->compute_classes_entities_counts();
+    this->compute_Is_for_all();
+    this->compute_Ls_for_all();
+    this->compute_fc(m);
+    this->compute_fs();
+    this->compute_f();
+    return this->get_candidates();
 }
 
 
@@ -151,7 +224,7 @@ std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string
 //}
 
 // it can be sped up more
-void EntityAnn::compute_intermediate_coverage(string cell_value) {
+bool EntityAnn::compute_intermediate_coverage(string cell_value) {
     std::list<string>* classes;
     std::list<string>* entities = this->get_entities_of_value(cell_value); // Z(v):
     size_t Q_size, Z_size;
@@ -166,29 +239,14 @@ void EntityAnn::compute_intermediate_coverage(string cell_value) {
         for(auto it2=classes->cbegin(); it2!=classes->cend(); it2++) {
             // add the class to the lookup if not added yet
             this->add_class_to_ancestor_lookup(*it2);
-            // add edges
-            //            m_logger->log("compute_intermediate_coverage> add edges");
-            //            for(auto it3=m_ancestor_lookup.at(*it2)->cbegin();it3!=m_ancestor_lookup.at(*it2)->cend();it3++){
-            //                m_logger->log("compute_intermediate_coverage> add edge: "+it3->first+" ---- "+(*it2));
-            //                m_graph->add_edge(it3->first,*it2);
-            //                m_logger->log("compute_intermediate_coverage> edge is added: "+it3->first+" ---- "+(*it2));
-            ////                m_logger->log("compute_intermediate_coverage> add edge: "+(*it2)+" ---- "+it3->first);
-            ////                m_graph->add_edge(*it2,it3->first);
-            ////                m_logger->log("compute_intermediate_coverage> edge is added: "+(*it2)+" ---- "+it3->first);
-            //            }
-            //            m_logger->log("compute_intermediate_coverage> to get the node  ");
-            //            m_logger->log("compute_intermediate_coverage> get node: "+(*it2));
             tnode = m_graph->get_node(*it2);
             if(tnode == nullptr) {
                 cout<< "Error: in compute_intermediate_coverage, tnode <"+tnode->uri+"> is null\n\n";
             }
-            //            m_logger->log("updateing tc for: "+);
             tnode->tc += 1.0 / (Q_size * Z_size);
-            //            m_logger->log("compute_intermediate_coverage> tnode: <"+tnode->uri+">"+" tc: "+to_string(tnode->tc));
-            //m_graph->add_edge(*it2,);
-            //tnode = m_ancestor_lookup.at(*it2);
         }
     }
+    return entities->size()>0;
 }
 
 
@@ -289,15 +347,15 @@ void EntityAnn::compute_classes_entities_counts() {
     for(auto it=m_graph->m_graph->cbegin(); it!=m_graph->m_graph->cend(); it++) {
         itt = hdt->search("", rdf_type.c_str(), it->first.c_str());
         num_of_entities = static_cast<unsigned long>(itt->estimatedNumResults());
-//        m_logger->log("entities of "+it->first+" is: "+to_string(num_of_entities));
+        //        m_logger->log("entities of "+it->first+" is: "+to_string(num_of_entities));
         m_classes_entities_count.insert({it->first, num_of_entities});
         delete itt;
     }
     r = this->m_graph->get_root();
-    if(r!=nullptr){
+    if(r!=nullptr) {
         propagate_counts(r);
     }
-    else{
+    else {
         m_logger->log("compute_classes_entities_counts> root is null");
     }
 }
@@ -318,11 +376,11 @@ unsigned long EntityAnn::propagate_counts(TNode* tnode) {
 void EntityAnn::compute_Is_for_all() {
     TNode* r;
     r = m_graph->get_root();
-    if(r!=nullptr){
+    if(r!=nullptr) {
         r->is = 1;
         this->compute_Is_for_node(r);
     }
-    else{
+    else {
         m_logger->log("compute_Is_for_all> root is null");
     }
 }
@@ -377,6 +435,53 @@ double EntityAnn::compute_Ls_for_node(TNode* tnode) {
 }
 
 
+void EntityAnn::compute_fs() {
+    TNode* tnode;
+    for(auto it=this->m_graph->m_graph->cbegin(); it!=this->m_graph->m_graph->cend(); it++) {
+        tnode = it->second;
+        tnode->fs = -1 * tnode->ls + 1;
+        m_logger->log("compute_fs> "+tnode->uri+", -1 * "+to_string(tnode->ls)+" + 1 = "+to_string(tnode->fs));
+    }
+}
 
 
+
+void EntityAnn::compute_fc(unsigned long m) {
+    TNode* tnode;
+    double m_d = static_cast<unsigned long>(m);
+    for(auto it=this->m_graph->m_graph->cbegin(); it!=this->m_graph->m_graph->cend(); it++) {
+        tnode = it->second;
+        tnode->fc = tnode->lc/m_d;
+        m_logger->log("compute_fc> "+tnode->uri+", "+to_string(tnode->lc)+" / "+to_string(m_d)+" = "+to_string(tnode->fc));
+    }
+}
+
+
+void EntityAnn::compute_f() {
+    TNode* tnode;
+    for(auto it=this->m_graph->m_graph->cbegin(); it!=this->m_graph->m_graph->cend(); it++) {
+        tnode = it->second;
+        tnode->f = tnode->fc * m_alpha + tnode->fs * (1.0 - m_alpha);
+        m_logger->log("compute_f> "+tnode->uri+" : "+to_string(m_alpha)+" * "+to_string(tnode->fc)+" + "+to_string((1.0 - m_alpha))+" * "+to_string(tnode->fs));
+    }
+}
+
+bool compare_tnodes (const  TNode* const& first, const  TNode* const& second) {
+    return first->f < second->f;
+}
+
+
+std::list<string>* EntityAnn::get_candidates() {
+    std::list<string>* candidates = new std::list<string>;
+    std::list<TNode*>* tnodes = new std::list<TNode*>;
+    for(auto it=m_graph->m_graph->begin(); it!=m_graph->m_graph->cend(); it++) {
+        tnodes->push_back(it->second);
+    }
+    tnodes->sort(compare_tnodes);
+    for(auto it=tnodes->cbegin(); it!=tnodes->cend(); it++) {
+        m_logger->log("get_candidates> "+(*it)->uri+" ----- ("+to_string((*it)->f)+")");
+        candidates->push_front((*it)->uri);
+    }
+    return candidates;
+}
 

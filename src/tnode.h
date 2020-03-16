@@ -17,6 +17,7 @@ class TNode {
         double ic, lc, fc; // coverage related variables
         double tc; // the variable used to compute the score fractions before the
         double is, ls, fs; // specificity related variables
+        double f; // the result of the final score
         std::unordered_map<string,TNode*> *parents; // sometimes there are multiple parents
         std::unordered_map<string,TNode*> *children; // childs
 //        std::ostream& operator<<(std::ostream& out, const TNode& tnode);
@@ -39,6 +40,7 @@ class TNode {
 
 };
 std::ostream& operator<<(std::ostream& out, const TNode& tnode);
+//bool operator<(const TNode& l, const TNode& r);
 //std::ostream& operator<<(std::ostream& os, const T& obj)
 //std::ostream& operator<<(std::ostream& out, const TNode& tnode)
 //{

@@ -3,6 +3,7 @@
 #include "entity.h"
 #include "graph.h"
 #include "tnode.h"
+#include <tabular_parser/parser.h>
 
 
 string input_file = "test.ttl";
@@ -225,7 +226,7 @@ namespace {
         string grand_uri = dbo_prefix+"Person";
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"golferboxer1";
-        TNode *boxer_tnode, *amature_tnode,*agent_tnode,*person_tnode;
+        TNode* boxer_tnode, *amature_tnode, *agent_tnode, *person_tnode;
         string label = "\"golferboxer1\"";
         label = "\"amaboxer4\"";
         ea->compute_intermediate_coverage(label);
@@ -233,7 +234,7 @@ namespace {
         ea->compute_Lc_for_all();
         ea->get_graph()->print_nodes();
         ea->get_graph()->pick_root();
-        ASSERT_STREQ((dbo_prefix+"Agent").c_str(),ea->get_graph()->get_root()->uri.c_str());
+        ASSERT_STREQ((dbo_prefix+"Agent").c_str(), ea->get_graph()->get_root()->uri.c_str());
         ea->compute_classes_entities_counts();
         ea->compute_Is_for_all();
         ea->compute_Ls_for_all();
@@ -249,7 +250,7 @@ namespace {
         delete ea;
     }
 
-    TEST(EntityTest, NONExistantLabel){
+    TEST(EntityTest, NONExistantLabel) {
         EntityAnn* ea = new EntityAnn(hdt_file, log_file);
         string parent_uri = dbo_prefix+"Athlete";
         string grand_uri = dbo_prefix+"Person";
@@ -261,11 +262,28 @@ namespace {
         ea->compute_Lc_for_all();
         ea->get_graph()->print_nodes();
         ea->get_graph()->pick_root();
-        ASSERT_EQ(ea->get_graph()->get_root(),nullptr);
+        ASSERT_EQ(ea->get_graph()->get_root(), nullptr);
         ea->compute_classes_entities_counts();
         ea->compute_Is_for_all();
         ea->compute_Ls_for_all();
         ea->get_graph()->print_nodes();
+        delete ea;
+    }
+
+    TEST(EntityTest, Scores) {
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+        std::list<string>* candidates;
+        string parent_uri = dbo_prefix+"Athlete";
+        string grand_uri = dbo_prefix+"Person";
+        string class_uri = dbo_prefix+"Boxer";
+        string resource_uri = dbr_prefix+"boxer1";
+        string label = "\"boxer1\"";
+        std::list<std::list<string>*>* data;
+        Parser p("test.csv");
+        data = p.parse();
+        candidates = ea->annotate_column(data, 2, 0.1);
+        ea->get_graph()->print_nodes();
+        ASSERT_STREQ(class_uri.c_str(),candidates->front().c_str());
         delete ea;
     }
 
