@@ -221,12 +221,11 @@ namespace {
 
     TEST(EntityTest, ClassEntityCounts) {
         EntityAnn* ea = new EntityAnn(hdt_file, log_file);
-        std::list<string>* classes;
         string parent_uri = dbo_prefix+"Athlete";
         string grand_uri = dbo_prefix+"Person";
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"golferboxer1";
-        TNode* tnode, *boxer_tnode, *amature_tnode,*agent_tnode,*person_tnode;
+        TNode *boxer_tnode, *amature_tnode,*agent_tnode,*person_tnode;
         string label = "\"golferboxer1\"";
         label = "\"amaboxer4\"";
         ea->compute_intermediate_coverage(label);
@@ -247,6 +246,26 @@ namespace {
         ASSERT_LT(boxer_tnode->ls, agent_tnode->ls);
         ASSERT_GT(boxer_tnode->is, amature_tnode->is);
         ASSERT_GT(boxer_tnode->ls, amature_tnode->ls);
+        delete ea;
+    }
+
+    TEST(EntityTest, NONExistantLabel){
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+        string parent_uri = dbo_prefix+"Athlete";
+        string grand_uri = dbo_prefix+"Person";
+        string class_uri = dbo_prefix+"Boxer";
+        string resource_uri = dbr_prefix+"golferboxer1";
+        string label = "\"nonexsitant\"";
+        ea->compute_intermediate_coverage(label);
+        ea->compute_Ic_for_all();
+        ea->compute_Lc_for_all();
+        ea->get_graph()->print_nodes();
+        ea->get_graph()->pick_root();
+        ASSERT_EQ(ea->get_graph()->get_root(),nullptr);
+        ea->compute_classes_entities_counts();
+        ea->compute_Is_for_all();
+        ea->compute_Ls_for_all();
+        ea->get_graph()->print_nodes();
         delete ea;
     }
 

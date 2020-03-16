@@ -24,6 +24,9 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
     this->compute_Lc_for_all();
     this->m_graph->pick_root();
     compute_classes_entities_counts();
+    compute_Is_for_all();
+    compute_Ls_for_all();
+
     return NULL;
 }
 
@@ -282,19 +285,27 @@ void EntityAnn::compute_Ic_for_node(TNode* tnode) {
 void EntityAnn::compute_classes_entities_counts() {
     IteratorTripleString* itt;
     unsigned long num_of_entities;
+    TNode* r;
     for(auto it=m_graph->m_graph->cbegin(); it!=m_graph->m_graph->cend(); it++) {
         itt = hdt->search("", rdf_type.c_str(), it->first.c_str());
         num_of_entities = static_cast<unsigned long>(itt->estimatedNumResults());
-        m_logger->log("entities of "+it->first+" is: "+to_string(num_of_entities));
+//        m_logger->log("entities of "+it->first+" is: "+to_string(num_of_entities));
         m_classes_entities_count.insert({it->first, num_of_entities});
         delete itt;
     }
-    propagate_counts(this->m_graph->get_root());
+    r = this->m_graph->get_root();
+    if(r!=nullptr){
+        propagate_counts(r);
+    }
+    else{
+        m_logger->log("compute_classes_entities_counts> root is null");
+    }
 }
 
 // include the counts of the childs because HDT does not perform reasoning
 unsigned long EntityAnn::propagate_counts(TNode* tnode) {
-    unsigned long count=m_classes_entities_count.at(tnode->uri);
+    unsigned long count;
+    count = m_classes_entities_count.at(tnode->uri);
     for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
         count += this->propagate_counts(it->second);
     }
@@ -305,13 +316,15 @@ unsigned long EntityAnn::propagate_counts(TNode* tnode) {
 
 
 void EntityAnn::compute_Is_for_all() {
-    //    std::list<TNode*>* roots = m_graph->get_candidate_roots();
-    //    for(auto it=roots->cbegin(); it!=roots->cend(); it++) {
-    //        this->compute_Is_for_node(*it);
-    //    }
-    TNode* r = m_graph->get_root();
-    r->is = 1;
-    this->compute_Is_for_node(r);
+    TNode* r;
+    r = m_graph->get_root();
+    if(r!=nullptr){
+        r->is = 1;
+        this->compute_Is_for_node(r);
+    }
+    else{
+        m_logger->log("compute_Is_for_all> root is null");
+    }
 }
 
 
