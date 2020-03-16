@@ -31,7 +31,8 @@ class Graph {
         void pick_root();
         void print_nodes();
         TNode* get_root();
-
+        void set_root(TNode*);
+        unsigned int get_max_depth(TNode*);
         std::unordered_map<string,TNode*>* m_graph;
     private:
         EasyLogger* m_logger;

@@ -88,7 +88,7 @@ void Graph::print_nodes(){
         //cout<<"\n"<<it->first<< ": ";
         cout<< "\n";
         for(auto it2=it->second->children->cbegin();it2!=it->second->children->cend();it2++){
-            cout<<it2->second->uri<< " ";
+            cout<<it2->second->uri<< ": \n --";
         }
         cout<<*(it->second);
     }
@@ -119,17 +119,38 @@ std::list<TNode*>* Graph::get_leaves(){
     return leaves;
 }
 
+//void Graph::pick_root(){
+//    TNode* tnode;
+//    std::list<TNode*> * roots = this->get_candidate_roots();
+//    if(roots->size()>0){
+//        tnode = roots->front();
+//        for(auto it=roots->cbegin();it!=roots->cend();it++){
+//            if((*it)->lc > tnode->lc){
+//                tnode = *it;
+//            }
+//        }
+//        m_root = tnode;
+//        m_logger->log("pick_root> The root is: "+m_root->uri);
+//    }
+//    else{
+//        m_logger->log("pick_root> The root is null");
+//    }
+//}
+
+
 void Graph::pick_root(){
-    TNode* tnode;
+    TNode* max_tnode=nullptr;
+    unsigned long max_depth=0, curr_depth=0;
     std::list<TNode*> * roots = this->get_candidate_roots();
     if(roots->size()>0){
-        tnode = roots->front();
         for(auto it=roots->cbegin();it!=roots->cend();it++){
-            if((*it)->lc > tnode->lc){
-                tnode = *it;
+            curr_depth = get_max_depth((*it));
+            if(curr_depth>max_depth){
+                max_tnode = *it;
+                max_depth = curr_depth;
             }
         }
-        m_root = tnode;
+        m_root = max_tnode;
         m_logger->log("pick_root> The root is: "+m_root->uri);
     }
     else{
@@ -141,5 +162,19 @@ TNode* Graph::get_root(){
     return m_root;
 }
 
+void Graph::set_root(TNode* root){
+    m_root = root;
+}
 
 
+
+unsigned int Graph::get_max_depth(TNode* tnode){
+    unsigned int max_depth = 0, curr_depth=0;
+    for(auto it=tnode->children->cbegin();it!=tnode->children->cend();it++){
+        curr_depth = this->get_max_depth(it->second);
+        if(curr_depth>max_depth){
+            max_depth = curr_depth;
+        }
+    }
+    return max_depth+1;
+}

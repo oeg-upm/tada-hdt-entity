@@ -18,6 +18,8 @@ dbr:amaboxer5 rdfs:label "amaboxer5"  .
 dbr:amaboxer6 rdfs:label "amaboxer6"  .
 
 
+dbr:swimmer1 rdfs:label "swimmer1" .
+
 
 
 
@@ -34,7 +36,12 @@ dbr:amaboxer4 rdf:type dbo:AmateurBoxer  .
 dbr:amaboxer5 rdf:type dbo:AmateurBoxer  .
 dbr:amaboxer6 rdf:type dbo:AmateurBoxer  .
 
+dbr:swimmer1 rdf:type dbo:Swimmer .
 
+
+
+dbo:Swimmer rdfs:subClassOf dbo:SwimmerExtraRoot .
+dbo:Swimmer rdfs:subClassOf dbo:Athlete .
 
 
 dbo:Boxer rdfs:subClassOf dbo:Athlete .

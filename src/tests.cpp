@@ -273,13 +273,22 @@ namespace {
     TEST(EntityTest, Scores) {
         EntityAnn* ea = new EntityAnn(hdt_file, log_file);
         std::list<string>* candidates;
-        string parent_uri = dbo_prefix+"Athlete";
-        string grand_uri = dbo_prefix+"Person";
         string class_uri = dbo_prefix+"Boxer";
-        string resource_uri = dbr_prefix+"boxer1";
-        string label = "\"boxer1\"";
         std::list<std::list<string>*>* data;
-        Parser p("test.csv");
+        Parser p("test_files/test1.csv");
+        data = p.parse();
+        candidates = ea->annotate_column(data, 2, 0.1);
+        ea->get_graph()->print_nodes();
+        ASSERT_STREQ(class_uri.c_str(),candidates->front().c_str());
+        delete ea;
+    }
+
+    TEST(EntityTest, ScoresExtraRoot) {
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+        std::list<string>* candidates;
+        string class_uri = dbo_prefix+"Swimmer";
+        std::list<std::list<string>*>* data;
+        Parser p("test_files/test2.csv");
         data = p.parse();
         candidates = ea->annotate_column(data, 2, 0.1);
         ea->get_graph()->print_nodes();

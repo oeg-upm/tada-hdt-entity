@@ -32,6 +32,8 @@ class EntityAnn {
         bool compute_intermediate_coverage(string cell_value);
         void compute_Ic_for_all();
         void compute_Ic_for_node(TNode* tnode);
+//        void propagate_Is_all();
+//        void propagate_Is_tnode(TNode *);
         double compute_Lc_for_node(TNode*);
         void compute_Lc_for_all();
         void compute_Is_for_all();
@@ -47,6 +49,7 @@ class EntityAnn {
         void compute_fc(unsigned long m);
         void compute_f();
         std::list<string>* get_candidates();
+        void pick_root();
     private:
         EasyLogger* m_logger;
         HDT* hdt;
@@ -54,6 +57,7 @@ class EntityAnn {
         std::unordered_map<string,std::unordered_map<string,bool>*> m_ancestor_lookup;
         std::unordered_map<string,bool>* add_class_to_ancestor_lookup(string tclass);
         std::unordered_map<string,unsigned long> m_classes_entities_count;
+//        bool m_propagate_Is=true; // should the parents also include the Is of their childred (true=yes)
         double m_alpha;
 };
 #endif
