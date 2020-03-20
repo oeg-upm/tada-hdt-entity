@@ -6,16 +6,23 @@
 #include <HDTManager.hpp>
 
 
-EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir) {
+void EntityAnn::init(string hdt_file_dir, string log_file_dir, double alpha){
     hdt = HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
     m_logger = new EasyLogger(log_file_dir);
     m_graph = new Graph(m_logger);
+    m_alpha = alpha;
+}
+
+EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir) {
+//    hdt = HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
+//    m_logger = new EasyLogger(log_file_dir);
+//    m_graph = new Graph(m_logger);
+    init(hdt_file_dir,log_file_dir,1.0);
 }
 
 
 EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir, double alpha) {
-    m_alpha = alpha;
-    EntityAnn( hdt_file_dir,  log_file_dir);
+    init(hdt_file_dir,log_file_dir,alpha);
 }
 
 
@@ -23,6 +30,39 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
     m_alpha = alpha;
     return this->annotate_column(data, idx);
 }
+
+std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* data, unsigned idx, bool use_context, bool double_levels) {
+    unsigned col_id  = 0;
+    unsigned long m=0;
+    string entity;
+    std::list<string>* prop;
+    if(use_context) {
+        for(auto it=data->cbegin(); it!=data->cend(); it++) {
+            col_id = 0;
+            entity = "-----#####";
+            prop = new std::list<string>;
+            for(auto jt=(*it)->cbegin(); jt!=(*it)->cend(); jt++, col_id++) {
+                if(col_id != idx) {
+                    prop->push_back(*jt);
+                    //cout << " " << (*jt) << " ";
+                }
+                else {
+                    entity= *jt;
+                }
+            }
+            cout << endl << "Entity ----------" << entity << endl;
+            if(this->compute_intermediate_coverage(entity, prop, double_levels)) {
+                m++;
+            }
+            delete prop;
+        }
+        return this->annotate_semi_scored_column(m);
+    }
+    else {
+        return this->annotate_column(data, idx);
+    }
+}
+
 
 
 std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* data, unsigned idx) {
@@ -32,20 +72,25 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
     std::advance(ito, idx);
     (*ito)->cbegin();
     for(auto it =(*ito)->cbegin(); it!=(*ito)->cend(); it++ ) {
-        if(it==(*ito)->cbegin()) {
+        if(it==(*ito)->cbegin()) { // to skip the header
             continue;
         }
         m_logger->log("cell value: "+(*it));
         l = *it;
-        // add double quotes which are needed for hdt
-        if(l[0] != '\"') {
-            l = "\""+l+"\"";
-        }
+//        // add double quotes which are needed for hdt
+//        if(l[0] != '\"') {
+//            l = "\""+l+"\"";
+//        }
         if(this->compute_intermediate_coverage(l)) {
             m++;
         }
         //cout<<*it << " | ";
     }
+    return this->annotate_semi_scored_column(m);
+}
+
+
+std::list<string>* EntityAnn::annotate_semi_scored_column(unsigned long m, double alpha) {
     this->compute_Ic_for_all();
     this->compute_Lc_for_all();
     this->pick_root();
@@ -58,24 +103,88 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
     return this->get_candidates();
 }
 
+std::list<string>* EntityAnn::annotate_semi_scored_column(unsigned long m) {
+    return this->annotate_semi_scored_column(m, m_alpha);
+}
+
 
 
 
 // Get entities of a given cell value or name using the rdfs:label property
 std::list<string>* EntityAnn::get_entities_of_value(string value) {
+    string qvalue = get_quoted(value);
     IteratorTripleString* itt;
     TripleString* triple;
     std::list<string>* entities = new std::list<string>;
-    itt = hdt->search("", rdfs_label.c_str(), value.c_str());
+    cout << "get_entities_of_value> " << value<<endl;
+    itt = hdt->search("", rdfs_label.c_str(), qvalue.c_str());
     m_logger->log("get_entities_of_value: cell value  <"+value+">");
     while(itt->hasNext()) {
         triple = itt->next();
+        cout << "get_entities_of_value> store subject: " << triple->getSubject()<<endl;
         entities->push_back(triple->getSubject());
         m_logger->log("get_entities_of_value: "+triple->getSubject());
     }
     delete itt;
     return entities;
 }
+
+
+// Get entities of a given cell value or name using the rdfs:label property
+std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<string>* properties, bool double_level) {
+    string qprop,qvalue;
+    IteratorTripleString* itt;
+    TripleString* triple;
+    std::list<string>* entities;// = this->get_entities_of_value(value);
+    std::list<string>* strict_entities = new std::list<string>;
+    std::list<string>* prop_entities;
+    bool to_break;
+    cout << "get_entities_of_value> " << value<<endl;
+    qvalue = get_quoted(value);
+    entities = this->get_entities_of_value(value);
+    cout << "get_entities_of_value> number of entities" <<entities->size()<<endl;
+    for(auto it = entities->cbegin(); it!=entities->cend(); it++) {
+        for(auto it2=properties->cbegin(); it2!=properties->cend(); it2++) {
+            qprop = get_quoted(*it2);
+            cout << "qprop: "<<*it2<<endl;
+            itt = hdt->search((*it).c_str(), "", qprop.c_str());
+            //            m_logger->log("get_entities_of_value: cell value  <"+value+">");
+            if(itt->hasNext()) {
+                strict_entities->push_back(*it);
+                cout << "store: "<<*it2<<endl;
+                m_logger->log("get_entities_of_value: "+(*it)+" and property"+(*it2));
+                delete itt;
+                break;
+            }
+            delete itt;
+        }
+        if(double_level) {
+            cout << "in double level: "<<endl;
+            for(auto it2=properties->cbegin(); it2!=properties->cend(); it2++) {
+                prop_entities = this->get_entities_of_value(*it2);
+                to_break = false;
+                for(auto it3=prop_entities->cbegin(); it3!=prop_entities->cend(); it3++) {
+                    itt = hdt->search((*it).c_str(), "", (*it3).c_str());
+                    if(itt->hasNext()) {
+                        strict_entities->push_back(*it);
+                        m_logger->log("get_entities_of_value: "+(*it)+" and property (double level)"+(*it3));
+                        delete itt;
+                        to_break = true;
+                        break;
+                    }
+                    delete itt;
+                }
+                delete prop_entities;
+                if(to_break) {
+                    break;
+                }
+            }// for loop it2
+        }// double
+    }// for loop it
+    delete entities;
+    return strict_entities;
+}
+
 
 /* It returns types of the given entities and would ignore all its parents.
 It does not discard types of the entities if it not a leaf (has child nodes).
@@ -181,9 +290,11 @@ std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string
 // it can be sped up more
 bool EntityAnn::compute_intermediate_coverage(string cell_value) {
     std::list<string>* classes;
-    std::list<string>* entities = this->get_entities_of_value(cell_value); // Z(v):
+    std::list<string>* entities;
     size_t Q_size, Z_size;
     TNode* tnode;
+    cout << "compute_intermediate_coverage> intermediate coverage: "<<cell_value<<endl;
+    entities = this->get_entities_of_value(cell_value); // Z(v):
     Z_size = entities->size();
     m_logger->log("compute_intermediate_coverage> number of entities: "+to_string(entities->size()));
     for(auto it=entities->cbegin(); it!=entities->cend(); it++) {
@@ -204,6 +315,43 @@ bool EntityAnn::compute_intermediate_coverage(string cell_value) {
     return entities->size()>0;
 }
 
+
+bool EntityAnn::compute_intermediate_coverage(string cell_value, std::list<string>* properties, bool double_level) {
+    string qcell_value;
+    std::list<string>* classes;
+    std::list<string>* entities;
+    size_t Q_size, Z_size;
+    TNode* tnode;
+    m_logger->log("compute_intermediate_coverage> cell value: "+cell_value);
+    qcell_value= get_quoted(cell_value);
+    entities = this->get_entities_of_value(cell_value, properties, double_level); // Z(v):
+    Z_size = entities->size();
+    m_logger->log("compute_intermediate_coverage> Z_size 1: "+to_string(Z_size)+" for cell value: "+cell_value);
+    if(Z_size == 0) {
+        delete entities;
+        entities = this->get_entities_of_value(cell_value);
+        Z_size = entities->size();
+        m_logger->log("compute_intermediate_coverage> Z_size 2: "+to_string(Z_size)+" for cell value: "+cell_value);
+        Z_size *= m_ambiguitity_penalty; // penalty (to add more weight to entities matched with a property
+    }
+    m_logger->log("compute_intermediate_coverage> number of entities: "+to_string(entities->size()));
+    for(auto it=entities->cbegin(); it!=entities->cend(); it++) {
+        classes = this->get_leaf_classes(*it); // Q(e): *it = e
+        this->update_graph(classes);
+        Q_size = classes->size();
+        m_logger->log("compute_intermediate_coverage> got the QSIZE ");
+        for(auto it2=classes->cbegin(); it2!=classes->cend(); it2++) {
+            // add the class to the lookup if not added yet
+            this->add_class_to_ancestor_lookup(*it2);
+            tnode = m_graph->get_node(*it2);
+            if(tnode == nullptr) {
+                cout<< "Error: in compute_intermediate_coverage, tnode <"+tnode->uri+"> is null\n\n";
+            }
+            tnode->tc += 1.0 / (Q_size * Z_size);
+        }
+    }
+    return entities->size()>0;
+}
 
 TNode* EntityAnn::get_tnode(string uri) {
     //    m_graph->print_nodes();
@@ -346,13 +494,13 @@ void EntityAnn::compute_Is_for_node(TNode* tnode) {
     TNode* ch = nullptr;
     double ch_count;
     unsigned long p_count = m_classes_entities_count.at(tnode->uri);
-    if(p_count==0){
+    if(p_count==0) {
         p_count++;
     }
     for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
         ch = it->second;
         ch_count = static_cast<double>(m_classes_entities_count.at(ch->uri));
-        if(ch_count == 0.0){
+        if(ch_count == 0.0) {
             ch_count=1.0;
         }
         ch->is = ch_count / p_count;
@@ -468,6 +616,13 @@ void EntityAnn::pick_root() {
     m_graph->pick_root();
 }
 
+string EntityAnn::get_quoted(string v){
+    string qcell_value = v;
+    if(qcell_value[0] != '\"') {
+        qcell_value = "\""+qcell_value+"\"";
+    }
+    return qcell_value;
+}
 
 //void EntityAnn::propagate_Is_all(){
 //    std::list<TNode*>* leaves = this->get_graph()->get_leaves();

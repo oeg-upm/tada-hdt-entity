@@ -21,6 +21,48 @@ dbr:amaboxer6 rdfs:label "amaboxer6"  .
 dbr:swimmer1 rdfs:label "swimmer1" .
 
 
+dbr:footballp1 rdfs:label "common_name_1" .
+dbr:basketballp1 rdfs:label "common_name_1" .
+dbr:volleyballp1 rdfs:label "common_name_1" .
+
+dbr:footballp2 rdfs:label "common_name_2" .
+dbr:basketballp2 rdfs:label "common_name_2" .
+dbr:volleyballp2 rdfs:label "common_name_2" .
+
+
+dbr:footballp3 rdfs:label "common_name_3" .
+dbr:basketballp3 rdfs:label "common_name_3" .
+dbr:volleyballp3 rdfs:label "common_name_3" .
+
+dbr:volleyballp4 rdfs:label "volleyballp4" .
+
+
+dbr:footballp1 rdf:type dbo:FootballPlayer .
+dbr:basketballp1 rdf:type dbo:BasketballPlayer .
+dbr:volleyballp1 rdf:type  dbo:VolleyballPlayer .
+
+dbr:footballp2 rdf:type dbo:FootballPlayer .
+dbr:basketballp2 rdf:type dbo:BasketballPlayer .
+dbr:volleyballp2 rdf:type  dbo:VolleyballPlayer .
+
+dbr:footballp3 rdf:type dbo:FootballPlayer .
+dbr:basketballp3 rdf:type dbo:BasketballPlayer .
+dbr:volleyballp3 rdf:type  dbo:VolleyballPlayer .
+
+dbr:volleyballp4 rdf:type  dbo:VolleyballPlayer .
+dbr:basketballp4 rdf:type dbo:BasketballPlayer .
+dbr:footballp4 rdf:type dbo:FootballPlayer .
+
+
+
+dbr:footballp1 dbp:city "city1" .
+dbr:footballp2 dbp:city "city2" .
+
+dbr:footballp1 dbp:country "country1" .
+
+
+
+
 
 
 dbr:boxer1 rdf:type dbo:Boxer  .
@@ -42,6 +84,12 @@ dbr:swimmer1 rdf:type dbo:Swimmer .
 
 dbo:Swimmer rdfs:subClassOf dbo:SwimmerExtraRoot .
 dbo:Swimmer rdfs:subClassOf dbo:Athlete .
+
+
+dbo:FootballPlayer rdfs:subClassOf dbo:Athlete .
+dbo:BasketballPlayer rdfs:subClassOf dbo:Athlete .
+dbo:VolleyballPlayer rdfs:subClassOf dbo:Athlete .
+
 
 
 dbo:Boxer rdfs:subClassOf dbo:Athlete .

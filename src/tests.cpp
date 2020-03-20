@@ -72,7 +72,7 @@ namespace {
     TEST(EntityTest, GetEntities) {
         EntityAnn* ea = new EntityAnn(hdt_file, log_file);
         std::list<string>* entities;
-        string label = "\"boxer1\"";
+        string label = "boxer1";
         entities = ea->get_entities_of_value(label);
         ASSERT_EQ(entities->size(), 1);
         delete ea;
@@ -84,7 +84,7 @@ namespace {
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"boxer1";
         TNode* tnode;
-        string label = "\"boxer1\"";
+        string label = "boxer1";
         // entity with one class
         ea->compute_intermediate_coverage(label);
         tnode =  ea->get_tnode(class_uri);
@@ -99,7 +99,7 @@ namespace {
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"boxer1";
         TNode* tnode;
-        string label = "\"golferboxer1\"";
+        string label = "golferboxer1";
         // entity with two classes
         ea->compute_intermediate_coverage(label);
         ea->get_graph()->print_nodes();
@@ -116,14 +116,14 @@ namespace {
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"boxer1";
         TNode* tnode;
-        string label = "\"boxer1\"";
+        string label = "boxer1";
         ea->compute_intermediate_coverage(label);
         Graph* graph = ea->get_graph();
         leaves = graph->get_leaves();
         graph->print_nodes();
         ASSERT_EQ(leaves->size(), 1);
         ASSERT_STREQ(leaves->front()->uri.c_str(), class_uri.c_str());
-        label = "\"golferboxer1\"";
+        label = "golferboxer1";
         ea->compute_intermediate_coverage(label);
         graph = ea->get_graph();
         leaves = graph->get_leaves();
@@ -140,7 +140,7 @@ namespace {
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"golferboxer1";
         TNode* tnode;
-        string label = "\"golferboxer1\"";
+        string label = "golferboxer1";
         ea->compute_intermediate_coverage(label);
         Graph* graph = ea->get_graph();
         roots = graph->get_candidate_roots();
@@ -159,7 +159,7 @@ namespace {
         string grand_uri = dbo_prefix+"Person";
         string resource_uri = dbr_prefix+"boxer1";
         TNode* tnode, *parent, *grand;
-        string label = "\"golferboxer1\"";
+        string label = "golferboxer1";
         ea->compute_intermediate_coverage(label);
         Graph* graph = ea->get_graph();
         leaves = graph->get_leaves();
@@ -184,7 +184,7 @@ namespace {
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"boxer1";
         TNode* tnode;
-        string label = "\"boxer1\"";
+        string label = "boxer1";
         // entity with one class
         ea->compute_intermediate_coverage(label);
         ea->compute_Ic_for_all();
@@ -204,7 +204,7 @@ namespace {
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"golferboxer1";
         TNode* tnode;
-        string label = "\"golferboxer1\"";
+        string label = "golferboxer1";
         // entity with one class
         ea->compute_intermediate_coverage(label);
         ea->compute_Ic_for_all();
@@ -227,8 +227,8 @@ namespace {
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"golferboxer1";
         TNode* boxer_tnode, *amature_tnode, *agent_tnode, *person_tnode;
-        string label = "\"golferboxer1\"";
-        label = "\"amaboxer4\"";
+        string label = "golferboxer1";
+        label = "amaboxer4";
         ea->compute_intermediate_coverage(label);
         ea->compute_Ic_for_all();
         ea->compute_Lc_for_all();
@@ -256,7 +256,7 @@ namespace {
         string grand_uri = dbo_prefix+"Person";
         string class_uri = dbo_prefix+"Boxer";
         string resource_uri = dbr_prefix+"golferboxer1";
-        string label = "\"nonexsitant\"";
+        string label = "nonexsitant";
         ea->compute_intermediate_coverage(label);
         ea->compute_Ic_for_all();
         ea->compute_Lc_for_all();
@@ -296,9 +296,30 @@ namespace {
         delete ea;
     }
 
+    TEST(EntityTest, Context){
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0.1);
+        //EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+        std::list<string>* candidates;
+        string volley_class_uri = dbo_prefix+"VolleyballPlayer";
+        string football_class_uri = dbo_prefix+"FootballPlayer";
+        std::list<std::list<string>*>* data;
+        Parser p("test_files/test3.csv");
+        data = p.parse();
+        candidates = ea->annotate_column(data, 1,0.1);
+        ASSERT_STREQ(volley_class_uri.c_str(),candidates->front().c_str());
+        delete ea;
+        delete data;
+        ea = new EntityAnn(hdt_file, log_file, 0.1);
+        data = p.parse_vertical();
+        candidates = ea->annotate_column(data, 1, true, false);
+        ea->get_graph()->print_nodes();
+        ASSERT_STREQ(football_class_uri.c_str(),candidates->front().c_str());
+        delete ea;
+    }
+
+
+
 }//namespace
-
-
 
 
 

@@ -25,10 +25,10 @@ rm  v1.0.zip
 cd easy-logger-1.0;make install;cd ..;rm -Rf easy-logger-1.0
 
 echo "Installing tabular-parser..."
-wget https://github.com/ahmad88me/tabular-parser/archive/v1.0.zip
-unzip v1.0.zip
-rm v1.0.zip
-cd tabular-parser-1.0;make install;cd ..;rm -Rf tabular-parser-1.0
+wget https://github.com/ahmad88me/tabular-parser/archive/v1.1.zip
+unzip v1.1.zip
+rm v1.1.zip
+cd tabular-parser-1.1;make install;cd ..;rm -Rf tabular-parser-1.1
 
 echo "update linker caches..."
 ldconfig
