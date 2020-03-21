@@ -57,9 +57,9 @@ class EntityAnn {
         std::list<string>* get_candidates();
         void pick_root();
         string get_quoted(string);
-        EasyLogger* m_logger;
-    private:
 //        EasyLogger* m_logger;
+    private:
+        EasyLogger* m_logger;
         HDT* hdt;
         Graph* m_graph;
         std::unordered_map<string, std::unordered_map<string, bool>*> m_ancestor_lookup;

@@ -1,8 +1,16 @@
+# These are used for the library 
+VERSION = 1.0
+LIBNAME = libtadahdtentity.so.$(VERSION)
+LIBALIAS = libtadahdtentity.so
+HDIR = /usr/local/include/tada_hdt_entity
+LIBDIR = /usr/local/lib
 
 OUT_DIRS = build bin
 NOMOBJS = entity.o graph.o tnode.o
 OBJS = $(NOMOBJS) main.o 
 TOBJS = $(NOMOBJS) tests.o
+
+NOMHEADERS = entity.h graph.h tnode.h
 
 NOMSOURCES = entity.cpp graph.cpp tnode.cpp  
 SOURCES = $(NOMSOURCES) main.cpp
@@ -21,12 +29,25 @@ OBJS_ABS = $(patsubst %,build/%,$(OBJS))
 TOBJS_ABS = $(patsubst %,build/%,$(TOBJS))
 SOURCES_ABS = $(patsubst %,src/%,$(SOURCES))
 TSOURCES_ABS = $(patsubst %,src/%,$(TSOURCES))
+NOMSOURCES_ABS = $(patsubst %,src/%,$(NOMSOURCES))
+HEADERS_ABS = $(patsubst %,src/%,$(NOMHEADERS))
 
 
 COVCLEANFILES = gcov.css snow.png ruby.png *.gcov  *.gcda *.gcno index-sort-f.html index-sort-l.html index.html \
 				amber.png glass.png updown.png coverage.info emerald.png Users usr v1\
 
-.PHONY : clean run test cov codecov
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	LIBCMAKETARGET := liblinux
+	DETECTEDOS := Linux
+endif
+
+ifeq  ($(UNAME_S),Darwin)
+	DETECTEDOS := MacOS
+	LIBCMAKETARGET := libmac
+endif
+
+.PHONY : clean run test cov codecov install lib liblinux libmac
 
 
 bin/tadaentity: $(OBJS_ABS)
@@ -36,7 +57,6 @@ bin/tadaentity: $(OBJS_ABS)
 $(OBJS_ABS): $(SOURCES_ABS) $(OUT_DIRS)
 	$(CC) $(CXXFLAGS) -c $(SOURCES_ABS)
 	mv *.o build/
-
 
 
 
@@ -60,6 +80,25 @@ codecov:
 	./codecovpush.sh
 	rm codecovpush.sh
 	$(MAKE) clean	
+
+lib:
+	echo  "Detected OS: " $(DETECTEDOS)
+	$(MAKE) $(LIBCMAKETARGET)
+
+libmac:
+	$(CC) $(CXXFLAGS)  -dynamiclib -flat_namespace  $(NOMSOURCES_ABS)  -o $(LIBNAME) $(LIBS)
+
+liblinux:
+	$(CC) $(CXXFLAGS) -fPIC -shared $(NOMSOURCES_ABS) -o  $(LIBNAME) $(LIBS)
+
+install:
+	mkdir -p  $(HDIR)
+	cp $(HEADERS_ABS) $(HDIR)
+	$(MAKE) lib
+	mv $(LIBNAME)  $(LIBDIR)
+	ln -fs $(LIBDIR)/$(LIBNAME)  $(LIBDIR)/$(LIBALIAS)
+	echo -e "tada_hdt_entity lib is installed"
+	$(MAKE) clean
 
 
 run: 
