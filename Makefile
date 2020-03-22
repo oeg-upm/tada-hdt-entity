@@ -1,5 +1,5 @@
 # These are used for the library 
-VERSION = 1.0
+VERSION = 1.1
 LIBNAME = libtadahdtentity.so.$(VERSION)
 LIBALIAS = libtadahdtentity.so
 HDIR = /usr/local/include/tada_hdt_entity

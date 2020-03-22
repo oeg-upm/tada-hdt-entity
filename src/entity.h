@@ -22,6 +22,7 @@ class EntityAnn {
 
     public:
         EntityAnn(HDT*, string);
+        EntityAnn(HDT*, string, double);
         EntityAnn(string, string);
         EntityAnn(string, string, double alpha);
         std::list<string>* annotate_column(std::list<std::list<string>*>* data, unsigned idx);

@@ -27,6 +27,10 @@ EntityAnn::EntityAnn(HDT* hdt_ptr, string log_file_dir) {
 }
 
 
+EntityAnn::EntityAnn(HDT* hdt_ptr, string log_file_dir, double alpha) {
+    init(hdt_ptr,log_file_dir,alpha);
+}
+
 EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir) {
     init(hdt_file_dir,log_file_dir,1.0);
 }
@@ -55,13 +59,11 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
             for(auto jt=(*it)->cbegin(); jt!=(*it)->cend(); jt++, col_id++) {
                 if(col_id != idx) {
                     prop->push_back(*jt);
-                    //cout << " " << (*jt) << " ";
                 }
                 else {
                     entity= *jt;
                 }
             }
-            cout << endl << "Entity ----------" << entity << endl;
             if(this->compute_intermediate_coverage(entity, prop, double_levels)) {
                 m++;
             }
@@ -88,14 +90,9 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
         }
         m_logger->log("cell value: "+(*it));
         l = *it;
-//        // add double quotes which are needed for hdt
-//        if(l[0] != '\"') {
-//            l = "\""+l+"\"";
-//        }
         if(this->compute_intermediate_coverage(l)) {
             m++;
         }
-        //cout<<*it << " | ";
     }
     return this->annotate_semi_scored_column(m);
 }
@@ -127,12 +124,10 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
     IteratorTripleString* itt;
     TripleString* triple;
     std::list<string>* entities = new std::list<string>;
-    cout << "get_entities_of_value> " << value<<endl;
     itt = hdt->search("", rdfs_label.c_str(), qvalue.c_str());
     m_logger->log("get_entities_of_value: cell value  <"+value+">");
     while(itt->hasNext()) {
         triple = itt->next();
-        cout << "get_entities_of_value> store subject: " << triple->getSubject()<<endl;
         entities->push_back(triple->getSubject());
         m_logger->log("get_entities_of_value: "+triple->getSubject());
     }
@@ -150,19 +145,15 @@ std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<stri
     std::list<string>* strict_entities = new std::list<string>;
     std::list<string>* prop_entities;
     bool to_break;
-    cout << "get_entities_of_value> " << value<<endl;
     qvalue = get_quoted(value);
     entities = this->get_entities_of_value(value);
-    cout << "get_entities_of_value> number of entities" <<entities->size()<<endl;
     for(auto it = entities->cbegin(); it!=entities->cend(); it++) {
         for(auto it2=properties->cbegin(); it2!=properties->cend(); it2++) {
             qprop = get_quoted(*it2);
-            cout << "qprop: "<<*it2<<endl;
             itt = hdt->search((*it).c_str(), "", qprop.c_str());
             //            m_logger->log("get_entities_of_value: cell value  <"+value+">");
             if(itt->hasNext()) {
                 strict_entities->push_back(*it);
-                cout << "store: "<<*it2<<endl;
                 m_logger->log("get_entities_of_value: "+(*it)+" and property"+(*it2));
                 delete itt;
                 break;
@@ -170,7 +161,6 @@ std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<stri
             delete itt;
         }
         if(double_level) {
-            cout << "in double level: "<<endl;
             for(auto it2=properties->cbegin(); it2!=properties->cend(); it2++) {
                 prop_entities = this->get_entities_of_value(*it2);
                 to_break = false;
@@ -304,7 +294,6 @@ bool EntityAnn::compute_intermediate_coverage(string cell_value) {
     std::list<string>* entities;
     size_t Q_size, Z_size;
     TNode* tnode;
-    cout << "compute_intermediate_coverage> intermediate coverage: "<<cell_value<<endl;
     entities = this->get_entities_of_value(cell_value); // Z(v):
     Z_size = entities->size();
     m_logger->log("compute_intermediate_coverage> number of entities: "+to_string(entities->size()));
@@ -600,29 +589,6 @@ std::list<string>* EntityAnn::get_candidates() {
     return candidates;
 }
 
-//void EntityAnn::pick_root() {
-//    TNode* max_tnode, *curr_tnode;
-//    std::list<TNode*>* roots = m_graph->get_candidate_roots();
-//    unsigned long max_count, curr_count;
-//    if(roots->size()>0) {
-//        max_tnode = roots->front();
-//        max_count = m_classes_entities_count.at(max_tnode->uri);
-//        for(auto it=roots->cbegin(); it!=roots->cend(); it++) {
-//            curr_tnode = *it;
-//            curr_count = m_classes_entities_count.at(curr_tnode->uri);
-//            if(curr_count > max_count) {
-//                max_count = curr_count;
-//                max_tnode = curr_tnode;
-//            }
-//        }
-//        m_graph->set_root(max_tnode);
-//        m_logger->log("pick_root> The root is: "+max_tnode->uri);
-//    }
-//    else {
-//        m_logger->log("pick_root> The root is null");
-//    }
-//}
-
 void EntityAnn::pick_root() {
     m_graph->pick_root();
 }
@@ -643,19 +609,3 @@ double EntityAnn::get_alpha(){
     return m_alpha;
 }
 
-
-
-//void EntityAnn::propagate_Is_all(){
-//    std::list<TNode*>* leaves = this->get_graph()->get_leaves();
-//    for(auto it=leaves->cbegin();it!=leaves->cend();it++){
-//        this->propagate_Is_tnode(*it);
-////        for(auto itp=(*it)->parents->cbegin();itp!=(*it)->parents->cend();itp++){
-////            this->propagate_Is_tnode((*itp).second);
-////        }
-//    }
-//}
-//void propagate_Is_tnode(TNode * tnode){
-////    for(auto it=tnode->children->cbegin();it!=tnode->children->cend();it++){
-////        tnode->i
-////    }
-//}
