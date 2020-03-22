@@ -21,6 +21,7 @@ const string rdfs_label = "http://www.w3.org/2000/01/rdf-schema#label";
 class EntityAnn {
 
     public:
+        EntityAnn(HDT*, string);
         EntityAnn(string, string);
         EntityAnn(string, string, double alpha);
         std::list<string>* annotate_column(std::list<std::list<string>*>* data, unsigned idx);
@@ -56,6 +57,8 @@ class EntityAnn {
         void compute_f();
         std::list<string>* get_candidates();
         void pick_root();
+        void set_alpha(double);
+        double get_alpha();
         string get_quoted(string);
 //        EasyLogger* m_logger;
     private:
@@ -69,6 +72,7 @@ class EntityAnn {
         double m_alpha;
         double m_ambiguitity_penalty=2;
         void init(string hdt_file_dir, string log_file_dir, double alpha);
+        void init(HDT* hdt_ptr, string log_file_dir, double alpha);
 };
 #endif
 

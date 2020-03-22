@@ -13,10 +13,21 @@ void EntityAnn::init(string hdt_file_dir, string log_file_dir, double alpha){
     m_alpha = alpha;
 }
 
+void EntityAnn::init(HDT* hdt_ptr, string log_file_dir, double alpha){
+    hdt =hdt_ptr;
+    m_logger = new EasyLogger(log_file_dir);
+    m_graph = new Graph(m_logger);
+    m_alpha = alpha;
+}
+
+
+
+EntityAnn::EntityAnn(HDT* hdt_ptr, string log_file_dir) {
+    init(hdt_ptr,log_file_dir,1.0);
+}
+
+
 EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir) {
-//    hdt = HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
-//    m_logger = new EasyLogger(log_file_dir);
-//    m_graph = new Graph(m_logger);
     init(hdt_file_dir,log_file_dir,1.0);
 }
 
@@ -623,6 +634,16 @@ string EntityAnn::get_quoted(string v){
     }
     return qcell_value;
 }
+
+void EntityAnn::set_alpha(double alpha){
+    m_alpha = alpha;
+}
+
+double EntityAnn::get_alpha(){
+    return m_alpha;
+}
+
+
 
 //void EntityAnn::propagate_Is_all(){
 //    std::list<TNode*>* leaves = this->get_graph()->get_leaves();

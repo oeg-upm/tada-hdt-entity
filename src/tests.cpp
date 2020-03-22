@@ -45,6 +45,17 @@ namespace {
         delete ea;
     }
 
+    TEST(EntityTest, Constructor2) {
+        HDT* hdt;
+        hdt = HDTManager::mapIndexedHDT(hdt_file.c_str());
+        EntityAnn* ea = new EntityAnn(hdt, log_file);
+        ASSERT_NE(ea, nullptr);
+        ea->set_alpha(0.5);
+        ASSERT_EQ(0.5,ea->get_alpha());
+        delete ea;
+    }
+
+
     TEST(EntityTest, GetLeafClasses) {
         EntityAnn* ea = new EntityAnn(hdt_file, log_file);
         std::list<string>* classes;
