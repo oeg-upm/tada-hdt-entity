@@ -342,6 +342,22 @@ namespace {
         delete ea;
     }
 
+    TEST(EntityTest, recomputef){
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0);
+        //EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+        std::list<string>* candidates;
+        string wrestler_class_uri = dbo_prefix+"Wrestler";
+        std::list<std::list<string>*>* data;
+        Parser p("test_files/test4.csv");
+        data = p.parse_vertical();
+        candidates = ea->annotate_column(data, 1, true, true);
+        ea->get_graph()->print_nodes();
+        delete candidates;
+        candidates = ea->recompute_f(0.1);
+        ASSERT_STREQ(wrestler_class_uri.c_str(),candidates->front().c_str());
+        delete ea;
+    }
+
 
 }//namespace
 

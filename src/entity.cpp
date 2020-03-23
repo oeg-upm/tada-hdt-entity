@@ -72,6 +72,7 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
             }
             delete prop;
         }
+        m_m = m;
         return this->annotate_semi_scored_column(m);
     }
     else {
@@ -113,6 +114,14 @@ std::list<string>* EntityAnn::annotate_semi_scored_column(unsigned long m, doubl
     this->compute_f();
     return this->get_candidates();
 }
+
+
+std::list<string>* EntityAnn::recompute_f(double alpha) {
+    m_alpha = alpha;
+    this->compute_f();
+    return this->get_candidates();
+}
+
 
 std::list<string>* EntityAnn::annotate_semi_scored_column(unsigned long m) {
     return this->annotate_semi_scored_column(m, m_alpha);
@@ -400,7 +409,7 @@ TNode* EntityAnn::update_graph(string class_uri) {
         if(orphan){
             m_graph->add_node(tnode);
             m_logger->log("update_graph> "+class_uri+" is an orphan");
-            cout<<class_uri <<"  is an orphan\n\n";
+//            cout<<class_uri <<"  is an orphan\n\n";
         }
     }
     return tnode;

@@ -61,6 +61,7 @@ class EntityAnn {
         void set_alpha(double);
         double get_alpha();
         string get_quoted(string);
+        std::list<string>* recompute_f(double);
 //        EasyLogger* m_logger;
     private:
         EasyLogger* m_logger;
@@ -72,6 +73,7 @@ class EntityAnn {
         //        bool m_propagate_Is=true; // should the parents also include the Is of their childred (true=yes)
         double m_alpha;
         double m_ambiguitity_penalty=2;
+        unsigned long m_m;
         void init(string hdt_file_dir, string log_file_dir, double alpha);
         void init(HDT* hdt_ptr, string log_file_dir, double alpha);
 };
