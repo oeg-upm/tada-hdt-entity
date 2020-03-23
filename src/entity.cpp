@@ -53,6 +53,9 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
     std::list<string>* prop;
     if(use_context) {
         for(auto it=data->cbegin(); it!=data->cend(); it++) {
+            if(it==data->cbegin()) { // to skip the header
+                continue;
+            }
             col_id = 0;
             entity = "-----#####";
             prop = new std::list<string>;
@@ -88,7 +91,7 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
         if(it==(*ito)->cbegin()) { // to skip the header
             continue;
         }
-        m_logger->log("cell value: "+(*it));
+        m_logger->log("annotate_column> cell value: "+(*it));
         l = *it;
         if(this->compute_intermediate_coverage(l)) {
             m++;
@@ -168,7 +171,7 @@ std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<stri
                     itt = hdt->search((*it).c_str(), "", (*it3).c_str());
                     if(itt->hasNext()) {
                         strict_entities->push_back(*it);
-                        m_logger->log("get_entities_of_value: "+(*it)+" and property (double level)"+(*it3));
+                        m_logger->log("get_entities_of_value> "+(*it)+" and property (double level) "+(*it3));
                         delete itt;
                         to_break = true;
                         break;
@@ -262,7 +265,7 @@ std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string
         //        m_logger->log("add_class_to_ancestor_lookup> the class already exists: <"+tclass+">");
         return m_ancestor_lookup.at(tclass);
     }
-    //    m_logger->log("add_class_to_ancestor_lookup> the class is being added to the lookup: <"+tclass+">");
+    m_logger->log("add_class_to_ancestor_lookup> the class is being added to the lookup: <"+tclass+">");
     ancestors = new std::unordered_map<string, bool>;
     m_ancestor_lookup.insert({tclass, ancestors});
     //    itt = hdt->search("", rdfs_subclassof.c_str(), tclass.c_str());
@@ -301,13 +304,16 @@ bool EntityAnn::compute_intermediate_coverage(string cell_value) {
         classes = this->get_leaf_classes(*it); // Q(e): *it = e
         this->update_graph(classes);
         Q_size = classes->size();
-        m_logger->log("compute_intermediate_coverage> got the QSIZE ");
+        m_logger->log("compute_intermediate_coverage> got the QSIZE "+to_string(Q_size));
         for(auto it2=classes->cbegin(); it2!=classes->cend(); it2++) {
+            m_logger->log("compute_intermediate_coverage> leaf: "+(*it2));
             // add the class to the lookup if not added yet
             this->add_class_to_ancestor_lookup(*it2);
+            m_logger->log("compute_intermediate_coverage> to get: "+(*it2));
             tnode = m_graph->get_node(*it2);
             if(tnode == nullptr) {
-                cout<< "Error: in compute_intermediate_coverage, tnode <"+tnode->uri+"> is null\n\n";
+                m_logger->log("Error: in compute_intermediate_coverage, tnode <"+cell_value+"> is null\n\n");
+                cout<< "Error: in compute_intermediate_coverage, tnode <"<<cell_value<<"> is null\n\n";
             }
             tnode->tc += 1.0 / (Q_size * Z_size);
         }
@@ -345,7 +351,8 @@ bool EntityAnn::compute_intermediate_coverage(string cell_value, std::list<strin
             this->add_class_to_ancestor_lookup(*it2);
             tnode = m_graph->get_node(*it2);
             if(tnode == nullptr) {
-                cout<< "Error: in compute_intermediate_coverage, tnode <"+tnode->uri+"> is null\n\n";
+                m_logger->log("Error: in compute_intermediate_coverage, tnode <"+cell_value+"> is null\n\n");
+                cout<< "Error: in compute_intermediate_coverage, tnode <"<<cell_value<<"> is null\n\n";
             }
             tnode->tc += 1.0 / (Q_size * Z_size);
         }
@@ -375,11 +382,13 @@ TNode* EntityAnn::update_graph(string class_uri) {
     string parent;
     TNode* pnode;
     TNode* tnode = m_graph->get_node(class_uri);
+    bool orphan=true; // has not parents
     if(tnode==nullptr) {
-        m_logger->log("update_graph> add class: "+class_uri);
+        m_logger->log("update_graph> to add class: "+class_uri);
         tnode = new TNode(class_uri);
         itt = hdt->search(class_uri.c_str(), rdfs_subclassof.c_str(), "");
         while(itt->hasNext()) {
+            orphan = false;
             triple = itt->next();
             parent = triple->getObject();
             m_logger->log("update_graph> parent: "+parent);
@@ -388,6 +397,11 @@ TNode* EntityAnn::update_graph(string class_uri) {
             m_graph->add_edge(pnode, tnode);
         }
         delete itt;
+        if(orphan){
+            m_graph->add_node(tnode);
+            m_logger->log("update_graph> "+class_uri+" is an orphan");
+            cout<<class_uri <<"  is an orphan\n\n";
+        }
     }
     return tnode;
 }

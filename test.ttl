@@ -64,6 +64,30 @@ dbr:footballp1 dbp:country "country1" .
 
 
 
+dbr:UK rdf:type dbo:Country .
+dbr:UK rdfs:label "UK" .
+dbr:Spain rdf:type dbo:Country .
+dbr:Spain rdfs:label "Spain" .
+dbr:Italy rdf:type dbo:Country .
+dbr:Italy rdfs:label "Italy" .
+
+
+dbr:wrestler1 rdf:type dbo:Wrestler .
+dbr:wrestler1 rdfs:label "wr_common_1" .
+dbr:wrestler1 dbp:country dbr:UK .
+dbr:wrestler2 rdf:type dbo:Wrestler .
+dbr:wrestler2 rdfs:label "wr_common_2" .
+dbr:wrestler2 dbp:country dbr:Spain .
+
+dbr:rower1 rdf:type dbo:Rower .
+dbr:rower1 rdfs:label "wr_common_1" .
+dbr:rower2 rdf:type dbo:Rower .
+dbr:rower2 rdfs:label "wr_common_2" .
+
+
+
+
+
 
 dbr:boxer1 rdf:type dbo:Boxer  .
 dbr:boxer2 rdf:type dbo:Boxer  .
@@ -91,7 +115,8 @@ dbo:BasketballPlayer rdfs:subClassOf dbo:Athlete .
 dbo:VolleyballPlayer rdfs:subClassOf dbo:Athlete .
 
 
-
+dbo:Rower rdfs:subClassOf dbo:Athlete .
+dbo:Wrestler rdfs:subClassOf dbo:Athlete .
 dbo:Boxer rdfs:subClassOf dbo:Athlete .
 dbo:AmateurBoxer rdfs:subClassOf dbo:Boxer .
 dbo:GolfPlayer rdfs:subClassOf dbo:Athlete .
