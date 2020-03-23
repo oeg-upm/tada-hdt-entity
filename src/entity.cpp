@@ -118,6 +118,7 @@ std::list<string>* EntityAnn::annotate_semi_scored_column(unsigned long m, doubl
 
 std::list<string>* EntityAnn::recompute_f(double alpha) {
     m_alpha = alpha;
+    m_logger->log("recompute_f> with alpha: "+to_string(alpha));
     this->compute_f();
     return this->get_candidates();
 }
