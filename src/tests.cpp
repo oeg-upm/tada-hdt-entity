@@ -358,6 +358,46 @@ namespace {
         delete ea;
     }
 
+    TEST(EntityTest, LangTag){
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0);
+        ea->set_language_tag("@en");
+        std::list<string>* candidates;
+        string class_uri = dbo_prefix+"Cyclist";
+        std::list<std::list<string>*>* data;
+        Parser p("test_files/test5.csv");
+        data = p.parse_vertical();
+        candidates = ea->annotate_column(data, 0, true, true);
+        ea->get_graph()->print_nodes();
+        delete candidates;
+        candidates = ea->recompute_f(0.1);
+        ASSERT_STREQ(class_uri.c_str(),candidates->front().c_str());
+        delete ea;
+    }
+
+
+
+//    TEST(EntityTest, Temp){
+//        EntityAnn* ea = new EntityAnn("/Users/aalobaid/workspaces/Cworkspace/tada-hdt/dbpedia_all.hdt", log_file, 0);
+//        ea->set_language_tag("@en");
+//        //EntityAnn* ea = new EntityAnn(hdt_file, log_file);
+//        std::list<string>* candidates;
+//        string wrestler_class_uri = dbo_prefix+"Country";
+//        std::list<std::list<string>*>* data;
+//        Parser p("/Users/aalobaid/workspaces/Pyworkspace/tada-gam/local_data/t2dv2/11688006_0_8123036130090004213.csv");
+//        data = p.parse_vertical();
+//        for(auto it=data->cbegin();it!=data->cend();it++){
+//                for(auto jt=(*it)->cbegin();jt!=(*it)->cend();jt++){
+//                    cout << "<" << (*jt) << ">" << "|";
+//                }
+//                cout << endl<<"----------"<<endl;
+//        }
+//        candidates = ea->annotate_column(data, 1, true, true);
+//        ea->get_graph()->print_nodes();
+//        delete candidates;
+//        candidates = ea->recompute_f(0.1);
+//        ASSERT_STREQ(wrestler_class_uri.c_str(),candidates->front().c_str());
+//        delete ea;
+//    }
 
 }//namespace
 

@@ -93,9 +93,9 @@ liblinux:
 
 install:
 	mkdir -p  $(HDIR)
-	cp $(HEADERS_ABS) $(HDIR)
+	cp  $(HEADERS_ABS) $(HDIR)
 	$(MAKE) lib
-	mv $(LIBNAME)  $(LIBDIR)
+	mv  $(LIBNAME)  $(LIBDIR)
 	ln -fs $(LIBDIR)/$(LIBNAME)  $(LIBDIR)/$(LIBALIAS)
 	echo -e "tada_hdt_entity lib is installed"
 	$(MAKE) clean

@@ -61,7 +61,9 @@ class EntityAnn {
         void set_alpha(double);
         double get_alpha();
         string get_quoted(string);
+        string get_taged(string);
         std::list<string>* recompute_f(double);
+        void set_language_tag(string);
 //        EasyLogger* m_logger;
     private:
         EasyLogger* m_logger;
@@ -74,6 +76,7 @@ class EntityAnn {
         double m_alpha;
         double m_ambiguitity_penalty=2;
         unsigned long m_m;
+        string m_lang_tag;
         void init(string hdt_file_dir, string log_file_dir, double alpha);
         void init(HDT* hdt_ptr, string log_file_dir, double alpha);
 };

@@ -85,7 +85,11 @@ dbr:rower2 rdf:type dbo:Rower .
 dbr:rower2 rdfs:label "wr_common_2" .
 
 
+dbr:cyclist1 rdf:type dbo:Cyclist .
+dbr:cyclist2 rdf:type dbo:Cyclist .
 
+dbr:cyclist1 rdfs:label "cyclist1"@en .
+dbr:cyclist2 rdfs:label "cyclist2"@en .
 
 
 
@@ -114,7 +118,7 @@ dbo:FootballPlayer rdfs:subClassOf dbo:Athlete .
 dbo:BasketballPlayer rdfs:subClassOf dbo:Athlete .
 dbo:VolleyballPlayer rdfs:subClassOf dbo:Athlete .
 
-
+dbo:Cyclist rdfs:subClassOf dbo:Athlete .
 dbo:Rower rdfs:subClassOf dbo:Athlete .
 dbo:Wrestler rdfs:subClassOf dbo:Athlete .
 dbo:Boxer rdfs:subClassOf dbo:Athlete .

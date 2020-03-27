@@ -67,12 +67,14 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
                     entity= *jt;
                 }
             }
+            m_logger->log("annotate_column> compute intermediate coverage --- >");
             if(this->compute_intermediate_coverage(entity, prop, double_levels)) {
                 m++;
             }
             delete prop;
         }
         m_m = m;
+        m_logger->log("annotate_column> m: "+to_string(m));
         return this->annotate_semi_scored_column(m);
     }
     else {
@@ -137,12 +139,16 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
     IteratorTripleString* itt;
     TripleString* triple;
     std::list<string>* entities = new std::list<string>;
+    qvalue = get_taged(qvalue);
     itt = hdt->search("", rdfs_label.c_str(), qvalue.c_str());
     m_logger->log("get_entities_of_value: cell value  <"+value+">");
     while(itt->hasNext()) {
         triple = itt->next();
         entities->push_back(triple->getSubject());
         m_logger->log("get_entities_of_value: "+triple->getSubject());
+    }
+    if(entities->size()==0){
+        m_logger->log("no values for qvalue<"+qvalue+">");
     }
     delete itt;
     return entities;
@@ -159,6 +165,7 @@ std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<stri
     std::list<string>* prop_entities;
     bool to_break;
     qvalue = get_quoted(value);
+    qvalue = get_taged(qvalue);
     entities = this->get_entities_of_value(value);
     for(auto it = entities->cbegin(); it!=entities->cend(); it++) {
         for(auto it2=properties->cbegin(); it2!=properties->cend(); it2++) {
@@ -333,13 +340,13 @@ bool EntityAnn::compute_intermediate_coverage(string cell_value) {
 
 
 bool EntityAnn::compute_intermediate_coverage(string cell_value, std::list<string>* properties, bool double_level) {
-    string qcell_value;
+//    string qcell_value;
     std::list<string>* classes;
     std::list<string>* entities;
     size_t Q_size, Z_size;
     TNode* tnode;
     m_logger->log("compute_intermediate_coverage> cell value: "+cell_value);
-    qcell_value= get_quoted(cell_value);
+//    qcell_value= get_quoted(cell_value);
     entities = this->get_entities_of_value(cell_value, properties, double_level); // Z(v):
     Z_size = entities->size();
     m_logger->log("compute_intermediate_coverage> Z_size 1: "+to_string(Z_size)+" for cell value: "+cell_value);
@@ -622,7 +629,12 @@ string EntityAnn::get_quoted(string v){
     if(qcell_value[0] != '\"') {
         qcell_value = "\""+qcell_value+"\"";
     }
+//    return qcell_value+m_lang_tag;
     return qcell_value;
+}
+
+string EntityAnn::get_taged(string qv){
+    return qv+m_lang_tag;
 }
 
 void EntityAnn::set_alpha(double alpha){
@@ -633,3 +645,6 @@ double EntityAnn::get_alpha(){
     return m_alpha;
 }
 
+void EntityAnn::set_language_tag(string tag){
+    m_lang_tag = tag;
+}
