@@ -64,6 +64,9 @@ class EntityAnn {
         string get_taged(string);
         std::list<string>* recompute_f(double);
         void set_language_tag(string);
+        string get_title_case(string);
+        void set_title_case(bool);
+        bool get_title_case();
 //        EasyLogger* m_logger;
     private:
         EasyLogger* m_logger;
@@ -76,6 +79,7 @@ class EntityAnn {
         double m_alpha;
         double m_ambiguitity_penalty=2;
         unsigned long m_m;
+        bool m_retry_with_title_case = false;
         string m_lang_tag;
         void init(string hdt_file_dir, string log_file_dir, double alpha);
         void init(HDT* hdt_ptr, string log_file_dir, double alpha);

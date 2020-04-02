@@ -2,6 +2,7 @@
 #include "tnode.h"
 #include <string>
 #include <list>
+#include <ctype.h>
 #include <easy_logger/easy_logger.h>
 #include <HDTManager.hpp>
 
@@ -135,10 +136,12 @@ std::list<string>* EntityAnn::annotate_semi_scored_column(unsigned long m) {
 
 // Get entities of a given cell value or name using the rdfs:label property
 std::list<string>* EntityAnn::get_entities_of_value(string value) {
-    string qvalue = get_quoted(value);
+    string qvalue;
     IteratorTripleString* itt;
     TripleString* triple;
+    string tcased;
     std::list<string>* entities = new std::list<string>;
+    qvalue = get_quoted(value);
     qvalue = get_taged(qvalue);
     itt = hdt->search("", rdfs_label.c_str(), qvalue.c_str());
     m_logger->log("get_entities_of_value: cell value  <"+value+">");
@@ -149,6 +152,13 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
     }
     if(entities->size()==0){
         m_logger->log("no values for qvalue<"+qvalue+">");
+        if(m_retry_with_title_case){
+            tcased = get_title_case(value);
+            if(tcased!=value){
+                m_logger->log("get_entities_of_value> tcased: "+tcased);
+                return get_entities_of_value(tcased);
+            }
+        }
     }
     delete itt;
     return entities;
@@ -648,3 +658,36 @@ double EntityAnn::get_alpha(){
 void EntityAnn::set_language_tag(string tag){
     m_lang_tag = tag;
 }
+
+string EntityAnn::get_title_case(string s){
+    string tcased = "";
+    char ch;
+    bool start_new_word = true; // will be on once a space of found
+    for(size_t i=0;i<s.size();i++){
+        if(s[i]==' '){
+            start_new_word = true;
+            tcased += " ";
+        }
+        else if(start_new_word){
+            ch = static_cast<char>(toupper(s[i]));
+            tcased.push_back(ch);
+            start_new_word = false;
+        }
+        else{
+            ch = static_cast<char>(tolower(s[i]));
+            tcased.push_back(ch);
+        }
+    }
+    return tcased;
+}
+
+void EntityAnn::set_title_case(bool t){
+    m_retry_with_title_case = t;
+}
+
+
+bool EntityAnn::get_title_case(){
+    return m_retry_with_title_case;
+}
+
+

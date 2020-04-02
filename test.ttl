@@ -109,6 +109,13 @@ dbr:amaboxer6 rdf:type dbo:AmateurBoxer  .
 dbr:swimmer1 rdf:type dbo:Swimmer .
 
 
+dbr:baseball1 rdf:type dbo:BaseballPlayer .
+dbr:baseball1 rdfs:label "Adam Pie"@en .
+
+dbr:baseball2 rdf:type dbo:BaseballPlayer .
+dbr:baseball2 rdfs:label "John Carrot"@en .
+
+
 
 dbo:Swimmer rdfs:subClassOf dbo:SwimmerExtraRoot .
 dbo:Swimmer rdfs:subClassOf dbo:Athlete .
@@ -118,6 +125,8 @@ dbo:FootballPlayer rdfs:subClassOf dbo:Athlete .
 dbo:BasketballPlayer rdfs:subClassOf dbo:Athlete .
 dbo:VolleyballPlayer rdfs:subClassOf dbo:Athlete .
 
+
+dbo:BaseballPlayer rdfs:subClassOf dbo:Athlete .
 dbo:Cyclist rdfs:subClassOf dbo:Athlete .
 dbo:Rower rdfs:subClassOf dbo:Athlete .
 dbo:Wrestler rdfs:subClassOf dbo:Athlete .

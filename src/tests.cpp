@@ -374,6 +374,34 @@ namespace {
         delete ea;
     }
 
+    TEST(EntityTest, TitleCaseSimple){
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0);
+        ea->set_language_tag("@en");
+        ASSERT_STRCASEEQ(ea->get_title_case("ABC").c_str(),"Abc");
+        ASSERT_STRCASEEQ(ea->get_title_case("Title Case Already").c_str(),"Title Case Already");
+        ASSERT_STRCASEEQ(ea->get_title_case("Another Title").c_str(),"Another Title");
+        ASSERT_STRCASEEQ(ea->get_title_case("everything here is small").c_str(),"Everything Here Is Small");
+        ASSERT_STRCASEEQ(ea->get_title_case("What about this?").c_str(),"What About This?");
+        delete ea;
+    }
+
+    TEST(EntityTest, TitleCase){
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0);
+        ea->set_language_tag("@en");
+        ea->set_title_case(true);
+        std::list<string>* candidates;
+        string class_uri = dbo_prefix+"BaseballPlayer";
+        std::list<std::list<string>*>* data;
+        Parser p("test_files/test6.csv");
+        data = p.parse_vertical();
+        candidates = ea->annotate_column(data, 0, true, true);
+        ea->get_graph()->print_nodes();
+        delete candidates;
+        candidates = ea->recompute_f(0.1);
+        ASSERT_STREQ(class_uri.c_str(),candidates->front().c_str());
+        delete ea;
+    }
+
 
 
 //    TEST(EntityTest, Temp){
