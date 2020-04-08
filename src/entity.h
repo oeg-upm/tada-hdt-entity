@@ -60,6 +60,7 @@ class EntityAnn {
         void pick_root();
         void set_alpha(double);
         double get_alpha();
+        string strip_quotes(string);
         string get_quoted(string);
         string get_taged(string);
         std::list<string>* recompute_f(double);

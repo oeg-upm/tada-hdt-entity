@@ -31,11 +31,6 @@ void ttl_to_hdt(string ttl_dir) {
 }
 
 
-
-
-
-
-
 namespace {
 
 
@@ -400,6 +395,13 @@ namespace {
         candidates = ea->recompute_f(0.1);
         ASSERT_STREQ(class_uri.c_str(),candidates->front().c_str());
         delete ea;
+    }
+
+    TEST(EntityTest, StripQ){
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0);
+        ea->set_language_tag("@en");
+        ea->set_title_case(true);
+        ASSERT_STREQ("ABC",ea->strip_quotes("\"ABC\"").c_str());
     }
 
 

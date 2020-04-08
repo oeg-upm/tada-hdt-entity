@@ -68,6 +68,7 @@ std::list<string>* EntityAnn::annotate_column(std::list<std::list<string>*>* dat
                     entity= *jt;
                 }
             }
+            entity = strip_quotes(entity);
             m_logger->log("annotate_column> compute intermediate coverage --- >");
             if(this->compute_intermediate_coverage(entity, prop, double_levels)) {
                 m++;
@@ -151,12 +152,15 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
         m_logger->log("get_entities_of_value: "+triple->getSubject());
     }
     if(entities->size()==0){
-        m_logger->log("no values for qvalue<"+qvalue+">");
+        m_logger->log("no values for qvalue<"+qvalue+"> "+"  <"+value+">");
         if(m_retry_with_title_case){
             tcased = get_title_case(value);
             if(tcased!=value){
                 m_logger->log("get_entities_of_value> tcased: "+tcased);
                 return get_entities_of_value(tcased);
+            }
+            else{
+                m_logger->log("get_entities_of_value> debug, tcased: <"+tcased+">");
             }
         }
     }
@@ -688,6 +692,16 @@ void EntityAnn::set_title_case(bool t){
 
 bool EntityAnn::get_title_case(){
     return m_retry_with_title_case;
+}
+
+string EntityAnn::strip_quotes(string s){
+    string t="";
+    for(size_t i =0;i<s.length();i++){
+        if(s[i]!='"'){
+            t.push_back(s[i]);
+        }
+    }
+    return t;
 }
 
 
