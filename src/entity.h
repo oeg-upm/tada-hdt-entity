@@ -68,7 +68,8 @@ class EntityAnn {
         string get_title_case(string);
         void set_title_case(bool);
         bool get_title_case();
-//        EasyLogger* m_logger;
+        std::list<string>* annotate_entity_property_column(std::list<std::list<string>*>*, long, long);
+        void annotate_entity_property_pair(string, string);
     private:
         EasyLogger* m_logger;
         HDT* hdt;
@@ -76,6 +77,7 @@ class EntityAnn {
         std::unordered_map<string, std::unordered_map<string, bool>*> m_ancestor_lookup;
         std::unordered_map<string, bool>* add_class_to_ancestor_lookup(string tclass);
         std::unordered_map<string, unsigned long> m_classes_entities_count;
+        std::unordered_map<string, unsigned long>* m_properties_counts;
         //        bool m_propagate_Is=true; // should the parents also include the Is of their childred (true=yes)
         double m_alpha;
         double m_ambiguitity_penalty=2;
@@ -85,5 +87,14 @@ class EntityAnn {
         void init(string hdt_file_dir, string log_file_dir, double alpha);
         void init(HDT* hdt_ptr, string log_file_dir, double alpha);
 };
+
+
+//bool sort_pair_property(const pair<string,unsigned long> &a,
+//               const pair<string,unsigned long> &b){
+//       return a.second>b.second;
+//}
+
+
+
 #endif
 

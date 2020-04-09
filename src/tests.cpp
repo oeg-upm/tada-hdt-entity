@@ -50,7 +50,6 @@ namespace {
         delete ea;
     }
 
-
     TEST(EntityTest, GetLeafClasses) {
         EntityAnn* ea = new EntityAnn(hdt_file, log_file);
         std::list<string>* classes;
@@ -404,6 +403,22 @@ namespace {
         ASSERT_STREQ("ABC",ea->strip_quotes("\"ABC\"").c_str());
     }
 
+
+
+    TEST(EntityTest, nonSubjectColumns){
+        string dbp_country="http://dbpedia.org/property/country";
+        std::list<std::list<string>*>* data;
+        std::list<string>* properties;
+        Parser p("test_files/test7.csv");
+        data = p.parse_vertical();
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0.9);
+        ea->set_title_case(false);
+        properties = ea->annotate_entity_property_column(data,1,2);
+//        cout << "size: "<<properties->size()<<endl;
+//        cout << "front: <"<<properties->front()<<"> "<<endl;
+//        cout << "target: <"<<dbp_country<<"> "<<endl;
+        ASSERT_STREQ(properties->front().c_str(),dbp_country.c_str());
+    }
 
 
 //    TEST(EntityTest, Temp){

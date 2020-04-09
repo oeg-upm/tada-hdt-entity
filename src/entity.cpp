@@ -1,20 +1,34 @@
 #include "entity.h"
 #include "tnode.h"
 #include <string>
+#include <iterator>
+#include <utility>
+#include <algorithm>
 #include <list>
+#include <iostream>
 #include <ctype.h>
 #include <easy_logger/easy_logger.h>
 #include <HDTManager.hpp>
 
+using namespace std;
 
-void EntityAnn::init(string hdt_file_dir, string log_file_dir, double alpha){
+
+bool sort_pair_property(const std::pair<string, unsigned long>& a,
+                        const std::pair<string, unsigned long>& b) {
+    return a.second>b.second;
+}
+
+
+
+
+void EntityAnn::init(string hdt_file_dir, string log_file_dir, double alpha) {
     hdt = HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
     m_logger = new EasyLogger(log_file_dir);
     m_graph = new Graph(m_logger);
     m_alpha = alpha;
 }
 
-void EntityAnn::init(HDT* hdt_ptr, string log_file_dir, double alpha){
+void EntityAnn::init(HDT* hdt_ptr, string log_file_dir, double alpha) {
     hdt =hdt_ptr;
     m_logger = new EasyLogger(log_file_dir);
     m_graph = new Graph(m_logger);
@@ -24,21 +38,21 @@ void EntityAnn::init(HDT* hdt_ptr, string log_file_dir, double alpha){
 
 
 EntityAnn::EntityAnn(HDT* hdt_ptr, string log_file_dir) {
-    init(hdt_ptr,log_file_dir,1.0);
+    init(hdt_ptr, log_file_dir, 1.0);
 }
 
 
 EntityAnn::EntityAnn(HDT* hdt_ptr, string log_file_dir, double alpha) {
-    init(hdt_ptr,log_file_dir,alpha);
+    init(hdt_ptr, log_file_dir, alpha);
 }
 
 EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir) {
-    init(hdt_file_dir,log_file_dir,1.0);
+    init(hdt_file_dir, log_file_dir, 1.0);
 }
 
 
 EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir, double alpha) {
-    init(hdt_file_dir,log_file_dir,alpha);
+    init(hdt_file_dir, log_file_dir, alpha);
 }
 
 
@@ -151,15 +165,15 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
         entities->push_back(triple->getSubject());
         m_logger->log("get_entities_of_value: "+triple->getSubject());
     }
-    if(entities->size()==0){
+    if(entities->size()==0) {
         m_logger->log("no values for qvalue<"+qvalue+"> "+"  <"+value+">");
-        if(m_retry_with_title_case){
+        if(m_retry_with_title_case) {
             tcased = get_title_case(value);
-            if(tcased!=value){
+            if(tcased!=value) {
                 m_logger->log("get_entities_of_value> tcased: "+tcased);
                 return get_entities_of_value(tcased);
             }
-            else{
+            else {
                 m_logger->log("get_entities_of_value> debug, tcased: <"+tcased+">");
             }
         }
@@ -171,7 +185,7 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
 
 // Get entities of a given cell value or name using the rdfs:label property
 std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<string>* properties, bool double_level) {
-    string qprop,qvalue;
+    string qprop, qvalue;
     IteratorTripleString* itt;
     TripleString* triple;
     std::list<string>* entities;// = this->get_entities_of_value(value);
@@ -354,13 +368,13 @@ bool EntityAnn::compute_intermediate_coverage(string cell_value) {
 
 
 bool EntityAnn::compute_intermediate_coverage(string cell_value, std::list<string>* properties, bool double_level) {
-//    string qcell_value;
+    //    string qcell_value;
     std::list<string>* classes;
     std::list<string>* entities;
     size_t Q_size, Z_size;
     TNode* tnode;
     m_logger->log("compute_intermediate_coverage> cell value: "+cell_value);
-//    qcell_value= get_quoted(cell_value);
+    //    qcell_value= get_quoted(cell_value);
     entities = this->get_entities_of_value(cell_value, properties, double_level); // Z(v):
     Z_size = entities->size();
     m_logger->log("compute_intermediate_coverage> Z_size 1: "+to_string(Z_size)+" for cell value: "+cell_value);
@@ -428,10 +442,10 @@ TNode* EntityAnn::update_graph(string class_uri) {
             m_graph->add_edge(pnode, tnode);
         }
         delete itt;
-        if(orphan){
+        if(orphan) {
             m_graph->add_node(tnode);
             m_logger->log("update_graph> "+class_uri+" is an orphan");
-//            cout<<class_uri <<"  is an orphan\n\n";
+            //            cout<<class_uri <<"  is an orphan\n\n";
         }
     }
     return tnode;
@@ -462,10 +476,6 @@ void EntityAnn::compute_Lc_for_all() {
     for(auto it=roots->cbegin(); it!=roots->cend(); it++) {
         this->compute_Lc_for_node(*it);
     }
-    //    std::list<TNode*> *leaves = m_graph->get_leaves();
-    //    for(auto it=leaves->cbegin();it!=leaves->cend();it++){
-    //        this->compute_Lc_for_node(*it);
-    //    }
 }
 
 void EntityAnn::compute_Ic_for_all() {
@@ -495,10 +505,6 @@ void EntityAnn::compute_classes_entities_counts() {
     for(auto it=m_graph->m_graph->cbegin(); it!=m_graph->m_graph->cend(); it++) {
         itt = hdt->search("", rdf_type.c_str(), it->first.c_str());
         num_of_entities = static_cast<unsigned long>(itt->estimatedNumResults());
-        //        m_logger->log("entities of "+it->first+" is: "+to_string(num_of_entities));
-        //		if(num_of_entities==0) {
-        //            num_of_entities++;
-        //        }
         m_classes_entities_count.insert({it->first, num_of_entities});
         delete itt;
     }
@@ -638,46 +644,46 @@ void EntityAnn::pick_root() {
     m_graph->pick_root();
 }
 
-string EntityAnn::get_quoted(string v){
+string EntityAnn::get_quoted(string v) {
     string qcell_value = v;
     if(qcell_value[0] != '\"') {
         qcell_value = "\""+qcell_value+"\"";
     }
-//    return qcell_value+m_lang_tag;
+    //    return qcell_value+m_lang_tag;
     return qcell_value;
 }
 
-string EntityAnn::get_taged(string qv){
+string EntityAnn::get_taged(string qv) {
     return qv+m_lang_tag;
 }
 
-void EntityAnn::set_alpha(double alpha){
+void EntityAnn::set_alpha(double alpha) {
     m_alpha = alpha;
 }
 
-double EntityAnn::get_alpha(){
+double EntityAnn::get_alpha() {
     return m_alpha;
 }
 
-void EntityAnn::set_language_tag(string tag){
+void EntityAnn::set_language_tag(string tag) {
     m_lang_tag = tag;
 }
 
-string EntityAnn::get_title_case(string s){
+string EntityAnn::get_title_case(string s) {
     string tcased = "";
     char ch;
     bool start_new_word = true; // will be on once a space of found
-    for(size_t i=0;i<s.size();i++){
-        if(s[i]==' '){
+    for(size_t i=0; i<s.size(); i++) {
+        if(s[i]==' ') {
             start_new_word = true;
             tcased += " ";
         }
-        else if(start_new_word){
+        else if(start_new_word) {
             ch = static_cast<char>(toupper(s[i]));
             tcased.push_back(ch);
             start_new_word = false;
         }
-        else{
+        else {
             ch = static_cast<char>(tolower(s[i]));
             tcased.push_back(ch);
         }
@@ -685,23 +691,187 @@ string EntityAnn::get_title_case(string s){
     return tcased;
 }
 
-void EntityAnn::set_title_case(bool t){
+void EntityAnn::set_title_case(bool t) {
     m_retry_with_title_case = t;
 }
 
 
-bool EntityAnn::get_title_case(){
+bool EntityAnn::get_title_case() {
     return m_retry_with_title_case;
 }
 
-string EntityAnn::strip_quotes(string s){
+string EntityAnn::strip_quotes(string s) {
     string t="";
-    for(size_t i =0;i<s.length();i++){
-        if(s[i]!='"'){
+    for(size_t i =0; i<s.length(); i++) {
+        if(s[i]!='"') {
             t.push_back(s[i]);
         }
     }
     return t;
 }
+
+std::list<string>* EntityAnn::annotate_entity_property_column(std::list<std::list<string>*>* data, long subject_idx, long property_idx) {
+    std::list<string>::iterator col_iter;
+    std::list<string>* properties = new std::list<string>;
+    string subject, class_uri, another, subject_uri;
+    m_properties_counts = new std::unordered_map<string, unsigned long>;
+    for(auto it=data->cbegin(); it!=data->cend(); it++) {
+        if(it==data->cbegin()) { // to skip the header
+            continue;
+        }
+        col_iter = (*it)->begin();
+        if(subject_idx < property_idx) {
+            std::advance(col_iter, subject_idx);
+            subject = *col_iter;
+            std::advance(col_iter, property_idx-subject_idx);
+            another = *col_iter;
+        }
+        else {
+            std::advance(col_iter, property_idx);
+            another = *col_iter;
+            std::advance(col_iter, subject_idx-property_idx);
+            subject = *col_iter;
+        }
+        annotate_entity_property_pair(subject, another);
+    }
+    string property_uri;
+    unsigned long count;
+    std::list<std::pair<string, unsigned long>>* pairs = new std::list<std::pair<string, unsigned long>>;
+    for(auto it=m_properties_counts->cbegin(); it!=m_properties_counts->cend(); it++) {
+        property_uri = it->first;
+        count = it->second;
+        pairs->push_back(std::make_pair(property_uri, count));
+    }
+    //    std::sort(pairs->cbegin(),pairs->cend(),sort_pair_property);
+    pairs->sort(sort_pair_property);
+    for(auto it=pairs->cbegin(); it!=pairs->cend(); it++) {
+        property_uri = it->first;
+        count = it->second;
+        cout << "property: "+property_uri << " ----- (" << count << ")\n";
+        properties->push_back(property_uri);
+    }
+    m_properties_counts->clear();
+    delete m_properties_counts;
+    pairs->clear();
+    delete pairs;
+    return properties;
+}
+
+
+void EntityAnn::annotate_entity_property_pair(string subject, string another) {
+    IteratorTripleString* itt;
+    TripleString* triple;
+    IteratorTripleString* itt2;
+    TripleString* triple2;
+    IteratorTripleString* itt3;
+    TripleString* triple3;
+    string subject_uri;
+    string subject_tagged;
+    string another_tagged;
+    string t_cased;
+    string property_uri, another_uri;
+    bool entity_found=false, property_found=false, another_found=false;
+    another_tagged = get_taged(get_quoted(strip_quotes(another)));
+    subject_tagged = get_taged(get_quoted(strip_quotes(subject)));
+    m_logger->log("annotate_entity_property_pair> ("+subject+","+another+")");
+    itt = hdt->search("", rdfs_label.c_str(), subject_tagged.c_str());
+    while(itt->hasNext()) {
+        entity_found = true;
+        m_logger->log("annotate_entity_property_pair> subject is found: "+subject_uri);
+        triple = itt->next();
+        subject_uri = triple->getSubject();
+        itt2 = hdt->search("", rdfs_label.c_str(),  another_tagged.c_str());
+        another_found = false;
+        while(itt2->hasNext()) {
+            another_found = true;
+            triple2 = itt2->next();
+            another_uri = triple2->getSubject();
+            m_logger->log("annotate_entity_property_pair> another is found"+another_uri);
+            itt3 = hdt->search(subject_uri.c_str(), "", another_uri.c_str());
+            while(itt3->hasNext()) {
+                triple3 = itt3->next();
+                property_uri = triple3->getPredicate();
+                if(m_properties_counts->find(property_uri) != m_properties_counts->cend()) {
+                    m_properties_counts->at(property_uri) += 1;
+                }
+                else {
+                    m_properties_counts->insert({property_uri, 1});
+                }
+            }// 3
+            delete itt3;
+        }// 2
+        if(another_found==false && m_retry_with_title_case) {
+            t_cased = get_title_case(another);
+            if(t_cased != another) {
+                annotate_entity_property_pair(subject, t_cased);
+            }
+        }
+        delete itt2;
+    }// 1
+    delete itt;
+    if(entity_found==false && m_retry_with_title_case) {
+        t_cased = get_title_case(subject);
+        if(t_cased != subject) {
+            annotate_entity_property_pair(t_cased, another);
+        }
+    }
+}
+
+
+
+//void EntityAnn::annotate_entity_property_pair(string subject, string another){
+//    IteratorTripleString* itt;
+//    TripleString* triple;
+//    IteratorTripleString* itt2;
+//    TripleString* triple2;
+//    string subject_uri;
+//    string subject_tagged;
+//    string another_tagged;
+//    string t_cased;
+//    string property_uri;
+//    bool entity_found=false, property_found=false;
+//    subject = strip_quotes(subject);
+//    another_tagged = strip_quotes(another);
+//    m_logger->log("annotate_entity_property_pair> ("+subject+","+another+")");
+//    subject_tagged = get_taged(get_quoted(subject));
+//    itt = hdt->search("", rdfs_label.c_str(), subject_tagged.c_str());
+//    while(itt->hasNext()) {
+//        entity_found = true;
+//        property_found = false;
+//        triple = itt->next();
+//        subject_uri = triple->getSubject();
+//        itt2 = hdt->search(subject_uri.c_str(), "",  another_tagged.c_str());
+//        m_logger->log("annotate_entity_property_pair> subject is found: "+subject_uri);
+//        while(itt2->hasNext()){
+//            property_found = true;
+//            triple2 = itt2->next();
+//            property_uri = triple2->getPredicate();
+//            m_logger->log("annotate_entity_property_pair> property is found"+property_uri);
+//            if(m_properties_counts->find(property_uri) != m_properties_counts->cend()){
+//                m_properties_counts->at(property_uri) += 1;
+//            }
+//            else{
+//                m_properties_counts->insert({property_uri,1});
+//            }
+//            delete itt2;
+//        }
+//        if(property_found==false && m_retry_with_title_case){
+//            t_cased = get_title_case(another);
+//            if(t_cased != another){
+//                annotate_entity_property_pair(subject, t_cased);
+//            }
+//        }
+//        if(property_found==false){
+//            m_logger->log("annotate_entity_property_pair> "+subject_uri+" ---- "+another_tagged+"   not found");
+//        }
+//    }
+//    if(entity_found==false && m_retry_with_title_case){
+//        t_cased = get_title_case(subject);
+//        if(t_cased != subject){
+//            annotate_entity_property_pair(t_cased,another);
+//        }
+//    }
+//    delete itt;
+//}
 
 
