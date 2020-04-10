@@ -26,6 +26,7 @@ void EntityAnn::init(string hdt_file_dir, string log_file_dir, double alpha) {
     m_logger = new EasyLogger(log_file_dir);
     m_graph = new Graph(m_logger);
     m_alpha = alpha;
+    m_properties_counts = nullptr;
 }
 
 void EntityAnn::init(HDT* hdt_ptr, string log_file_dir, double alpha) {
@@ -33,6 +34,7 @@ void EntityAnn::init(HDT* hdt_ptr, string log_file_dir, double alpha) {
     m_logger = new EasyLogger(log_file_dir);
     m_graph = new Graph(m_logger);
     m_alpha = alpha;
+    m_properties_counts = nullptr;
 }
 
 
@@ -734,27 +736,28 @@ std::list<string>* EntityAnn::annotate_entity_property_column(std::list<std::lis
         }
         annotate_entity_property_pair(subject, another);
     }
-    string property_uri;
-    unsigned long count;
-    std::list<std::pair<string, unsigned long>>* pairs = new std::list<std::pair<string, unsigned long>>;
-    for(auto it=m_properties_counts->cbegin(); it!=m_properties_counts->cend(); it++) {
-        property_uri = it->first;
-        count = it->second;
-        pairs->push_back(std::make_pair(property_uri, count));
-    }
-    //    std::sort(pairs->cbegin(),pairs->cend(),sort_pair_property);
-    pairs->sort(sort_pair_property);
-    for(auto it=pairs->cbegin(); it!=pairs->cend(); it++) {
-        property_uri = it->first;
-        count = it->second;
-        cout << "property: "+property_uri << " ----- (" << count << ")\n";
-        properties->push_back(property_uri);
-    }
-    m_properties_counts->clear();
-    delete m_properties_counts;
-    pairs->clear();
-    delete pairs;
-    return properties;
+    return get_properties_from_map();
+//    string property_uri;
+//    unsigned long count;
+//    std::list<std::pair<string, unsigned long>>* pairs = new std::list<std::pair<string, unsigned long>>;
+//    for(auto it=m_properties_counts->cbegin(); it!=m_properties_counts->cend(); it++) {
+//        property_uri = it->first;
+//        count = it->second;
+//        pairs->push_back(std::make_pair(property_uri, count));
+//    }
+//    //    std::sort(pairs->cbegin(),pairs->cend(),sort_pair_property);
+//    pairs->sort(sort_pair_property);
+//    for(auto it=pairs->cbegin(); it!=pairs->cend(); it++) {
+//        property_uri = it->first;
+//        count = it->second;
+//        cout << "property: "+property_uri << " ----- (" << count << ")\n";
+//        properties->push_back(property_uri);
+//    }
+//    m_properties_counts->clear();
+//    delete m_properties_counts;
+//    pairs->clear();
+//    delete pairs;
+//    return properties;
 }
 
 
@@ -773,11 +776,12 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
     bool entity_found=false, property_found=false, another_found=false;
     another_tagged = get_taged(get_quoted(strip_quotes(another)));
     subject_tagged = get_taged(get_quoted(strip_quotes(subject)));
-    m_logger->log("annotate_entity_property_pair> ("+subject+","+another+")");
+//    m_logger->log("annotate_entity_property_pair> ("+subject+","+another+")");
+//    m_logger->log("annotate_entity_property_pair> tagged ("+subject_tagged+","+another_tagged+")");
     itt = hdt->search("", rdfs_label.c_str(), subject_tagged.c_str());
     while(itt->hasNext()) {
         entity_found = true;
-        m_logger->log("annotate_entity_property_pair> subject is found: "+subject_uri);
+//        m_logger->log("annotate_entity_property_pair> subject is found: "+subject_uri);
         triple = itt->next();
         subject_uri = triple->getSubject();
         itt2 = hdt->search("", rdfs_label.c_str(),  another_tagged.c_str());
@@ -786,11 +790,14 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
             another_found = true;
             triple2 = itt2->next();
             another_uri = triple2->getSubject();
-            m_logger->log("annotate_entity_property_pair> another is found"+another_uri);
+//            m_logger->log("annotate_entity_property_pair> another is found: "+another_uri);
             itt3 = hdt->search(subject_uri.c_str(), "", another_uri.c_str());
+            property_found = false;
             while(itt3->hasNext()) {
+                property_found = true;
                 triple3 = itt3->next();
                 property_uri = triple3->getPredicate();
+                m_logger->log("annotate_entity_property_pair> *** triple: "+subject_uri+" - "+property_uri+" - "+another_uri);
                 if(m_properties_counts->find(property_uri) != m_properties_counts->cend()) {
                     m_properties_counts->at(property_uri) += 1;
                 }
@@ -798,6 +805,12 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
                     m_properties_counts->insert({property_uri, 1});
                 }
             }// 3
+            if(property_found){
+                m_logger->log("annotate_entity_property_pair> relation found: "+subject_uri+" - "+another_uri);
+            }
+            else{
+                m_logger->log("annotate_entity_property_pair> relation NOT:"+subject_uri+" - "+another_uri);
+            }
             delete itt3;
         }// 2
         if(another_found==false && m_retry_with_title_case) {
@@ -817,61 +830,89 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
     }
 }
 
+std::list<string>* EntityAnn::get_entities_of_class(string class_uri){
+    IteratorTripleString* itt;
+    TripleString* triple;
+    std::list<string>* entities;
+    entities=new std::list<string>;
+    itt = hdt->search("", rdf_type.c_str(), class_uri.c_str());
+    while(itt->hasNext()){
+        triple = itt->next();
+        entities->push_back(triple->getSubject());
+    }
+    return entities;
+}
 
 
-//void EntityAnn::annotate_entity_property_pair(string subject, string another){
-//    IteratorTripleString* itt;
-//    TripleString* triple;
-//    IteratorTripleString* itt2;
-//    TripleString* triple2;
-//    string subject_uri;
-//    string subject_tagged;
-//    string another_tagged;
-//    string t_cased;
-//    string property_uri;
-//    bool entity_found=false, property_found=false;
-//    subject = strip_quotes(subject);
-//    another_tagged = strip_quotes(another);
-//    m_logger->log("annotate_entity_property_pair> ("+subject+","+another+")");
-//    subject_tagged = get_taged(get_quoted(subject));
-//    itt = hdt->search("", rdfs_label.c_str(), subject_tagged.c_str());
-//    while(itt->hasNext()) {
-//        entity_found = true;
-//        property_found = false;
-//        triple = itt->next();
-//        subject_uri = triple->getSubject();
-//        itt2 = hdt->search(subject_uri.c_str(), "",  another_tagged.c_str());
-//        m_logger->log("annotate_entity_property_pair> subject is found: "+subject_uri);
-//        while(itt2->hasNext()){
-//            property_found = true;
-//            triple2 = itt2->next();
-//            property_uri = triple2->getPredicate();
-//            m_logger->log("annotate_entity_property_pair> property is found"+property_uri);
-//            if(m_properties_counts->find(property_uri) != m_properties_counts->cend()){
-//                m_properties_counts->at(property_uri) += 1;
-//            }
-//            else{
-//                m_properties_counts->insert({property_uri,1});
-//            }
-//            delete itt2;
-//        }
-//        if(property_found==false && m_retry_with_title_case){
-//            t_cased = get_title_case(another);
-//            if(t_cased != another){
-//                annotate_entity_property_pair(subject, t_cased);
-//            }
-//        }
-//        if(property_found==false){
-//            m_logger->log("annotate_entity_property_pair> "+subject_uri+" ---- "+another_tagged+"   not found");
-//        }
-//    }
-//    if(entity_found==false && m_retry_with_title_case){
-//        t_cased = get_title_case(subject);
-//        if(t_cased != subject){
-//            annotate_entity_property_pair(t_cased,another);
-//        }
-//    }
-//    delete itt;
-//}
+
+std::list<string>* EntityAnn::annotate_entity_property_heuristic(std::list<std::list<string>*>* data, string class_uri, long property_idx) {
+    std::list<string>::iterator col_iter;
+    IteratorTripleString* itt;
+    TripleString* triple;
+    std::list<string>* entities = new std::list<string>;
+    std::list<string>* subjects;
+    std::list<string>* ent;
+    string another, subject_uri, entity_uri, property_uri;
+    m_properties_counts = new std::unordered_map<string, unsigned long>;
+    for(auto it=data->cbegin(); it!=data->cend(); it++) {
+        if(it==data->cbegin()) { // to skip the header
+            continue;
+        }
+        col_iter = (*it)->begin();
+        std::advance(col_iter, property_idx);
+        another = *col_iter;
+        ent = get_entities_of_value(another);
+        if(ent->size() == 0 && m_retry_with_title_case){
+            ent = get_entities_of_value(get_title_case(another));
+        }
+        entities->merge(*ent);
+    }
+    subjects = get_entities_of_class(class_uri);
+    for(auto it=entities->cbegin();it!=entities->cend();it++){
+        for(auto it2=subjects->cbegin();it2!=subjects->cend();it2++){
+            subject_uri = (*it2);
+            entity_uri = (*it);
+            itt = hdt->search(subject_uri.c_str(),"",entity_uri.c_str());
+            while(itt->hasNext()){
+                triple = itt->next();
+                property_uri = triple->getPredicate();
+                if(m_properties_counts->find(property_uri) != m_properties_counts->cend()) {
+                    m_properties_counts->at(property_uri) += 1;
+                }
+                else {
+                    m_properties_counts->insert({property_uri, 1});
+                }
+            }
+        }
+    }
+    return get_properties_from_map();
+}
+
+std::list<string>* EntityAnn::get_properties_from_map(){
+    std::list<string>* properties = new std::list<string>;
+    string property_uri;
+    unsigned long count;
+    std::list<std::pair<string, unsigned long>>* pairs = new std::list<std::pair<string, unsigned long>>;
+    for(auto it=m_properties_counts->cbegin(); it!=m_properties_counts->cend(); it++) {
+        property_uri = it->first;
+        count = it->second;
+        pairs->push_back(std::make_pair(property_uri, count));
+    }
+    pairs->sort(sort_pair_property);
+    for(auto it=pairs->cbegin(); it!=pairs->cend(); it++) {
+        property_uri = it->first;
+        count = it->second;
+        cout << "property: "+property_uri << " ----- (" << count << ")\n";
+        properties->push_back(property_uri);
+    }
+    m_properties_counts->clear();
+    delete m_properties_counts;
+    pairs->clear();
+    delete pairs;
+    return properties;
+}
+
+
+
 
 

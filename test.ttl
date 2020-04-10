@@ -78,6 +78,9 @@ dbr:wrestler1 dbp:country dbr:UK .
 dbr:wrestler2 rdf:type dbo:Wrestler .
 dbr:wrestler2 rdfs:label "wr_common_2" .
 dbr:wrestler2 dbp:country dbr:Spain .
+dbr:wrestler3 rdf:type dbo:Wrestler .
+dbr:wrestler3 rdfs:label "wrestler3".
+
 
 dbr:rower1 rdf:type dbo:Rower .
 dbr:rower1 rdfs:label "wr_common_1" .

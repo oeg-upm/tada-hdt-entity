@@ -420,6 +420,25 @@ namespace {
         ASSERT_STREQ(properties->front().c_str(),dbp_country.c_str());
     }
 
+    TEST(EntityTest, nonSubjectColumnsHeuristic){
+        string dbp_country="http://dbpedia.org/property/country";
+        string class_uri = "http://dbpedia.org/ontology/Wrestler";
+        std::list<std::list<string>*>* data;
+        std::list<string>* properties;
+        Parser p("test_files/test8.csv");
+        data = p.parse_vertical();
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0.9);
+        ea->set_title_case(false);
+        properties = ea->annotate_entity_property_column(data,1,2);
+//        cout << "size: "<<properties->size()<<endl;
+//        cout << "front: <"<<properties->front()<<"> "<<endl;
+//        cout << "target: <"<<dbp_country<<"> "<<endl;
+        ASSERT_EQ(0,properties->size());
+        properties = ea->annotate_entity_property_heuristic(data, class_uri,2);
+        ASSERT_STREQ(properties->front().c_str(),dbp_country.c_str());
+    }
+
+
 
 //    TEST(EntityTest, Temp){
 //        EntityAnn* ea = new EntityAnn("/Users/aalobaid/workspaces/Cworkspace/tada-hdt/dbpedia_all.hdt", log_file, 0);

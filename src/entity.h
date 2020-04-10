@@ -70,6 +70,9 @@ class EntityAnn {
         bool get_title_case();
         std::list<string>* annotate_entity_property_column(std::list<std::list<string>*>*, long, long);
         void annotate_entity_property_pair(string, string);
+        std::list<string>* annotate_entity_property_heuristic(std::list<std::list<string>*>* , string , long);
+        std::list<string>* get_entities_of_class(string);
+        std::list<string>* get_properties_from_map();
     private:
         EasyLogger* m_logger;
         HDT* hdt;
