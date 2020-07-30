@@ -77,9 +77,12 @@ class EntityAnn {
         std::list<string>* annotate_entity_property_heuristic(std::list<std::list<string>*>* , string , long);
         std::list<string>* get_entities_of_class(string);
         std::list<string>* get_properties_from_map();
-        const string rdf_type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-        const string rdfs_subclassof = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
-        const string rdfs_label = "http://www.w3.org/2000/01/rdf-schema#label";
+//        const string rdf_type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+//        const string rdfs_subclassof = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+//        const string rdfs_label = "http://www.w3.org/2000/01/rdf-schema#label";
+        const string type_uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+        const string subclassof_uri = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+        const string label_uri = "http://www.w3.org/2000/01/rdf-schema#label";
 
     private:
         EasyLogger* m_logger;

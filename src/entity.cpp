@@ -173,7 +173,7 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
     std::list<string>* entities = new std::list<string>;
     qvalue = get_quoted(value);
     qvalue = get_taged(qvalue);
-    itt = m_hdt->search("", rdfs_label.c_str(), qvalue.c_str());
+    itt = m_hdt->search("", label_uri.c_str(), qvalue.c_str());
     m_logger->log("get_entities_of_value: cell value  <"+value+">");
     while(itt->hasNext()) {
         triple = itt->next();
@@ -270,10 +270,10 @@ std::list<string>* EntityAnn::get_leaf_classes(string entity_uri) {
     std::unordered_map<string, bool>* candidates = new std::unordered_map<string, bool>;
     std::unordered_map<string, bool>* to_be_deleted = new std::unordered_map<string, bool>;
     string prev_class="", curr_class="";
-    itt = m_hdt->search(entity_uri.c_str(), rdf_type.c_str(), "");
+    itt = m_hdt->search(entity_uri.c_str(), type_uri.c_str(), "");
     m_logger->log("in function get leaf classes");
     m_logger->log("entity uri: <"+entity_uri+">");
-    m_logger->log("rdf_type: <"+rdf_type+">");
+    m_logger->log("type_uri: <"+type_uri+">");
     while(itt->hasNext()) {
         triple = itt->next();
         curr_class = triple->getObject();
@@ -328,8 +328,8 @@ std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string
     m_logger->log("add_class_to_ancestor_lookup> the class is being added to the lookup: <"+tclass+">");
     ancestors = new std::unordered_map<string, bool>;
     m_ancestor_lookup.insert({tclass, ancestors});
-    //    itt = m_hdt->search("", rdfs_subclassof.c_str(), tclass.c_str());
-    itt = m_hdt->search(tclass.c_str(), rdfs_subclassof.c_str(), "");
+    //    itt = m_hdt->search("", subclassof_uri.c_str(), tclass.c_str());
+    itt = m_hdt->search(tclass.c_str(), subclassof_uri.c_str(), "");
     while(itt->hasNext()) {
         triple = itt->next();
         parent = triple->getObject();
@@ -446,7 +446,7 @@ TNode* EntityAnn::update_graph(string class_uri) {
     if(tnode==nullptr) {
         m_logger->log("update_graph> to add class: "+class_uri);
         tnode = new TNode(class_uri);
-        itt = m_hdt->search(class_uri.c_str(), rdfs_subclassof.c_str(), "");
+        itt = m_hdt->search(class_uri.c_str(), subclassof_uri.c_str(), "");
         while(itt->hasNext()) {
             orphan = false;
             triple = itt->next();
@@ -518,7 +518,7 @@ void EntityAnn::compute_classes_entities_counts() {
     unsigned long num_of_entities;
     TNode* r;
     for(auto it=m_graph->m_graph->cbegin(); it!=m_graph->m_graph->cend(); it++) {
-        itt = m_hdt->search("", rdf_type.c_str(), it->first.c_str());
+        itt = m_hdt->search("", type_uri.c_str(), it->first.c_str());
         num_of_entities = static_cast<unsigned long>(itt->estimatedNumResults());
         m_classes_entities_count.insert({it->first, num_of_entities});
         delete itt;
@@ -770,13 +770,13 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
     subject_tagged = get_taged(get_quoted(strip_quotes(subject)));
     //    m_logger->log("annotate_entity_property_pair> ("+subject+","+another+")");
     //    m_logger->log("annotate_entity_property_pair> tagged ("+subject_tagged+","+another_tagged+")");
-    itt = m_hdt->search("", rdfs_label.c_str(), subject_tagged.c_str());
+    itt = m_hdt->search("", label_uri.c_str(), subject_tagged.c_str());
     while(itt->hasNext()) {
         entity_found = true;
         //        m_logger->log("annotate_entity_property_pair> subject is found: "+subject_uri);
         triple = itt->next();
         subject_uri = triple->getSubject();
-        itt2 = m_hdt->search("", rdfs_label.c_str(),  another_tagged.c_str());
+        itt2 = m_hdt->search("", label_uri.c_str(),  another_tagged.c_str());
         another_found = false;
         while(itt2->hasNext()) {
             another_found = true;
@@ -827,7 +827,7 @@ std::list<string>* EntityAnn::get_entities_of_class(string class_uri) {
    hdt::TripleString* triple;
     std::list<string>* entities;
     entities=new std::list<string>;
-    itt = m_hdt->search("", rdf_type.c_str(), class_uri.c_str());
+    itt = m_hdt->search("", type_uri.c_str(), class_uri.c_str());
     while(itt->hasNext()) {
         triple = itt->next();
         entities->push_back(triple->getSubject());
