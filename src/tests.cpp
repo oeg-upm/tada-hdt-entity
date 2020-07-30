@@ -5,6 +5,7 @@
 #include "tnode.h"
 #include <tabular_parser/parser.h>
 
+using namespace hdt;
 
 string input_file = "test.ttl";
 string log_file = "test.log";

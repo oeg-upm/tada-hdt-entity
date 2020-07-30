@@ -20,6 +20,7 @@ using namespace std;
 // Graph as adjacency list with pointer to the parent
 class Graph {
     public:
+        Graph(string logger_fname);
         Graph(EasyLogger*);
         bool add_edge(TNode *from_node, TNode *to_node);
         bool add_edge(string from_uri, string to_uri);

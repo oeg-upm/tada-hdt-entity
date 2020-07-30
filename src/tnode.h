@@ -11,6 +11,7 @@ using namespace std;
 class TNode {
 
     public:
+        TNode();
         TNode(string auri);
 
         string uri;

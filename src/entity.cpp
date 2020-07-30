@@ -8,10 +8,25 @@
 #include <iostream>
 #include <ctype.h>
 #include <easy_logger/easy_logger.h>
+#include <HDT.hpp>
 #include <HDTManager.hpp>
 
 using namespace std;
 
+
+
+
+EntityAnn::EntityAnn() {
+    // do nothing
+}
+
+void EntityAnn::setHDT(string hdt_file_dir){
+    m_hdt = hdt::HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
+}
+
+void EntityAnn::setLogger(string log_file_dir){
+    m_logger = new EasyLogger(log_file_dir);
+}
 
 bool sort_pair_property(const std::pair<string, unsigned long>& a,
                         const std::pair<string, unsigned long>& b) {
@@ -19,15 +34,15 @@ bool sort_pair_property(const std::pair<string, unsigned long>& a,
 }
 
 void EntityAnn::init(string hdt_file_dir, string log_file_dir, double alpha) {
-    hdt = HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
+    m_hdt = hdt::HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
     m_logger = new EasyLogger(log_file_dir);
     m_graph = new Graph(m_logger);
     m_alpha = alpha;
     m_properties_counts = nullptr;
 }
 
-void EntityAnn::init(HDT* hdt_ptr, string log_file_dir, double alpha) {
-    hdt =hdt_ptr;
+void EntityAnn::init(hdt::HDT* hdt_ptr, string log_file_dir, double alpha) {
+    m_hdt =hdt_ptr;
     m_logger = new EasyLogger(log_file_dir);
     m_graph = new Graph(m_logger);
     m_alpha = alpha;
@@ -36,12 +51,12 @@ void EntityAnn::init(HDT* hdt_ptr, string log_file_dir, double alpha) {
 
 
 
-EntityAnn::EntityAnn(HDT* hdt_ptr, string log_file_dir) {
+EntityAnn::EntityAnn(hdt::HDT* hdt_ptr, string log_file_dir) {
     init(hdt_ptr, log_file_dir, 1.0);
 }
 
 
-EntityAnn::EntityAnn(HDT* hdt_ptr, string log_file_dir, double alpha) {
+EntityAnn::EntityAnn(hdt::HDT* hdt_ptr, string log_file_dir, double alpha) {
     init(hdt_ptr, log_file_dir, alpha);
 }
 
@@ -152,13 +167,13 @@ std::list<string>* EntityAnn::annotate_semi_scored_column(unsigned long m) {
 // Get entities of a given cell value or name using the rdfs:label property
 std::list<string>* EntityAnn::get_entities_of_value(string value) {
     string qvalue;
-    IteratorTripleString* itt;
-    TripleString* triple;
+   hdt::IteratorTripleString* itt;
+   hdt::TripleString* triple;
     string tcased;
     std::list<string>* entities = new std::list<string>;
     qvalue = get_quoted(value);
     qvalue = get_taged(qvalue);
-    itt = hdt->search("", rdfs_label.c_str(), qvalue.c_str());
+    itt = m_hdt->search("", rdfs_label.c_str(), qvalue.c_str());
     m_logger->log("get_entities_of_value: cell value  <"+value+">");
     while(itt->hasNext()) {
         triple = itt->next();
@@ -186,8 +201,8 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
 // Get entities of a given cell value or name using the rdfs:label property
 std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<string>* properties, bool double_level) {
     string qprop, qvalue;
-    IteratorTripleString* itt;
-    TripleString* triple;
+   hdt::IteratorTripleString* itt;
+   hdt::TripleString* triple;
     std::list<string>* entities;// = this->get_entities_of_value(value);
     std::list<string>* strict_entities = new std::list<string>;
     std::list<string>* prop_entities;
@@ -198,7 +213,7 @@ std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<stri
     for(auto it = entities->cbegin(); it!=entities->cend(); it++) {
         for(auto it2=properties->cbegin(); it2!=properties->cend(); it2++) {
             qprop = get_quoted(*it2);
-            itt = hdt->search((*it).c_str(), "", qprop.c_str());
+            itt = m_hdt->search((*it).c_str(), "", qprop.c_str());
             //            m_logger->log("get_entities_of_value: cell value  <"+value+">");
             if(itt->hasNext()) {
                 strict_entities->push_back(*it);
@@ -213,7 +228,7 @@ std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<stri
                 prop_entities = this->get_entities_of_value(*it2);
                 to_break = false;
                 for(auto it3=prop_entities->cbegin(); it3!=prop_entities->cend(); it3++) {
-                    itt = hdt->search((*it).c_str(), "", (*it3).c_str());
+                    itt = m_hdt->search((*it).c_str(), "", (*it3).c_str());
                     if(itt->hasNext()) {
                         strict_entities->push_back(*it);
                         m_logger->log("get_entities_of_value> "+(*it)+" and property (double level) "+(*it3));
@@ -249,13 +264,13 @@ if the types of en entity e are [C,A], it would return only C.
 
 
 std::list<string>* EntityAnn::get_leaf_classes(string entity_uri) {
-    IteratorTripleString* itt;
-    TripleString* triple = nullptr;
+   hdt::IteratorTripleString* itt;
+   hdt::TripleString* triple = nullptr;
     std::list<string>* leaves = new std::list<string>;
     std::unordered_map<string, bool>* candidates = new std::unordered_map<string, bool>;
     std::unordered_map<string, bool>* to_be_deleted = new std::unordered_map<string, bool>;
     string prev_class="", curr_class="";
-    itt = hdt->search(entity_uri.c_str(), rdf_type.c_str(), "");
+    itt = m_hdt->search(entity_uri.c_str(), rdf_type.c_str(), "");
     m_logger->log("in function get leaf classes");
     m_logger->log("entity uri: <"+entity_uri+">");
     m_logger->log("rdf_type: <"+rdf_type+">");
@@ -300,8 +315,8 @@ bool EntityAnn::is_ancestor_of(string b, string a) {
 
 // return the ancestors for the given tclass (whether it is already in the lookup or not)
 std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string tclass) {
-    IteratorTripleString* itt;
-    TripleString* triple;
+    hdt::IteratorTripleString* itt;
+    hdt::TripleString* triple;
     string parent;
     std::unordered_map<string, bool>* pancestors; // ancestors of a parent
     std::unordered_map<string, bool>* ancestors;
@@ -313,8 +328,8 @@ std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string
     m_logger->log("add_class_to_ancestor_lookup> the class is being added to the lookup: <"+tclass+">");
     ancestors = new std::unordered_map<string, bool>;
     m_ancestor_lookup.insert({tclass, ancestors});
-    //    itt = hdt->search("", rdfs_subclassof.c_str(), tclass.c_str());
-    itt = hdt->search(tclass.c_str(), rdfs_subclassof.c_str(), "");
+    //    itt = m_hdt->search("", rdfs_subclassof.c_str(), tclass.c_str());
+    itt = m_hdt->search(tclass.c_str(), rdfs_subclassof.c_str(), "");
     while(itt->hasNext()) {
         triple = itt->next();
         parent = triple->getObject();
@@ -422,8 +437,8 @@ void EntityAnn::update_graph(std::list<string>* classes) {
 }
 
 TNode* EntityAnn::update_graph(string class_uri) {
-    IteratorTripleString* itt;
-    TripleString* triple = nullptr;
+   hdt::IteratorTripleString* itt;
+   hdt::TripleString* triple = nullptr;
     string parent;
     TNode* pnode;
     TNode* tnode = m_graph->get_node(class_uri);
@@ -431,7 +446,7 @@ TNode* EntityAnn::update_graph(string class_uri) {
     if(tnode==nullptr) {
         m_logger->log("update_graph> to add class: "+class_uri);
         tnode = new TNode(class_uri);
-        itt = hdt->search(class_uri.c_str(), rdfs_subclassof.c_str(), "");
+        itt = m_hdt->search(class_uri.c_str(), rdfs_subclassof.c_str(), "");
         while(itt->hasNext()) {
             orphan = false;
             triple = itt->next();
@@ -499,11 +514,11 @@ void EntityAnn::compute_Ic_for_node(TNode* tnode) {
 
 
 void EntityAnn::compute_classes_entities_counts() {
-    IteratorTripleString* itt;
+   hdt::IteratorTripleString* itt;
     unsigned long num_of_entities;
     TNode* r;
     for(auto it=m_graph->m_graph->cbegin(); it!=m_graph->m_graph->cend(); it++) {
-        itt = hdt->search("", rdf_type.c_str(), it->first.c_str());
+        itt = m_hdt->search("", rdf_type.c_str(), it->first.c_str());
         num_of_entities = static_cast<unsigned long>(itt->estimatedNumResults());
         m_classes_entities_count.insert({it->first, num_of_entities});
         delete itt;
@@ -739,12 +754,12 @@ std::list<string>* EntityAnn::annotate_entity_property_column(std::list<std::lis
 
 
 void EntityAnn::annotate_entity_property_pair(string subject, string another) {
-    IteratorTripleString* itt;
-    TripleString* triple;
-    IteratorTripleString* itt2;
-    TripleString* triple2;
-    IteratorTripleString* itt3;
-    TripleString* triple3;
+   hdt::IteratorTripleString* itt;
+   hdt::TripleString* triple;
+   hdt::IteratorTripleString* itt2;
+   hdt::TripleString* triple2;
+   hdt::IteratorTripleString* itt3;
+   hdt::TripleString* triple3;
     string subject_uri;
     string subject_tagged;
     string another_tagged;
@@ -755,20 +770,20 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
     subject_tagged = get_taged(get_quoted(strip_quotes(subject)));
     //    m_logger->log("annotate_entity_property_pair> ("+subject+","+another+")");
     //    m_logger->log("annotate_entity_property_pair> tagged ("+subject_tagged+","+another_tagged+")");
-    itt = hdt->search("", rdfs_label.c_str(), subject_tagged.c_str());
+    itt = m_hdt->search("", rdfs_label.c_str(), subject_tagged.c_str());
     while(itt->hasNext()) {
         entity_found = true;
         //        m_logger->log("annotate_entity_property_pair> subject is found: "+subject_uri);
         triple = itt->next();
         subject_uri = triple->getSubject();
-        itt2 = hdt->search("", rdfs_label.c_str(),  another_tagged.c_str());
+        itt2 = m_hdt->search("", rdfs_label.c_str(),  another_tagged.c_str());
         another_found = false;
         while(itt2->hasNext()) {
             another_found = true;
             triple2 = itt2->next();
             another_uri = triple2->getSubject();
             //            m_logger->log("annotate_entity_property_pair> another is found: "+another_uri);
-            itt3 = hdt->search(subject_uri.c_str(), "", another_uri.c_str());
+            itt3 = m_hdt->search(subject_uri.c_str(), "", another_uri.c_str());
             property_found = false;
             while(itt3->hasNext()) {
                 property_found = true;
@@ -808,11 +823,11 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
 }
 
 std::list<string>* EntityAnn::get_entities_of_class(string class_uri) {
-    IteratorTripleString* itt;
-    TripleString* triple;
+   hdt::IteratorTripleString* itt;
+   hdt::TripleString* triple;
     std::list<string>* entities;
     entities=new std::list<string>;
-    itt = hdt->search("", rdf_type.c_str(), class_uri.c_str());
+    itt = m_hdt->search("", rdf_type.c_str(), class_uri.c_str());
     while(itt->hasNext()) {
         triple = itt->next();
         entities->push_back(triple->getSubject());
@@ -824,8 +839,8 @@ std::list<string>* EntityAnn::get_entities_of_class(string class_uri) {
 
 std::list<string>* EntityAnn::annotate_entity_property_heuristic(std::list<std::list<string>*>* data, string class_uri, long property_idx) {
     std::list<string>::iterator col_iter;
-    IteratorTripleString* itt;
-    TripleString* triple;
+   hdt::IteratorTripleString* itt;
+   hdt::TripleString* triple;
     std::list<string>* entities = new std::list<string>;
     std::list<string>* subjects;
     std::list<string>* ent;
@@ -850,7 +865,7 @@ std::list<string>* EntityAnn::annotate_entity_property_heuristic(std::list<std::
         for(auto it2=subjects->cbegin(); it2!=subjects->cend(); it2++) {
             subject_uri = (*it2);
             entity_uri = (*it);
-            itt = hdt->search(subject_uri.c_str(), "", entity_uri.c_str());
+            itt = m_hdt->search(subject_uri.c_str(), "", entity_uri.c_str());
             while(itt->hasNext()) {
                 triple = itt->next();
                 property_uri = triple->getPredicate();
@@ -881,10 +896,12 @@ std::list<string>* EntityAnn::get_properties_from_map() {
         pairs->push_back(std::make_pair(property_uri, count));
     }
     pairs->sort(sort_pair_property);
+    m_logger->log("---------------------------------");
     for(auto it=pairs->cbegin(); it!=pairs->cend(); it++) {
         property_uri = it->first;
         count = it->second;
-        cout << "property: "+property_uri << " ----- (" << count << ")\n";
+        m_logger->log("property: "+property_uri+" ----- ("+to_string(count)+")");
+//        cout << "property: "+property_uri << " ----- (" << count << ")\n";
         properties->push_back(property_uri);
     }
     m_properties_counts->clear();

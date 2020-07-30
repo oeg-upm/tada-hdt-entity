@@ -5,6 +5,12 @@
 #include <unordered_map>
 
 
+Graph::Graph(string fname) {
+    m_graph = new std::unordered_map<string, TNode*>;
+    m_logger = new EasyLogger(fname);
+    m_root = nullptr;
+}
+
 Graph::Graph(EasyLogger* m) {
     m_graph = new std::unordered_map<string, TNode*>;
     m_logger = m;

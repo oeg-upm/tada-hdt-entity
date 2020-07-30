@@ -11,20 +11,24 @@
 #include <HDTManager.hpp>
 
 
-using namespace hdt;
+using namespace std;
+//using namespace hdt;
 
-const string rdf_type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-const string rdfs_subclassof = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
-const string rdfs_label = "http://www.w3.org/2000/01/rdf-schema#label";
+//const string rdf_type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+//const string rdfs_subclassof = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+//const string rdfs_label = "http://www.w3.org/2000/01/rdf-schema#label";
 
 
 class EntityAnn {
 
     public:
-        EntityAnn(HDT*, string);
-        EntityAnn(HDT*, string, double);
+        EntityAnn();
         EntityAnn(string, string);
+        EntityAnn(hdt::HDT*, string);
+        EntityAnn(hdt::HDT*, string, double);
         EntityAnn(string, string, double alpha);
+        void setHDT(string);
+        void setLogger(string);
         std::list<string>* annotate_column(std::list<std::list<string>*>* data, unsigned idx);
         std::list<string>* annotate_column(std::list<std::list<string>*>* data, unsigned idx, double alpha);
         std::list<string>* annotate_column(std::list<std::list<string>*>* data, unsigned idx, bool, bool);
@@ -73,9 +77,14 @@ class EntityAnn {
         std::list<string>* annotate_entity_property_heuristic(std::list<std::list<string>*>* , string , long);
         std::list<string>* get_entities_of_class(string);
         std::list<string>* get_properties_from_map();
+        const string rdf_type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+        const string rdfs_subclassof = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+        const string rdfs_label = "http://www.w3.org/2000/01/rdf-schema#label";
+
     private:
         EasyLogger* m_logger;
-        HDT* hdt;
+        hdt::HDT* m_hdt;
+        //HDT:: HDT::HDT* hdt;
         Graph* m_graph;
         std::unordered_map<string, std::unordered_map<string, bool>*> m_ancestor_lookup;
         std::unordered_map<string, bool>* add_class_to_ancestor_lookup(string tclass);
@@ -88,7 +97,7 @@ class EntityAnn {
         bool m_retry_with_title_case = false;
         string m_lang_tag;
         void init(string hdt_file_dir, string log_file_dir, double alpha);
-        void init(HDT* hdt_ptr, string log_file_dir, double alpha);
+        void init(hdt::HDT* hdt_ptr, string log_file_dir, double alpha);
 };
 
 
