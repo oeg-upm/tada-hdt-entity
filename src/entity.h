@@ -27,6 +27,7 @@ class EntityAnn {
         EntityAnn(hdt::HDT*, string);
         EntityAnn(hdt::HDT*, string, double);
         EntityAnn(string, string, double alpha);
+        ~EntityAnn();      // destructor
         void setHDT(string);
         void setLogger(string);
         std::list<string>* annotate_column(std::list<std::list<string>*>* data, unsigned idx);

@@ -20,6 +20,26 @@ EntityAnn::EntityAnn() {
     // do nothing
 }
 
+EntityAnn::~EntityAnn() {
+    if(m_logger != nullptr){
+        delete(m_logger);
+    }
+    if(m_hdt != nullptr){
+        delete(m_hdt);
+    }
+    if(m_graph != nullptr){
+        delete(m_graph);
+    }
+//    for(auto it=m_ancestor_lookup.cbegin();it!=m_ancestor_lookup.cend();it++){
+//        if((*it).second != nullptr){
+//            delete((*it).second);
+//        }
+//    }
+    if(m_properties_counts != nullptr){
+        delete(m_properties_counts);
+    }
+}
+
 void EntityAnn::setHDT(string hdt_file_dir){
     m_hdt = hdt::HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
 }
@@ -706,6 +726,7 @@ string EntityAnn::get_title_case(string s) {
     return tcased;
 }
 
+
 void EntityAnn::set_title_case(bool t) {
     m_retry_with_title_case = t;
 }
@@ -714,6 +735,7 @@ void EntityAnn::set_title_case(bool t) {
 bool EntityAnn::get_title_case() {
     return m_retry_with_title_case;
 }
+
 
 string EntityAnn::strip_quotes(string s) {
     string t="";
@@ -724,6 +746,7 @@ string EntityAnn::strip_quotes(string s) {
     }
     return t;
 }
+
 
 std::list<string>* EntityAnn::annotate_entity_property_column(std::list<std::list<string>*>* data, long subject_idx, long property_idx) {
     std::list<string>::iterator col_iter;
@@ -821,6 +844,7 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
         }
     }
 }
+
 
 std::list<string>* EntityAnn::get_entities_of_class(string class_uri) {
    hdt::IteratorTripleString* itt;
