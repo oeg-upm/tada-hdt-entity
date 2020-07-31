@@ -34,6 +34,11 @@ void ttl_to_hdt(string ttl_dir) {
 
 namespace {
 
+    TEST(EntityEmpty, Hello) {
+        EntityAnn* ea = new EntityAnn();
+        ASSERT_NE(ea, nullptr);
+        delete ea;
+    }
 
     TEST(EntityTest, Hello) {
         EntityAnn* ea = new EntityAnn(hdt_file, log_file);

@@ -17,7 +17,10 @@ using namespace std;
 
 
 EntityAnn::EntityAnn() {
-    // do nothing
+    m_logger = nullptr;
+    m_hdt = nullptr;
+    m_graph = nullptr;
+    m_properties_counts = nullptr;
 }
 
 EntityAnn::~EntityAnn() {
@@ -72,20 +75,36 @@ void EntityAnn::init(hdt::HDT* hdt_ptr, string log_file_dir, double alpha) {
 
 
 EntityAnn::EntityAnn(hdt::HDT* hdt_ptr, string log_file_dir) {
+    m_logger = nullptr;
+    m_hdt = nullptr;
+    m_graph = nullptr;
+    m_properties_counts = nullptr;
     init(hdt_ptr, log_file_dir, 1.0);
 }
 
 
 EntityAnn::EntityAnn(hdt::HDT* hdt_ptr, string log_file_dir, double alpha) {
+    m_logger = nullptr;
+    m_hdt = nullptr;
+    m_graph = nullptr;
+    m_properties_counts = nullptr;
     init(hdt_ptr, log_file_dir, alpha);
 }
 
 EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir) {
+    m_logger = nullptr;
+    m_hdt = nullptr;
+    m_graph = nullptr;
+    m_properties_counts = nullptr;
     init(hdt_file_dir, log_file_dir, 1.0);
 }
 
 
 EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir, double alpha) {
+    m_logger = nullptr;
+    m_hdt = nullptr;
+    m_graph = nullptr;
+    m_properties_counts = nullptr;
     init(hdt_file_dir, log_file_dir, alpha);
 }
 
