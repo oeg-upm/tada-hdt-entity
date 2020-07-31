@@ -46,6 +46,11 @@ namespace {
         hdt = HDTManager::mapIndexedHDT(hdt_file.c_str());
         EntityAnn* ea = new EntityAnn(hdt, log_file);
         ASSERT_NE(ea, nullptr);
+
+        ea->type_uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+        ea->subclassof_uri = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+        ea->label_uri = "http://www.w3.org/2000/01/rdf-schema#label";
+
         ea->set_alpha(0.5);
         ASSERT_EQ(0.5,ea->get_alpha());
         delete ea;
