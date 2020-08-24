@@ -545,6 +545,7 @@ void EntityAnn::compute_Ic_for_all() {
 
 void EntityAnn::compute_Ic_for_node(TNode* tnode) {
     if(tnode->ic==0.0) {
+        m_logger->log("compute_Ic_for_node> "+tnode->uri+" "+to_string(tnode->tc));
         tnode->ic = tnode->tc;
         for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
             this->compute_Ic_for_node(it->second);
@@ -645,7 +646,7 @@ double EntityAnn::compute_Ls_for_node(TNode* tnode) {
             }
             ls = tnode->is * p->ls;
             tnode->ls = ls;
-            m_logger->log("Ls> is: "+to_string(tnode->is)+" parent Ls: "+to_string(p->ls)+" parent: "+p->uri);
+            m_logger->log("Ls> is: "+to_string(tnode->is)+" tnode: "+tnode->uri+" parent Ls: "+to_string(p->ls)+" parent: "+p->uri);
         }
     }
     return ls;
