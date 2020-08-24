@@ -96,7 +96,8 @@ class EntityAnn {
         std::unordered_map<string, unsigned long>* m_properties_counts;
         //        bool m_propagate_Is=true; // should the parents also include the Is of their childred (true=yes)
         double m_alpha;
-        double m_ambiguitity_penalty=2;
+        //double m_ambiguitity_penalty=2;
+        double m_ambiguitity_penalty=1; // no penalty
         unsigned long m_m;
         bool m_retry_with_title_case = false;
         string m_lang_tag;

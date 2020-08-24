@@ -487,6 +487,7 @@ TNode* EntityAnn::update_graph(string class_uri) {
     if(tnode==nullptr) {
         m_logger->log("update_graph> to add class: "+class_uri);
         tnode = new TNode(class_uri);
+        //looking for the parents of class_uri
         itt = m_hdt->search(class_uri.c_str(), subclassof_uri.c_str(), "");
         while(itt->hasNext()) {
             orphan = false;
@@ -494,7 +495,7 @@ TNode* EntityAnn::update_graph(string class_uri) {
             parent = triple->getObject();
             m_logger->log("update_graph> parent: "+parent);
             pnode = this->update_graph(parent);
-            m_logger->log("update_graph> adding a link "+parent+" -------- "+class_uri);
+            m_logger->log("update_graph> adding a link (parent)"+parent+" -------- "+class_uri+" (child)");
             m_graph->add_edge(pnode, tnode);
         }
         delete itt;
@@ -697,6 +698,7 @@ std::list<string>* EntityAnn::get_candidates() {
 }
 
 void EntityAnn::pick_root() {
+    m_logger->log("EntityAnn.pick_root> ");
     m_graph->pick_root();
 }
 
