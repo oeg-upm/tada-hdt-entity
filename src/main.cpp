@@ -11,8 +11,8 @@ int main(){
     ea.set_language_tag("@en");
     ea.subclassof_uri = "http://www.wikidata.org/prop/direct/P279";
     ea.type_uri = "http://www.wikidata.org/prop/direct/P31";
-    Parser p("/home/ahmad/tada-hdt-semtab-2020/data/tables/OEL94AJS.csv");
-    candidates = ea.annotate_column(p.parse_vertical(), 0, true, true);
+    Parser p("/home/ahmad/tada-hdt-semtab-2020/data/tables/0DGO26EF.csv");
+    candidates = ea.annotate_column(p.parse_vertical(), 2, true, true);
     cout << "Candidats: ";
     for(auto it=candidates->cbegin();it!=candidates->cend();it++){
         cout <<*it<<endl;
