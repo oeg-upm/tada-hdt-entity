@@ -524,6 +524,7 @@ double EntityAnn::compute_Lc_for_node(TNode* tnode) {
             m_logger->log("compute_Lc_for_node> is a child "+tnode->uri);
             tnode->lc = tnode->ic;
         }
+        m_logger->log("compute_Lc_for_node> ****** "+tnode->uri+" Lc: "+to_string(tnode->lc));
     }
     return tnode->lc;
 }
