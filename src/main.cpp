@@ -17,10 +17,9 @@ int main(){
     for(auto it=candidates->cbegin();it!=candidates->cend();it++){
         cout <<*it<<endl;
     }
+
 //      cout << "Hello!" <<endl;
 //      EntityAnn ea("/Users/aalobaid/workspaces/Cworkspace/tada-hdt/dbpedia_all.hdt","entity.log");
-
-
 //      std::list<std::list<string>*>* data;
 //          Parser p("test.csv");
 //          data = p.parse();

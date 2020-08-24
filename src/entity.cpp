@@ -338,8 +338,10 @@ std::list<string>* EntityAnn::get_leaf_classes(string entity_uri) {
         }
         to_be_deleted->clear();
     }// while loop
+    m_logger->log("Leave classes: ");
     for(auto it=candidates->cbegin(); it!=candidates->cend(); it++) {
         leaves->push_back(it->first);
+        m_logger->log("leave: "+(it->first));
     }
     delete itt;
     return leaves;
