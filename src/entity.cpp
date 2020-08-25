@@ -456,6 +456,7 @@ bool EntityAnn::compute_intermediate_coverage(string cell_value, std::list<strin
                 cout<< "Error: in compute_intermediate_coverage, tnode <"<<cell_value<<"> is null\n\n";
             }
             tnode->tc += 1.0 / (Q_size * Z_size);
+            m_logger->log("compute_intermediate_coverage> "+tnode->uri+" tc: "+to_string(tnode->tc));
         }
     }
     return entities->size()>0;
