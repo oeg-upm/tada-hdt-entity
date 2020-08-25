@@ -47,7 +47,8 @@ class EntityAnn {
         void compute_Ic_for_node(TNode* tnode);
         //        void propagate_Is_all();
         //        void propagate_Is_tnode(TNode *);
-        double compute_Lc_for_node(TNode*);
+//        double compute_Lc_for_node(TNode*);
+        std::unordered_map<string, bool>* compute_Lc_for_node(TNode*);
         void compute_Lc_for_all();
         void compute_Is_for_all();
         void compute_Is_for_node(TNode* tnode);

@@ -227,11 +227,14 @@ namespace {
         ea->compute_Lc_for_all();
         ea->get_graph()->print_nodes();
         tnode =  ea->get_tnode(class_uri);
+        cout << "class ic: "<<tnode->ic<<"Lc: "<<tnode->lc<<endl;
         ASSERT_NE(tnode, nullptr);
         ASSERT_DOUBLE_EQ(0.5, tnode->lc);
         tnode =  ea->get_tnode(parent_uri);
+        cout << "parent ic: "<<tnode->ic<<"Lc: "<<tnode->lc<<endl;
         ASSERT_DOUBLE_EQ(1.0, tnode->lc);
         tnode =  ea->get_tnode(grand_uri);
+        cout << "grand ic: "<<tnode->ic<<"Lc: "<<tnode->lc<<endl;
         ASSERT_DOUBLE_EQ(1.0, tnode->lc);
         delete ea;
     }
