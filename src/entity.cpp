@@ -543,7 +543,7 @@ std::unordered_map<string, bool>* EntityAnn::compute_Lc_for_node(TNode* tnode) {
                 m_logger->log("compute_Lc_for_node> "+it->first+" add "+to_string(m_graph->get_node(it->first)->ic));
                 d += m_graph->get_node(it->first)->ic;
             }
-            tnode->lc = d;
+            tnode->lc = d + tnode->ic; // add Lc = sum + Ic
         }
         m_logger->log("compute_Lc_for_node> ****** "+tnode->uri+" Lc: "+to_string(tnode->lc));
     }
