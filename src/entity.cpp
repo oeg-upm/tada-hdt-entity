@@ -757,7 +757,7 @@ std::list<string>* EntityAnn::get_candidates() {
     }
     tnodes->sort(compare_tnodes);
     for(auto it=tnodes->cbegin(); it!=tnodes->cend(); it++) {
-        m_logger->log("get_candidates> "+(*it)->uri+" ----- ("+to_string((*it)->f)+")");
+        m_logger->log("get_candidates> "+(*it)->uri+" ----- ("+to_string((*it)->f)+") ## fc="+to_string((*it)->fc)+" fs="+to_string((*it)->fs));
         candidates->push_front((*it)->uri);
     }
     return candidates;
