@@ -388,10 +388,6 @@ std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string
     return ancestors;
 }
 
-//void EntityAnn::score_cell(string cell_value){
-
-//}
-
 // it can be sped up more
 bool EntityAnn::compute_intermediate_coverage(string cell_value) {
     std::list<string>* classes;
@@ -524,10 +520,10 @@ std::unordered_map<string, bool>* EntityAnn::compute_Lc_for_node(TNode* tnode) {
                 des->insert({it2->first, true});
             }
         }
-        if(ch!=nullptr) {
-            delete ch;
-        }
-        // Add the parent
+//        if(ch!=nullptr) {
+//            delete ch;
+//        }
+        // Add the direct child
         if(des->find(it->first)==des->cend()) { // not found
             des->insert({it->first, true});
         }
@@ -536,6 +532,7 @@ std::unordered_map<string, bool>* EntityAnn::compute_Lc_for_node(TNode* tnode) {
         //            tnode->lc = tnode->lc + this->compute_Lc_for_node(it->second);
     }
     if(tnode->lc==0.0) {
+        m_descendents_lookup.insert({tnode->uri, des});
         // if the tnode is a leave node
         if(des->size() == 0) {
             m_logger->log("compute_Lc_for_node> is leaf node "+tnode->uri);
@@ -578,8 +575,7 @@ void EntityAnn::compute_Lc_for_all() {
     std::unordered_map<string, bool>* des = new std::unordered_map<string, bool>; //descendants
     std::list<TNode*>* roots = m_graph->get_candidate_roots();
     for(auto it=roots->cbegin(); it!=roots->cend(); it++) {
-        des = this->compute_Lc_for_node(*it);
-        delete des;
+        this->compute_Lc_for_node(*it);
     }
 }
 
@@ -612,6 +608,7 @@ void EntityAnn::compute_classes_entities_counts() {
         itt = m_hdt->search("", type_uri.c_str(), it->first.c_str());
         num_of_entities = static_cast<unsigned long>(itt->estimatedNumResults());
         m_classes_entities_count.insert({it->first, num_of_entities});
+        m_classes_propagated_count.insert({it->first, 0});
         delete itt;
     }
     r = this->m_graph->get_root();
@@ -624,16 +621,36 @@ void EntityAnn::compute_classes_entities_counts() {
 }
 
 // include the counts of the childs because HDT does not perform reasoning
-unsigned long EntityAnn::propagate_counts(TNode* tnode) {
+void EntityAnn::propagate_counts(TNode* tnode) {
     unsigned long count;
-    count = m_classes_entities_count.at(tnode->uri);
-    for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
-        count += this->propagate_counts(it->second);
+//    count = m_classes_entities_count.at(tnode->uri);
+    count = 0;
+    std::unordered_map<string, bool>* des;
+    if(m_classes_propagated_count.at(tnode->uri)==0){ // counts not propagated
+        m_logger->log("propagate_counts> for "+tnode->uri);
+        for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
+            this->propagate_counts(it->second);
+        }
+        des = m_descendents_lookup.at(tnode->uri);
+        for(auto it=des->cbegin();it!=des->cend();it++){ // compute the counts from all descendents
+            count+= m_classes_entities_count.at(it->first);
+        }
+        m_classes_propagated_count.at(tnode->uri) = count;
+        m_logger->log("propagate_counts> "+tnode->uri+" #"+to_string(count));
     }
-    m_classes_entities_count.at(tnode->uri) = count;
-    m_logger->log("propagate_counts> "+tnode->uri+" #"+to_string(count));
-    return count;
 }
+//unsigned long EntityAnn::propagate_counts(TNode* tnode) {
+//    unsigned long count;
+//    count = m_classes_entities_count.at(tnode->uri);
+//    for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
+//        count += this->propagate_counts(it->second);
+//    }
+//    m_classes_entities_count.at(tnode->uri) = count;
+//    m_logger->log("propagate_counts> "+tnode->uri+" #"+to_string(count));
+//    return count;
+//}
+
+
 
 void EntityAnn::compute_Is_for_all() {
     TNode* r;
@@ -650,13 +667,13 @@ void EntityAnn::compute_Is_for_all() {
 void EntityAnn::compute_Is_for_node(TNode* tnode) {
     TNode* ch = nullptr;
     double ch_count;
-    unsigned long p_count = m_classes_entities_count.at(tnode->uri);
+    unsigned long p_count = m_classes_entities_count.at(tnode->uri) + m_classes_propagated_count.at(tnode->uri);
     if(p_count==0) {
         p_count++;
     }
     for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
         ch = it->second;
-        ch_count = static_cast<double>(m_classes_entities_count.at(ch->uri));
+        ch_count = static_cast<double>(m_classes_entities_count.at(ch->uri)) + m_classes_propagated_count.at(ch->uri);
         if(ch_count == 0.0) {
             ch_count=1.0;
         }
@@ -1007,6 +1024,14 @@ std::list<string>* EntityAnn::get_properties_from_map() {
     return properties;
 }
 
+unsigned long EntityAnn::get_counts_of_class(string uri){
+    unsigned long class_num;
+    unsigned long propagated_num;
+    class_num = m_classes_entities_count.at(uri);
+    propagated_num = m_classes_propagated_count.at(uri);
+    m_logger->log("get_counts_of_class> class_count: "+to_string(class_num)+" propagated: "+to_string(propagated_num));
+    return class_num + propagated_num;
+}
 
 
 

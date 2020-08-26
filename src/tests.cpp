@@ -452,6 +452,22 @@ namespace {
         ASSERT_STREQ(properties->front().c_str(),dbp_country.c_str());
     }
 
+    TEST(EntityTest, diamondTaxomony){
+        std::list<string>* candidates;
+        string class_uri = "http://dbpedia.org/ontology/Dup";
+        string mid_uri = "http://dbpedia.org/ontology/Dmid1";
+        std::list<std::list<string>*>* data;
+        Parser p("test_files/test9.csv");
+        data = p.parse_vertical();
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0.9);
+        ea->set_title_case(false);
+        candidates = ea->annotate_column(data,0, true, true);
+        ASSERT_STREQ(candidates->front().c_str(), class_uri.c_str());
+        ASSERT_EQ(ea->get_counts_of_class(class_uri), 4);
+        ASSERT_EQ(ea->get_counts_of_class(mid_uri), 2);
+        delete candidates;
+//        ASSERT_TRUE(true);
+    }
 
 
 //    TEST(EntityTest, Temp){
