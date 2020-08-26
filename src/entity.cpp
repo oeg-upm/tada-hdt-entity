@@ -1019,6 +1019,7 @@ std::list<string>* EntityAnn::get_properties_from_map() {
     }
     m_properties_counts->clear();
     delete m_properties_counts;
+    m_properties_counts = nullptr;
     pairs->clear();
     delete pairs;
     return properties;
