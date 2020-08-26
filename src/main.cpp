@@ -7,16 +7,19 @@ using namespace hdt;
 int main(){
     std::list<string>* candidates;
     string hdt_dir = "/home/ahmad/datasets/wikidata20200309.hdt";
-    EntityAnn ea(hdt_dir.c_str(), "sample.log", 0.1);
-    ea.set_language_tag("@en");
-    ea.subclassof_uri = "http://www.wikidata.org/prop/direct/P279";
-    ea.type_uri = "http://www.wikidata.org/prop/direct/P31";
+    EntityAnn *ea = new EntityAnn(hdt_dir.c_str(), "sample.log", 0.1);
+    ea->set_language_tag("@en");
+    ea->subclassof_uri = "http://www.wikidata.org/prop/direct/P279";
+    ea->type_uri = "http://www.wikidata.org/prop/direct/P31";
     Parser p("/home/ahmad/tada-hdt-semtab-2020/data/tables/0DGO26EF.csv");
-    candidates = ea.annotate_column(p.parse_vertical(), 2, true, true);
+//    candidates = ea.annotate_column(p.parse_vertical(), 2, true, true);
+    candidates = ea->annotate_entity_property_column(p.parse_vertical(),0,2);
     cout << "Candidats: ";
     for(auto it=candidates->cbegin();it!=candidates->cend();it++){
         cout <<*it<<endl;
     }
+    delete ea;
+
 
 //      cout << "Hello!" <<endl;
 //      EntityAnn ea("/Users/aalobaid/workspaces/Cworkspace/tada-hdt/dbpedia_all.hdt","entity.log");
