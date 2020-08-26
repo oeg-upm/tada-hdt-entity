@@ -227,11 +227,14 @@ namespace {
         ea->compute_Lc_for_all();
         ea->get_graph()->print_nodes();
         tnode =  ea->get_tnode(class_uri);
+        cout << "class ic: "<<tnode->ic<<"Lc: "<<tnode->lc<<endl;
         ASSERT_NE(tnode, nullptr);
         ASSERT_DOUBLE_EQ(0.5, tnode->lc);
         tnode =  ea->get_tnode(parent_uri);
+        cout << "parent ic: "<<tnode->ic<<"Lc: "<<tnode->lc<<endl;
         ASSERT_DOUBLE_EQ(1.0, tnode->lc);
         tnode =  ea->get_tnode(grand_uri);
+        cout << "grand ic: "<<tnode->ic<<"Lc: "<<tnode->lc<<endl;
         ASSERT_DOUBLE_EQ(1.0, tnode->lc);
         delete ea;
     }
@@ -449,6 +452,22 @@ namespace {
         ASSERT_STREQ(properties->front().c_str(),dbp_country.c_str());
     }
 
+    TEST(EntityTest, diamondTaxomony){
+        std::list<string>* candidates;
+        string class_uri = "http://dbpedia.org/ontology/Dup";
+        string mid_uri = "http://dbpedia.org/ontology/Dmid1";
+        std::list<std::list<string>*>* data;
+        Parser p("test_files/test9.csv");
+        data = p.parse_vertical();
+        EntityAnn* ea = new EntityAnn(hdt_file, log_file, 0.9);
+        ea->set_title_case(false);
+        candidates = ea->annotate_column(data,0, true, true);
+        ASSERT_STREQ(candidates->front().c_str(), class_uri.c_str());
+        ASSERT_EQ(ea->get_counts_of_class(class_uri), 4);
+        ASSERT_EQ(ea->get_counts_of_class(mid_uri), 2);
+        delete candidates;
+//        ASSERT_TRUE(true);
+    }
 
 
 //    TEST(EntityTest, Temp){

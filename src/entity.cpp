@@ -24,30 +24,30 @@ EntityAnn::EntityAnn() {
 }
 
 EntityAnn::~EntityAnn() {
-    if(m_logger != nullptr){
+    if(m_logger != nullptr) {
         delete(m_logger);
     }
-    if(m_hdt != nullptr){
+    if(m_hdt != nullptr) {
         delete(m_hdt);
     }
-    if(m_graph != nullptr){
+    if(m_graph != nullptr) {
         delete(m_graph);
     }
-//    for(auto it=m_ancestor_lookup.cbegin();it!=m_ancestor_lookup.cend();it++){
-//        if((*it).second != nullptr){
-//            delete((*it).second);
-//        }
-//    }
-    if(m_properties_counts != nullptr){
+    //    for(auto it=m_ancestor_lookup.cbegin();it!=m_ancestor_lookup.cend();it++){
+    //        if((*it).second != nullptr){
+    //            delete((*it).second);
+    //        }
+    //    }
+    if(m_properties_counts != nullptr) {
         delete(m_properties_counts);
     }
 }
 
-void EntityAnn::setHDT(string hdt_file_dir){
+void EntityAnn::setHDT(string hdt_file_dir) {
     m_hdt = hdt::HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
 }
 
-void EntityAnn::setLogger(string log_file_dir){
+void EntityAnn::setLogger(string log_file_dir) {
     m_logger = new EasyLogger(log_file_dir);
 }
 
@@ -206,8 +206,8 @@ std::list<string>* EntityAnn::annotate_semi_scored_column(unsigned long m) {
 // Get entities of a given cell value or name using the rdfs:label property
 std::list<string>* EntityAnn::get_entities_of_value(string value) {
     string qvalue;
-   hdt::IteratorTripleString* itt;
-   hdt::TripleString* triple;
+    hdt::IteratorTripleString* itt;
+    hdt::TripleString* triple;
     string tcased;
     std::list<string>* entities = new std::list<string>;
     qvalue = get_quoted(value);
@@ -240,8 +240,8 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
 // Get entities of a given cell value or name using the rdfs:label property
 std::list<string>* EntityAnn::get_entities_of_value(string value, std::list<string>* properties, bool double_level) {
     string qprop, qvalue;
-   hdt::IteratorTripleString* itt;
-   hdt::TripleString* triple;
+    hdt::IteratorTripleString* itt;
+    hdt::TripleString* triple;
     std::list<string>* entities;// = this->get_entities_of_value(value);
     std::list<string>* strict_entities = new std::list<string>;
     std::list<string>* prop_entities;
@@ -303,8 +303,8 @@ if the types of en entity e are [C,A], it would return only C.
 
 
 std::list<string>* EntityAnn::get_leaf_classes(string entity_uri) {
-   hdt::IteratorTripleString* itt;
-   hdt::TripleString* triple = nullptr;
+    hdt::IteratorTripleString* itt;
+    hdt::TripleString* triple = nullptr;
     std::list<string>* leaves = new std::list<string>;
     std::unordered_map<string, bool>* candidates = new std::unordered_map<string, bool>;
     std::unordered_map<string, bool>* to_be_deleted = new std::unordered_map<string, bool>;
@@ -338,8 +338,10 @@ std::list<string>* EntityAnn::get_leaf_classes(string entity_uri) {
         }
         to_be_deleted->clear();
     }// while loop
+    m_logger->log("leaves classes for entity: "+entity_uri);
     for(auto it=candidates->cbegin(); it!=candidates->cend(); it++) {
         leaves->push_back(it->first);
+        m_logger->log("leaf: "+(it->first));
     }
     delete itt;
     return leaves;
@@ -385,10 +387,6 @@ std::unordered_map<string, bool>* EntityAnn::add_class_to_ancestor_lookup(string
     delete itt;
     return ancestors;
 }
-
-//void EntityAnn::score_cell(string cell_value){
-
-//}
 
 // it can be sped up more
 bool EntityAnn::compute_intermediate_coverage(string cell_value) {
@@ -454,6 +452,7 @@ bool EntityAnn::compute_intermediate_coverage(string cell_value, std::list<strin
                 cout<< "Error: in compute_intermediate_coverage, tnode <"<<cell_value<<"> is null\n\n";
             }
             tnode->tc += 1.0 / (Q_size * Z_size);
+            m_logger->log("compute_intermediate_coverage> "+tnode->uri+" tc: "+to_string(tnode->tc));
         }
     }
     return entities->size()>0;
@@ -476,8 +475,8 @@ void EntityAnn::update_graph(std::list<string>* classes) {
 }
 
 TNode* EntityAnn::update_graph(string class_uri) {
-   hdt::IteratorTripleString* itt;
-   hdt::TripleString* triple = nullptr;
+    hdt::IteratorTripleString* itt;
+    hdt::TripleString* triple = nullptr;
     string parent;
     TNode* pnode;
     TNode* tnode = m_graph->get_node(class_uri);
@@ -485,6 +484,7 @@ TNode* EntityAnn::update_graph(string class_uri) {
     if(tnode==nullptr) {
         m_logger->log("update_graph> to add class: "+class_uri);
         tnode = new TNode(class_uri);
+        //looking for the parents of class_uri
         itt = m_hdt->search(class_uri.c_str(), subclassof_uri.c_str(), "");
         while(itt->hasNext()) {
             orphan = false;
@@ -492,7 +492,7 @@ TNode* EntityAnn::update_graph(string class_uri) {
             parent = triple->getObject();
             m_logger->log("update_graph> parent: "+parent);
             pnode = this->update_graph(parent);
-            m_logger->log("update_graph> adding a link "+parent+" -------- "+class_uri);
+            m_logger->log("update_graph> adding a link (parent)"+parent+" -------- "+class_uri+" (child)");
             m_graph->add_edge(pnode, tnode);
         }
         delete itt;
@@ -505,27 +505,74 @@ TNode* EntityAnn::update_graph(string class_uri) {
     return tnode;
 }
 
-double EntityAnn::compute_Lc_for_node(TNode* tnode) {
-    double d;
+
+std::unordered_map<string, bool>* EntityAnn::compute_Lc_for_node(TNode* tnode) {
+    double d=0;
     m_logger->log("compute_Lc_for_node> "+tnode->uri);
-    if(tnode->lc==0.0) {
-        m_logger->log("compute_Lc_for_node> in if "+tnode->uri);
-        for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
-            d = this->compute_Lc_for_node(it->second);
-            tnode->lc += d;
-            m_logger->log("compute_Lc_for_node> "+tnode->uri+ " append "+it->second->uri+" with value "+to_string(d));
-            //            tnode->lc = tnode->lc + this->compute_Lc_for_node(it->second);
+    std::unordered_map<string, bool>* des = new std::unordered_map<string, bool>; //descendants
+    std::unordered_map<string, bool>* ch;
+    m_logger->log("compute_Lc_for_node> in if "+tnode->uri);
+    for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
+        //            d = this->compute_Lc_for_node(it->second);
+        ch = this->compute_Lc_for_node(it->second);
+        for(auto it2=ch->cbegin(); it2!=ch->cend(); it2++) {
+            if(des->find(it2->first)==des->cend()) { // not found
+                des->insert({it2->first, true});
+            }
         }
+//        if(ch!=nullptr) {
+//            delete ch;
+//        }
+        // Add the direct child
+        if(des->find(it->first)==des->cend()) { // not found
+            des->insert({it->first, true});
+        }
+        //            tnode->lc += d;
+        //            m_logger->log("compute_Lc_for_node> "+tnode->uri+ " append "+it->second->uri+" with value "+to_string(d));
+        //            tnode->lc = tnode->lc + this->compute_Lc_for_node(it->second);
+    }
+    if(tnode->lc==0.0) {
+        m_descendents_lookup.insert({tnode->uri, des});
         // if the tnode is a leave node
-        if(tnode->lc == 0.0) {
-            m_logger->log("compute_Lc_for_node> is a child "+tnode->uri);
+        if(des->size() == 0) {
+            m_logger->log("compute_Lc_for_node> is leaf node "+tnode->uri);
             tnode->lc = tnode->ic;
         }
+        else{
+            for(auto it=des->cbegin();it!=des->cend();it++){
+                m_logger->log("compute_Lc_for_node> "+it->first+" add "+to_string(m_graph->get_node(it->first)->ic));
+                d += m_graph->get_node(it->first)->ic;
+            }
+            tnode->lc = d + tnode->ic; // add Lc = sum + Ic
+        }
+        m_logger->log("compute_Lc_for_node> ****** "+tnode->uri+" Lc: "+to_string(tnode->lc));
     }
-    return tnode->lc;
+    return des;
 }
 
+//double EntityAnn::compute_Lc_for_node(TNode* tnode) {
+//    double d;
+//    m_logger->log("compute_Lc_for_node> "+tnode->uri);
+//    if(tnode->lc==0.0) {
+//        m_logger->log("compute_Lc_for_node> in if "+tnode->uri);
+//        for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
+//            d = this->compute_Lc_for_node(it->second);
+//            tnode->lc += d;
+//            m_logger->log("compute_Lc_for_node> "+tnode->uri+ " append "+it->second->uri+" with value "+to_string(d));
+//            //            tnode->lc = tnode->lc + this->compute_Lc_for_node(it->second);
+//        }
+//        // if the tnode is a leave node
+//        if(tnode->lc == 0.0) {
+//            m_logger->log("compute_Lc_for_node> is a child "+tnode->uri);
+//            tnode->lc = tnode->ic;
+//        }
+//        m_logger->log("compute_Lc_for_node> ****** "+tnode->uri+" Lc: "+to_string(tnode->lc));
+//    }
+//    return tnode->lc;
+//}
+
 void EntityAnn::compute_Lc_for_all() {
+    std::unordered_map<string, bool>* des = new std::unordered_map<string, bool>; //descendants
     std::list<TNode*>* roots = m_graph->get_candidate_roots();
     for(auto it=roots->cbegin(); it!=roots->cend(); it++) {
         this->compute_Lc_for_node(*it);
@@ -542,6 +589,7 @@ void EntityAnn::compute_Ic_for_all() {
 
 void EntityAnn::compute_Ic_for_node(TNode* tnode) {
     if(tnode->ic==0.0) {
+        m_logger->log("compute_Ic_for_node> "+tnode->uri+" "+to_string(tnode->tc));
         tnode->ic = tnode->tc;
         for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
             this->compute_Ic_for_node(it->second);
@@ -553,13 +601,14 @@ void EntityAnn::compute_Ic_for_node(TNode* tnode) {
 
 
 void EntityAnn::compute_classes_entities_counts() {
-   hdt::IteratorTripleString* itt;
+    hdt::IteratorTripleString* itt;
     unsigned long num_of_entities;
     TNode* r;
     for(auto it=m_graph->m_graph->cbegin(); it!=m_graph->m_graph->cend(); it++) {
         itt = m_hdt->search("", type_uri.c_str(), it->first.c_str());
         num_of_entities = static_cast<unsigned long>(itt->estimatedNumResults());
         m_classes_entities_count.insert({it->first, num_of_entities});
+        m_classes_propagated_count.insert({it->first, 0});
         delete itt;
     }
     r = this->m_graph->get_root();
@@ -572,16 +621,36 @@ void EntityAnn::compute_classes_entities_counts() {
 }
 
 // include the counts of the childs because HDT does not perform reasoning
-unsigned long EntityAnn::propagate_counts(TNode* tnode) {
+void EntityAnn::propagate_counts(TNode* tnode) {
     unsigned long count;
-    count = m_classes_entities_count.at(tnode->uri);
-    for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
-        count += this->propagate_counts(it->second);
+//    count = m_classes_entities_count.at(tnode->uri);
+    count = 0;
+    std::unordered_map<string, bool>* des;
+    if(m_classes_propagated_count.at(tnode->uri)==0){ // counts not propagated
+        m_logger->log("propagate_counts> for "+tnode->uri);
+        for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
+            this->propagate_counts(it->second);
+        }
+        des = m_descendents_lookup.at(tnode->uri);
+        for(auto it=des->cbegin();it!=des->cend();it++){ // compute the counts from all descendents
+            count+= m_classes_entities_count.at(it->first);
+        }
+        m_classes_propagated_count.at(tnode->uri) = count;
+        m_logger->log("propagate_counts> "+tnode->uri+" #"+to_string(count));
     }
-    m_classes_entities_count.at(tnode->uri) = count;
-    m_logger->log("propagate_counts> "+tnode->uri+" #"+to_string(count));
-    return count;
 }
+//unsigned long EntityAnn::propagate_counts(TNode* tnode) {
+//    unsigned long count;
+//    count = m_classes_entities_count.at(tnode->uri);
+//    for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
+//        count += this->propagate_counts(it->second);
+//    }
+//    m_classes_entities_count.at(tnode->uri) = count;
+//    m_logger->log("propagate_counts> "+tnode->uri+" #"+to_string(count));
+//    return count;
+//}
+
+
 
 void EntityAnn::compute_Is_for_all() {
     TNode* r;
@@ -598,13 +667,13 @@ void EntityAnn::compute_Is_for_all() {
 void EntityAnn::compute_Is_for_node(TNode* tnode) {
     TNode* ch = nullptr;
     double ch_count;
-    unsigned long p_count = m_classes_entities_count.at(tnode->uri);
+    unsigned long p_count = m_classes_entities_count.at(tnode->uri) + m_classes_propagated_count.at(tnode->uri);
     if(p_count==0) {
         p_count++;
     }
     for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
         ch = it->second;
-        ch_count = static_cast<double>(m_classes_entities_count.at(ch->uri));
+        ch_count = static_cast<double>(m_classes_entities_count.at(ch->uri)) + m_classes_propagated_count.at(ch->uri);
         if(ch_count == 0.0) {
             ch_count=1.0;
         }
@@ -642,7 +711,7 @@ double EntityAnn::compute_Ls_for_node(TNode* tnode) {
             }
             ls = tnode->is * p->ls;
             tnode->ls = ls;
-            m_logger->log("Ls> is: "+to_string(tnode->is)+" parent Ls: "+to_string(p->ls)+" parent: "+p->uri);
+            m_logger->log("Ls> is: "+to_string(tnode->is)+" tnode: "+tnode->uri+" parent Ls: "+to_string(p->ls)+" parent: "+p->uri);
         }
     }
     return ls;
@@ -688,13 +757,14 @@ std::list<string>* EntityAnn::get_candidates() {
     }
     tnodes->sort(compare_tnodes);
     for(auto it=tnodes->cbegin(); it!=tnodes->cend(); it++) {
-        m_logger->log("get_candidates> "+(*it)->uri+" ----- ("+to_string((*it)->f)+")");
+        m_logger->log("get_candidates> "+(*it)->uri+" ----- ("+to_string((*it)->f)+") ## fc="+to_string((*it)->fc)+" fs="+to_string((*it)->fs));
         candidates->push_front((*it)->uri);
     }
     return candidates;
 }
 
 void EntityAnn::pick_root() {
+    m_logger->log("EntityAnn.pick_root> ");
     m_graph->pick_root();
 }
 
@@ -796,12 +866,12 @@ std::list<string>* EntityAnn::annotate_entity_property_column(std::list<std::lis
 
 
 void EntityAnn::annotate_entity_property_pair(string subject, string another) {
-   hdt::IteratorTripleString* itt;
-   hdt::TripleString* triple;
-   hdt::IteratorTripleString* itt2;
-   hdt::TripleString* triple2;
-   hdt::IteratorTripleString* itt3;
-   hdt::TripleString* triple3;
+    hdt::IteratorTripleString* itt;
+    hdt::TripleString* triple;
+    hdt::IteratorTripleString* itt2;
+    hdt::TripleString* triple2;
+    hdt::IteratorTripleString* itt3;
+    hdt::TripleString* triple3;
     string subject_uri;
     string subject_tagged;
     string another_tagged;
@@ -866,8 +936,8 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
 
 
 std::list<string>* EntityAnn::get_entities_of_class(string class_uri) {
-   hdt::IteratorTripleString* itt;
-   hdt::TripleString* triple;
+    hdt::IteratorTripleString* itt;
+    hdt::TripleString* triple;
     std::list<string>* entities;
     entities=new std::list<string>;
     itt = m_hdt->search("", type_uri.c_str(), class_uri.c_str());
@@ -882,8 +952,8 @@ std::list<string>* EntityAnn::get_entities_of_class(string class_uri) {
 
 std::list<string>* EntityAnn::annotate_entity_property_heuristic(std::list<std::list<string>*>* data, string class_uri, long property_idx) {
     std::list<string>::iterator col_iter;
-   hdt::IteratorTripleString* itt;
-   hdt::TripleString* triple;
+    hdt::IteratorTripleString* itt;
+    hdt::TripleString* triple;
     std::list<string>* entities = new std::list<string>;
     std::list<string>* subjects;
     std::list<string>* ent;
@@ -944,16 +1014,25 @@ std::list<string>* EntityAnn::get_properties_from_map() {
         property_uri = it->first;
         count = it->second;
         m_logger->log("property: "+property_uri+" ----- ("+to_string(count)+")");
-//        cout << "property: "+property_uri << " ----- (" << count << ")\n";
+        //        cout << "property: "+property_uri << " ----- (" << count << ")\n";
         properties->push_back(property_uri);
     }
     m_properties_counts->clear();
     delete m_properties_counts;
+    m_properties_counts = nullptr;
     pairs->clear();
     delete pairs;
     return properties;
 }
 
+unsigned long EntityAnn::get_counts_of_class(string uri){
+    unsigned long class_num;
+    unsigned long propagated_num;
+    class_num = m_classes_entities_count.at(uri);
+    propagated_num = m_classes_propagated_count.at(uri);
+    m_logger->log("get_counts_of_class> class_count: "+to_string(class_num)+" propagated: "+to_string(propagated_num));
+    return class_num + propagated_num;
+}
 
 
 

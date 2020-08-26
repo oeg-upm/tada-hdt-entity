@@ -142,3 +142,17 @@ dbo:Company rdfs:subClassOf dbo:Organisation .
 dbo:Organisation rdfs:subClassOf dbo:Agent .
 
 
+dbo:Dmid1 rdfs:subClassOf dbo:Dup .
+dbo:Dmid2 rdfs:subClassOf dbo:Dup .
+dbo:Dlow rdfs:subClassOf dbo:Dmid1 .
+dbo:Dlow rdfs:subClassOf dbo:Dmid2 .
+
+dbr:dmid1 rdf:type dbo:Dmid1  .
+dbr:dmid2 rdf:type dbo:Dmid2  .
+dbr:dup rdf:type dbo:Dup  .
+dbr:dlow rdf:type dbo:Dlow .
+
+dbr:dmid1 rdfs:label "dmid1"  .
+dbr:dmid2 rdfs:label "dmid2" .
+dbr:dup rdfs:label "dup"  .
+dbr:dlow rdfs:label "dlow" .

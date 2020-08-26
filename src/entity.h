@@ -47,7 +47,8 @@ class EntityAnn {
         void compute_Ic_for_node(TNode* tnode);
         //        void propagate_Is_all();
         //        void propagate_Is_tnode(TNode *);
-        double compute_Lc_for_node(TNode*);
+//        double compute_Lc_for_node(TNode*);
+        std::unordered_map<string, bool>* compute_Lc_for_node(TNode*);
         void compute_Lc_for_all();
         void compute_Is_for_all();
         void compute_Is_for_node(TNode* tnode);
@@ -57,7 +58,7 @@ class EntityAnn {
         TNode* update_graph(string class_uri);
         void update_graph(std::list<string>* class_uris);
         void compute_classes_entities_counts();
-        unsigned long propagate_counts(TNode* tnode);
+        void propagate_counts(TNode* tnode);
         void compute_fs();
         void compute_fc(unsigned long m);
         void compute_f();
@@ -78,25 +79,28 @@ class EntityAnn {
         std::list<string>* annotate_entity_property_heuristic(std::list<std::list<string>*>* , string , long);
         std::list<string>* get_entities_of_class(string);
         std::list<string>* get_properties_from_map();
+        unsigned long get_counts_of_class(string);
 //        const string rdf_type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 //        const string rdfs_subclassof = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
 //        const string rdfs_label = "http://www.w3.org/2000/01/rdf-schema#label";
         string type_uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
         string subclassof_uri = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
         string label_uri = "http://www.w3.org/2000/01/rdf-schema#label";
-
     private:
         EasyLogger* m_logger;
         hdt::HDT* m_hdt;
         //HDT:: HDT::HDT* hdt;
         Graph* m_graph;
         std::unordered_map<string, std::unordered_map<string, bool>*> m_ancestor_lookup;
+        std::unordered_map<string, std::unordered_map<string, bool>*> m_descendents_lookup; // to store all childs and their descendents
         std::unordered_map<string, bool>* add_class_to_ancestor_lookup(string tclass);
         std::unordered_map<string, unsigned long> m_classes_entities_count;
+        std::unordered_map<string, unsigned long> m_classes_propagated_count;
         std::unordered_map<string, unsigned long>* m_properties_counts;
         //        bool m_propagate_Is=true; // should the parents also include the Is of their childred (true=yes)
         double m_alpha;
-        double m_ambiguitity_penalty=2;
+        //double m_ambiguitity_penalty=2;
+        double m_ambiguitity_penalty=1; // no penalty
         unsigned long m_m;
         bool m_retry_with_title_case = false;
         string m_lang_tag;
