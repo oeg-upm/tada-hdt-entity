@@ -27,9 +27,9 @@ EntityAnn::~EntityAnn() {
     if(m_logger != nullptr) {
         delete(m_logger);
     }
-    if(m_hdt != nullptr) {
-        delete(m_hdt);
-    }
+//    if(m_hdt != nullptr) {
+//        delete(m_hdt);
+//    }
     if(m_graph != nullptr) {
         delete(m_graph);
     }
@@ -209,9 +209,12 @@ std::list<string>* EntityAnn::get_entities_of_value(string value) {
     hdt::IteratorTripleString* itt;
     hdt::TripleString* triple;
     string tcased;
-    std::list<string>* entities = new std::list<string>;
+    std::list<string>* entities = new std::list<string>();
+    m_logger->log("get_entities_of_value>  value: <"+value+">");
     qvalue = get_quoted(value);
+    m_logger->log("get_entities_of_value>  quoted: <"+qvalue+">");
     qvalue = get_taged(qvalue);
+    m_logger->log("get_entities_of_value>  tagged: <"+qvalue+">");
     itt = m_hdt->search("", label_uri.c_str(), qvalue.c_str());
     m_logger->log("get_entities_of_value: cell value  <"+value+">");
     while(itt->hasNext()) {
