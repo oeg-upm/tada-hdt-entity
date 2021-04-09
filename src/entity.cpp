@@ -27,9 +27,9 @@ EntityAnn::~EntityAnn() {
     if(m_logger != nullptr) {
         delete(m_logger);
     }
-//    if(m_hdt != nullptr) {
-//        delete(m_hdt);
-//    }
+    if(m_hdt != nullptr && delete_hdt_in_destructor) {
+        delete(m_hdt);
+    }
     if(m_graph != nullptr) {
         delete(m_graph);
     }
@@ -46,6 +46,11 @@ EntityAnn::~EntityAnn() {
 void EntityAnn::setHDT(string hdt_file_dir) {
     m_hdt = hdt::HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
 }
+
+hdt::HDT* EntityAnn::getHDT() {
+    return m_hdt;
+}
+
 
 void EntityAnn::setLogger(string log_file_dir) {
     m_logger = new EasyLogger(log_file_dir);
@@ -79,6 +84,7 @@ EntityAnn::EntityAnn(hdt::HDT* hdt_ptr, string log_file_dir) {
     m_hdt = nullptr;
     m_graph = nullptr;
     m_properties_counts = nullptr;
+    delete_hdt_in_destructor=false;
     init(hdt_ptr, log_file_dir, 1.0);
 }
 
@@ -88,6 +94,7 @@ EntityAnn::EntityAnn(hdt::HDT* hdt_ptr, string log_file_dir, double alpha) {
     m_hdt = nullptr;
     m_graph = nullptr;
     m_properties_counts = nullptr;
+    delete_hdt_in_destructor=false;
     init(hdt_ptr, log_file_dir, alpha);
 }
 
@@ -96,6 +103,7 @@ EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir) {
     m_hdt = nullptr;
     m_graph = nullptr;
     m_properties_counts = nullptr;
+    delete_hdt_in_destructor=true;
     init(hdt_file_dir, log_file_dir, 1.0);
 }
 
@@ -105,6 +113,7 @@ EntityAnn::EntityAnn(string hdt_file_dir, string log_file_dir, double alpha) {
     m_hdt = nullptr;
     m_graph = nullptr;
     m_properties_counts = nullptr;
+    delete_hdt_in_destructor=true;
     init(hdt_file_dir, log_file_dir, alpha);
 }
 
@@ -523,9 +532,9 @@ std::unordered_map<string, bool>* EntityAnn::compute_Lc_for_node(TNode* tnode) {
                 des->insert({it2->first, true});
             }
         }
-//        if(ch!=nullptr) {
-//            delete ch;
-//        }
+        //        if(ch!=nullptr) {
+        //            delete ch;
+        //        }
         // Add the direct child
         if(des->find(it->first)==des->cend()) { // not found
             des->insert({it->first, true});
@@ -541,8 +550,8 @@ std::unordered_map<string, bool>* EntityAnn::compute_Lc_for_node(TNode* tnode) {
             m_logger->log("compute_Lc_for_node> is leaf node "+tnode->uri);
             tnode->lc = tnode->ic;
         }
-        else{
-            for(auto it=des->cbegin();it!=des->cend();it++){
+        else {
+            for(auto it=des->cbegin(); it!=des->cend(); it++) {
                 m_logger->log("compute_Lc_for_node> "+it->first+" add "+to_string(m_graph->get_node(it->first)->ic));
                 d += m_graph->get_node(it->first)->ic;
             }
@@ -626,16 +635,16 @@ void EntityAnn::compute_classes_entities_counts() {
 // include the counts of the childs because HDT does not perform reasoning
 void EntityAnn::propagate_counts(TNode* tnode) {
     unsigned long count;
-//    count = m_classes_entities_count.at(tnode->uri);
+    //    count = m_classes_entities_count.at(tnode->uri);
     count = 0;
     std::unordered_map<string, bool>* des;
-    if(m_classes_propagated_count.at(tnode->uri)==0){ // counts not propagated
+    if(m_classes_propagated_count.at(tnode->uri)==0) { // counts not propagated
         m_logger->log("propagate_counts> for "+tnode->uri);
         for(auto it=tnode->children->cbegin(); it!=tnode->children->cend(); it++) {
             this->propagate_counts(it->second);
         }
         des = m_descendents_lookup.at(tnode->uri);
-        for(auto it=des->cbegin();it!=des->cend();it++){ // compute the counts from all descendents
+        for(auto it=des->cbegin(); it!=des->cend(); it++) { // compute the counts from all descendents
             count+= m_classes_entities_count.at(it->first);
         }
         m_classes_propagated_count.at(tnode->uri) = count;
@@ -1028,7 +1037,7 @@ std::list<string>* EntityAnn::get_properties_from_map() {
     return properties;
 }
 
-unsigned long EntityAnn::get_counts_of_class(string uri){
+unsigned long EntityAnn::get_counts_of_class(string uri) {
     unsigned long class_num;
     unsigned long propagated_num;
     class_num = m_classes_entities_count.at(uri);
