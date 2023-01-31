@@ -10,6 +10,7 @@ using namespace hdt;
 string input_file = "test.ttl";
 string log_file = "test.log";
 string hdt_file = "test.hdt";
+string base_dir = "";
 
 string dbr_prefix = "http://dbpedia.org/resource/";
 string dbo_prefix = "http://dbpedia.org/ontology/";
@@ -22,7 +23,9 @@ void ttl_to_hdt(string ttl_dir) {
 
   if (!EntityAnn::file_exists(ttl_dir.c_str())) {
     cout << ttl_dir << " is not found (not necessarily an error)\n";
-    ttl_dir = "../" + ttl_dir;
+    base_dir = "../";
+    ttl_dir = base_dir + ttl_dir;
+    hdt_file = base_dir + hdt_file;
     cout << "Trying: " << ttl_dir << endl;
   }
 
@@ -63,8 +66,9 @@ TEST(EntityTest, Constructor2) {
 
   ea->type_uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
   ea->subclassof_uri = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
-  ea->label_uri = "http://www.w3.org/2000/01/rdf-schema#label";
-
+//  ea->label_uri = "http://www.w3.org/2000/01/rdf-schema#label";
+  ea->clear_label_uri();
+  ea->append_label_uri("http://www.w3.org/2000/01/rdf-schema#label");
   ea->set_alpha(0.5);
   ASSERT_EQ(0.5, ea->get_alpha());
   delete ea;
@@ -305,7 +309,7 @@ TEST(EntityTest, Scores) {
   std::list<string> *candidates;
   string class_uri = dbo_prefix + "Boxer";
   std::list<std::list<string>*> *data;
-  Parser p("test_files/test1.csv");
+  Parser p(base_dir + "test_files/test1.csv");
   data = p.parse();
   candidates = ea->annotate_column(data, 2, 0.1);
   ea->get_graph()->print_nodes();
@@ -318,7 +322,7 @@ TEST(EntityTest, ScoresExtraRoot) {
   std::list<string> *candidates;
   string class_uri = dbo_prefix + "Swimmer";
   std::list<std::list<string>*> *data;
-  Parser p("test_files/test2.csv");
+  Parser p(base_dir + "test_files/test2.csv");
   data = p.parse();
   candidates = ea->annotate_column(data, 2, 0.1);
   ea->get_graph()->print_nodes();
@@ -333,7 +337,7 @@ TEST(EntityTest, Context) {
   string volley_class_uri = dbo_prefix + "VolleyballPlayer";
   string football_class_uri = dbo_prefix + "FootballPlayer";
   std::list<std::list<string>*> *data;
-  Parser p("test_files/test3.csv");
+  Parser p(base_dir + "test_files/test3.csv");
   data = p.parse();
   candidates = ea->annotate_column(data, 1, 0.1);
   ASSERT_STREQ(volley_class_uri.c_str(), candidates->front().c_str());
@@ -353,7 +357,7 @@ TEST(EntityTest, DoubleLevel) {
   std::list<string> *candidates;
   string wrestler_class_uri = dbo_prefix + "Wrestler";
   std::list<std::list<string>*> *data;
-  Parser p("test_files/test4.csv");
+  Parser p(base_dir + "test_files/test4.csv");
   data = p.parse_vertical();
   candidates = ea->annotate_column(data, 1, true, true);
   ea->get_graph()->print_nodes();
@@ -367,7 +371,7 @@ TEST(EntityTest, recomputef) {
   std::list<string> *candidates;
   string wrestler_class_uri = dbo_prefix + "Wrestler";
   std::list<std::list<string>*> *data;
-  Parser p("test_files/test4.csv");
+  Parser p(base_dir + "test_files/test4.csv");
   data = p.parse_vertical();
   candidates = ea->annotate_column(data, 1, true, true);
   ea->get_graph()->print_nodes();
@@ -383,7 +387,7 @@ TEST(EntityTest, LangTag) {
   std::list<string> *candidates;
   string class_uri = dbo_prefix + "Cyclist";
   std::list<std::list<string>*> *data;
-  Parser p("test_files/test5.csv");
+  Parser p(base_dir + "test_files/test5.csv");
   data = p.parse_vertical();
   candidates = ea->annotate_column(data, 0, true, true);
   ea->get_graph()->print_nodes();
@@ -411,7 +415,7 @@ TEST(EntityTest, TitleCase) {
   std::list<string> *candidates;
   string class_uri = dbo_prefix + "BaseballPlayer";
   std::list<std::list<string>*> *data;
-  Parser p("test_files/test6.csv");
+  Parser p(base_dir + "test_files/test6.csv");
   data = p.parse_vertical();
   candidates = ea->annotate_column(data, 0, true, true);
   ea->get_graph()->print_nodes();
@@ -434,7 +438,7 @@ TEST(EntityTest, nonSubjectColumns) {
   string dbp_country = "http://dbpedia.org/property/country";
   std::list<std::list<string>*> *data;
   std::list<string> *properties;
-  Parser p("test_files/test7.csv");
+  Parser p(base_dir + "test_files/test7.csv");
   data = p.parse_vertical();
   EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.9);
   ea->set_title_case(false);
@@ -450,7 +454,7 @@ TEST(EntityTest, nonSubjectColumnsHeuristic) {
   string class_uri = "http://dbpedia.org/ontology/Wrestler";
   std::list<std::list<string>*> *data;
   std::list<string> *properties;
-  Parser p("test_files/test8.csv");
+  Parser p(base_dir + "test_files/test8.csv");
   data = p.parse_vertical();
   EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.9);
   ea->set_title_case(false);
@@ -468,7 +472,7 @@ TEST(EntityTest, diamondTaxomony) {
   string class_uri = "http://dbpedia.org/ontology/Dup";
   string mid_uri = "http://dbpedia.org/ontology/Dmid1";
   std::list<std::list<string>*> *data;
-  Parser p("test_files/test9.csv");
+  Parser p(base_dir + "test_files/test9.csv");
   data = p.parse_vertical();
   EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.9);
   ea->set_title_case(false);

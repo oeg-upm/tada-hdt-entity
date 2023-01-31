@@ -91,11 +91,14 @@ class EntityAnn {
   //        const string rdfs_label = "http://www.w3.org/2000/01/rdf-schema#label";
   string type_uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
   string subclassof_uri = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
-  string label_uri = "http://www.w3.org/2000/01/rdf-schema#label";
+//  string label_uri = "http://www.w3.org/2000/01/rdf-schema#label";
   bool delete_hdt_in_destructor = false;
   //double m_ambiguitity_penalty=2;
   double m_ambiguitity_penalty = 1; // no penalty
 
+  std::list<string> get_labels_uris();
+  bool append_label_uri(string);
+  bool clear_label_uri();
   // source: https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exists-using-standard-c-c11-14-17-c
   static inline bool file_exists(const std::string &name) {
     struct stat buffer;
@@ -114,6 +117,7 @@ class EntityAnn {
   std::unordered_map<string, unsigned long> m_classes_entities_count;
   std::unordered_map<string, unsigned long> m_classes_propagated_count;
   std::unordered_map<string, unsigned long> *m_properties_counts;
+  std::list<string> m_labels_uris;
   //        bool m_propagate_Is=true; // should the parents also include the Is of their childred (true=yes)
   double m_alpha;
   unsigned long m_m;
