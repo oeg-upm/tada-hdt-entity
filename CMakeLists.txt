@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project(tada-hdt-entity)
 
+# copied from  # https://stackoverflow.com/questions/31561309/cmake-warnings-under-os-x-macosx-rpath-is-not-specified-for-the-following-targe
+# to remove the rpath warning
+set(CMAKE_MACOSX_RPATH 1)
 
 add_library(mylibs SHARED "./src/entity.cpp" "./src/graph.cpp" "./src/tnode.cpp")
 #add_library(mylibs SHARED "./src/entity.cpp")
@@ -51,6 +54,8 @@ include_directories("include" "/usr/local/include")
 #Rename Library
 set_target_properties(mylibs PROPERTIES OUTPUT_NAME "tada-hdt-entity")
 
+
+
 add_executable("${PROJECT_NAME}" "${SOURCES}" "${HEADERS}")
 target_link_libraries("${PROJECT_NAME}" mylibs)
 
@@ -60,9 +65,6 @@ include(GNUInstallDirs)
 install(TARGETS mylibs DESTINATION lib)
 install(FILES include/entity.h include/tnode.h include/graph.h DESTINATION include/tada-hdt-entity)
 
-# copied from  # https://stackoverflow.com/questions/31561309/cmake-warnings-under-os-x-macosx-rpath-is-not-specified-for-the-following-targe
-# to remove the rpath warning
-set(CMAKE_MACOSX_RPATH 1)
 
 ## copied from gtest guide https://google.github.io/googletest/quickstart-cmake.html
 ## GoogleTest requires at least C++11
