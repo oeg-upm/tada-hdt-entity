@@ -19,11 +19,8 @@ TSOURCES = $(NOMSOURCES) tests.cpp
 LIBS = -lhdt -pthread -leasylogger -ltabularparser
 TLIBS = $(LIBS) -lgtest
 
-
-INC = -I./include
-
 CC = g++
-CXXFLAGS = -std=c++11 $(INC)  
+CXXFLAGS = -std=c++11  
 
 TESTAPP = bin/testapp
 COVAPP = bin/covapp
@@ -33,7 +30,7 @@ TOBJS_ABS = $(patsubst %,build/%,$(TOBJS))
 SOURCES_ABS = $(patsubst %,src/%,$(SOURCES))
 TSOURCES_ABS = $(patsubst %,src/%,$(TSOURCES))
 NOMSOURCES_ABS = $(patsubst %,src/%,$(NOMSOURCES))
-HEADERS_ABS = $(patsubst %,include/%,$(NOMHEADERS))
+HEADERS_ABS = $(patsubst %,src/%,$(NOMHEADERS))
 
 
 COVCLEANFILES = gcov.css snow.png ruby.png *.gcov  *.gcda *.gcno index-sort-f.html index-sort-l.html index.html \
