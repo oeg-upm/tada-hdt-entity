@@ -1,3 +1,4 @@
+*.user
 .DS_Store
 
 # Qt project files
