@@ -19,3 +19,5 @@ blocks:
             - echo "Hello from my 'main' container"
             - cp scripts/semaphoreci.sh scripts/start.sh
             - sh scripts/run_tests_in_docker.sh
+      secrets:
+        - name: tada-hdt-entity
