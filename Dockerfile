@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY scripts /app/scripts
 COPY src /app/src
+COPY include /app/include
 COPY Makefile /app/Makefile
 COPY .git /app/.git
 COPY test.ttl /app/test.ttl
