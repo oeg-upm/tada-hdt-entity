@@ -496,6 +496,9 @@ TEST(EntityTest, multipleLabels) {
   ea->append_label_uri("http://www.w3.org/2000/01/rdf-schema#label");
   ea->set_title_case(true);
   candidates = ea->annotate_column(data, 0, true, true);
+
+  ASSERT_EQ(candidates->size(), 0);// test fail
+
   ASSERT_GT(candidates->size(), 0);
   ASSERT_STREQ(candidates->front().c_str(), class_uri.c_str());
   ASSERT_EQ(ea->get_counts_of_class(class_uri), 4);
