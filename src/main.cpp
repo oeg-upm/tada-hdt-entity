@@ -9,13 +9,15 @@ int main() {
   cout << "Hello!" << endl;
 //    string file_dir1="/Users/aalobaid/workspaces/Pyworkspace/tada-gam/local_data/t2dv2/5873256_0_7795190905731964989.csv";
 //    string file_dir2 = "/Users/aalobaid/workspaces/Pyworkspace/tada-gam/local_data/t2dv2/86747932_0_7532457067740920052.csv";
-  unsigned int col_idx = 1;
+  int col_idx = 0;
   string m_hdt = "/Users/aalobaid/workspaces/Datasets/Bigg/biggv1.hdt";
   string fdir = "/Users/aalobaid/Downloads/a.csv";
   EntityAnn *ea = new EntityAnn(m_hdt, "entity.log");
+  ea->set_title_case(true);
   Parser p(fdir);
+  ea->clear_label_uri();
   ea->append_label_uri("http://www.w3.org/2004/02/skos/core#prefLabel");
-  candidates = ea->annotate_column(p.parse_vertical(), 0, true, true);
+  candidates = ea->annotate_column(p.parse_vertical(), col_idx, true, true);
 
   for (auto it = candidates->cbegin(); it != candidates->cend(); it++) {
     cout << "Candidate: " << *it << endl;

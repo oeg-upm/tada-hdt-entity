@@ -31,11 +31,6 @@ set(HEADERS
     include/graph.h)
 
 
-
-
-
-
-
 # This is to get rid of the the c++11 warnings
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)

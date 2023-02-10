@@ -235,6 +235,8 @@ std::list<string> *EntityAnn::get_entities_of_value(string value) {
   hdt::TripleString *triple;
   string tcased;
   std::list<string> *entities = new std::list<string>();
+std:
+  list<string> *lab_entities = new std::list<string>();
   m_logger->log("get_entities_of_value>  value: <" + value + ">");
   qvalue = get_quoted(value);
   m_logger->log("get_entities_of_value>  quoted: <" + qvalue + ">");
@@ -243,7 +245,7 @@ std::list<string> *EntityAnn::get_entities_of_value(string value) {
   string label_uri;
 
   for (auto it = m_labels_uris.cbegin(); it != m_labels_uris.cend(); it++) {
-
+    lab_entities->clear();
     label_uri = *it;
 
     itt = m_hdt->search("", label_uri.c_str(), qvalue.c_str());
@@ -252,10 +254,11 @@ std::list<string> *EntityAnn::get_entities_of_value(string value) {
     while (itt->hasNext()) {
       triple = itt->next();
       entities->push_back(triple->getSubject());
+      lab_entities->push_back(triple->getSubject());
       m_logger->log("get_entities_of_value: " + triple->getSubject());
     }
 
-    if (entities->size() == 0) {
+    if (lab_entities->size() == 0) {
       m_logger->log("no values for qvalue<" + qvalue + "> " + "  <" + value + ">");
 
       if (m_retry_with_title_case) {
@@ -263,7 +266,10 @@ std::list<string> *EntityAnn::get_entities_of_value(string value) {
 
         if (tcased != value) {
           m_logger->log("get_entities_of_value> tcased: " + tcased);
-          return get_entities_of_value(tcased);
+          delete (lab_entities);
+          lab_entities = get_entities_of_value(tcased);
+          entities->merge(*lab_entities);
+//          return get_entities_of_value(tcased);
         } else {
           m_logger->log("get_entities_of_value> debug, tcased: <" + tcased + ">");
         }
@@ -272,6 +278,9 @@ std::list<string> *EntityAnn::get_entities_of_value(string value) {
 
     delete itt;
   }
+
+  delete (lab_entities);
+
 
   return entities;
 }

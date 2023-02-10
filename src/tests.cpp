@@ -481,7 +481,26 @@ TEST(EntityTest, diamondTaxomony) {
   ASSERT_EQ(ea->get_counts_of_class(class_uri), 4);
   ASSERT_EQ(ea->get_counts_of_class(mid_uri), 2);
   delete candidates;
-//        ASSERT_TRUE(true);
+}
+
+TEST(EntityTest, multipleLabels) {
+  std::list<string> *candidates;
+  string class_uri = "http://dbpedia.org/ontology/Dup";
+  string mid_uri = "http://dbpedia.org/ontology/Dmid1";
+  std::list<std::list<string>*> *data;
+  Parser p(base_dir + "test_files/test9.csv");
+  data = p.parse_vertical();
+  EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.9);
+  ea->clear_label_uri();
+  ea->append_label_uri("http://some.example");
+  ea->append_label_uri("http://www.w3.org/2000/01/rdf-schema#label");
+  ea->set_title_case(true);
+  candidates = ea->annotate_column(data, 0, true, true);
+  ASSERT_GT(candidates->size(), 0);
+  ASSERT_STREQ(candidates->front().c_str(), class_uri.c_str());
+  ASSERT_EQ(ea->get_counts_of_class(class_uri), 4);
+  ASSERT_EQ(ea->get_counts_of_class(mid_uri), 2);
+  delete candidates;
 }
 
 
