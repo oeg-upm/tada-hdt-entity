@@ -1,0 +1,23 @@
+version: v1.0
+name: Run in Docker
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+  containers:
+    - name: main
+      image: 'registry.semaphoreci.com/node:10'
+    - name: database
+      image: 'registry.semaphoreci.com/postgres:11'
+blocks:
+  - name: Docker Tests
+    task:
+      jobs:
+        - name: Tests
+          commands:
+            - checkout
+            - echo "Hello from my 'main' container"
+            - cp scripts/semaphoreci.sh scripts/start.sh
+            - sh scripts/run_tests_in_docker.sh
+      secrets:
+        - name: tada-hdt-entity
