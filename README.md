@@ -5,9 +5,17 @@
 # tada-hdt-entity
 Add classes to entity columns in tabular data using HDT as the knowledge source
 
+# requirements
+* [easy-logger](https://github.com/ahmad88me/easy-logger)
+* [tabular-parser](https://github.com/ahmad88me/tabular-parser)
+* [hdt-cpp](https://github.com/rdfhdt/hdt-cpp)
+* [getopt](https://github.com/ahmad88me/getoptpp)
+
 # Two options to compile
 ## Make
-
+```
+make
+```
 ## CMake
 ```
 mkdir build
@@ -15,12 +23,9 @@ cd build
 cmake ..
 make
 ```
-### Run tests
+
+## Tests
+inside the `build` directory
 ```
 ./tests
-```
-
-### Run main
-```
-tada-hdt-entity
 ```
