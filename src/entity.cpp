@@ -160,12 +160,18 @@ std::list<string> *EntityAnn::annotate_column(std::list<std::list<string>*> *dat
 
       if (this->compute_intermediate_coverage(entity, prop, double_levels)) {
         m++;
+
+        if (m_sample_size > 0 && m >= m_sample_size) {
+          m_logger->log("annotate_column> sample size is reached");
+          break;
+        }
+
       }
 
       delete prop;
     }
 
-    m_m = m;
+//    m_m = m;
     m_logger->log("annotate_column> m: " + to_string(m));
     return this->annotate_semi_scored_column(m);
   } else {
@@ -192,6 +198,11 @@ std::list<string> *EntityAnn::annotate_column(std::list<std::list<string>*> *dat
 
     if (this->compute_intermediate_coverage(l)) {
       m++;
+
+      if (m_sample_size > 0 && m >= m_sample_size) {
+        m_logger->log("annotate_column> sample size is reached");
+        break;
+      }
     }
   }
 
@@ -200,6 +211,7 @@ std::list<string> *EntityAnn::annotate_column(std::list<std::list<string>*> *dat
 
 
 std::list<string> *EntityAnn::annotate_semi_scored_column(unsigned long m, double alpha) {
+  m_m = m;
   this->compute_Ic_for_all();
   this->compute_Lc_for_all();
   this->pick_root();
@@ -224,8 +236,6 @@ std::list<string> *EntityAnn::recompute_f(double alpha) {
 std::list<string> *EntityAnn::annotate_semi_scored_column(unsigned long m) {
   return this->annotate_semi_scored_column(m, m_alpha);
 }
-
-
 
 
 // Get entities of a given cell value or name using the rdfs:label property
@@ -697,8 +707,6 @@ void EntityAnn::compute_Ic_for_node(TNode *tnode) {
 }
 
 
-
-
 void EntityAnn::compute_classes_entities_counts() {
   hdt::IteratorTripleString *itt;
   unsigned long num_of_entities;
@@ -720,6 +728,7 @@ void EntityAnn::compute_classes_entities_counts() {
     m_logger->log("compute_classes_entities_counts> root is null");
   }
 }
+
 
 // include the counts of the childs because HDT does not perform reasoning
 void EntityAnn::propagate_counts(TNode *tnode) {
@@ -770,6 +779,7 @@ void EntityAnn::compute_Is_for_all() {
   }
 }
 
+
 void EntityAnn::compute_Is_for_node(TNode *tnode) {
   TNode *ch = nullptr;
   double ch_count;
@@ -794,6 +804,7 @@ void EntityAnn::compute_Is_for_node(TNode *tnode) {
   }
 }
 
+
 void EntityAnn::compute_Ls_for_all() {
   std::list<TNode *> *leaves = m_graph->get_leaves();
 
@@ -801,6 +812,7 @@ void EntityAnn::compute_Ls_for_all() {
     this->compute_Ls_for_node(*it);
   }
 }
+
 
 double EntityAnn::compute_Ls_for_node(TNode *tnode) {
   double ls = tnode->ls;
@@ -834,6 +846,7 @@ double EntityAnn::compute_Ls_for_node(TNode *tnode) {
   return ls;
 }
 
+
 void EntityAnn::compute_fs() {
   TNode *tnode;
 
@@ -843,6 +856,7 @@ void EntityAnn::compute_fs() {
     m_logger->log("compute_fs> " + tnode->uri + ", -1 * " + to_string(tnode->ls) + " + 1 = " + to_string(tnode->fs));
   }
 }
+
 
 void EntityAnn::compute_fc(unsigned long m) {
   TNode *tnode;
@@ -855,6 +869,7 @@ void EntityAnn::compute_fc(unsigned long m) {
                     tnode->fc));
   }
 }
+
 
 void EntityAnn::compute_f() {
   TNode *tnode;
@@ -1206,8 +1221,6 @@ unsigned long EntityAnn::get_counts_of_class(string uri) {
   return class_num + propagated_num;
 }
 
-
-
 std::list<string> EntityAnn::get_labels_uris() {
   return m_labels_uris;
 }
@@ -1222,4 +1235,15 @@ bool EntityAnn::clear_label_uri() {
   return true;
 }
 
+void EntityAnn::set_sample_size(long sample_size) {
+  m_sample_size = sample_size;
+}
+
+long EntityAnn::get_sample_size() {
+  return m_sample_size;
+}
+
+unsigned long EntityAnn::get_m() {
+  return m_m;
+}
 

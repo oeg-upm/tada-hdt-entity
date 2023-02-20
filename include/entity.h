@@ -76,10 +76,12 @@ class EntityAnn {
   string get_quoted(string);
   string get_taged(string);
   std::list<string> *recompute_f(double);
-  void set_language_tag(string);
   string get_title_case(string);
   void set_title_case(bool);
   bool get_title_case();
+  void set_language_tag(string tag);
+  unsigned long get_m();
+
   std::list<string> *annotate_entity_property_column(std::list<std::list<string>*> *, long, long);
   void annotate_entity_property_pair(string, string);
   std::list<string> *annotate_entity_property_heuristic(std::list<std::list<string>*> *, string, long);
@@ -95,6 +97,9 @@ class EntityAnn {
   bool delete_hdt_in_destructor = false;
   //double m_ambiguitity_penalty=2;
   double m_ambiguitity_penalty = 1; // no penalty
+
+  void set_sample_size(long sample_size);
+  long get_sample_size();
 
   std::list<string> get_labels_uris();
   bool append_label_uri(string);
@@ -123,6 +128,7 @@ class EntityAnn {
   unsigned long m_m;
   bool m_retry_with_title_case = false;
   string m_lang_tag;
+  long m_sample_size = 0;
   void init(string hdt_file_dir, string log_file_dir, double alpha);
   void init(hdt::HDT *hdt_ptr, string log_file_dir, double alpha);
 };

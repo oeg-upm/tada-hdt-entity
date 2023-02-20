@@ -131,7 +131,7 @@ TEST(EntityTest, IntermediateScoresMultiClass) {
   string label = "golferboxer1";
   // entity with two classes
   ea->compute_intermediate_coverage(label);
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   tnode =  ea->get_tnode(class_uri);
   ASSERT_NE(tnode, nullptr);
   ASSERT_DOUBLE_EQ(0.5, tnode->tc);
@@ -149,14 +149,14 @@ TEST(EntityTest, GraphLeaves) {
   ea->compute_intermediate_coverage(label);
   Graph *graph = ea->get_graph();
   leaves = graph->get_leaves();
-  graph->print_nodes();
+  //graph->print_nodes();
   ASSERT_EQ(leaves->size(), 1);
   ASSERT_STREQ(leaves->front()->uri.c_str(), class_uri.c_str());
   label = "golferboxer1";
   ea->compute_intermediate_coverage(label);
   graph = ea->get_graph();
   leaves = graph->get_leaves();
-  graph->print_nodes();
+  //graph->print_nodes();
   ASSERT_EQ(leaves->size(), 2);
   delete ea;
 }
@@ -173,7 +173,7 @@ TEST(EntityTest, GraphRoots) {
   ea->compute_intermediate_coverage(label);
   Graph *graph = ea->get_graph();
   roots = graph->get_candidate_roots();
-  graph->print_nodes();
+  //graph->print_nodes();
   ASSERT_EQ(roots->size(), 1);
   ASSERT_STREQ(roots->front()->uri.c_str(), root.c_str());
   delete ea;
@@ -197,7 +197,7 @@ TEST(EntityTest, GraphContruction) {
     cout << "leaves: " << (*it)->uri << endl;
   }
 
-  graph->print_nodes();
+  //graph->print_nodes();
   ASSERT_EQ(leaves->size(), 2);
   tnode = graph->get_node(class_uri);
   ASSERT_EQ(tnode->parents->size(), 1);
@@ -220,7 +220,7 @@ TEST(EntityTest, IcLcSingle) {
   ea->compute_intermediate_coverage(label);
   ea->compute_Ic_for_all();
   ea->compute_Lc_for_all();
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   tnode =  ea->get_tnode(class_uri);
   ASSERT_NE(tnode, nullptr);
   ASSERT_EQ(1.0, tnode->lc);
@@ -240,7 +240,7 @@ TEST(EntityTest, IcLcMulti) {
   ea->compute_intermediate_coverage(label);
   ea->compute_Ic_for_all();
   ea->compute_Lc_for_all();
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   tnode =  ea->get_tnode(class_uri);
   cout << "class ic: " << tnode->ic << "Lc: " << tnode->lc << endl;
   ASSERT_NE(tnode, nullptr);
@@ -266,13 +266,13 @@ TEST(EntityTest, ClassEntityCounts) {
   ea->compute_intermediate_coverage(label);
   ea->compute_Ic_for_all();
   ea->compute_Lc_for_all();
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   ea->get_graph()->pick_root();
   ASSERT_STREQ((dbo_prefix + "Agent").c_str(), ea->get_graph()->get_root()->uri.c_str());
   ea->compute_classes_entities_counts();
   ea->compute_Is_for_all();
   ea->compute_Ls_for_all();
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   boxer_tnode = ea->get_graph()->get_node(dbo_prefix + "Boxer");
   amature_tnode = ea->get_graph()->get_node(dbo_prefix + "AmateurBoxer");
   agent_tnode = ea->get_graph()->get_node(dbo_prefix + "Agent");
@@ -294,13 +294,13 @@ TEST(EntityTest, NONExistantLabel) {
   ea->compute_intermediate_coverage(label);
   ea->compute_Ic_for_all();
   ea->compute_Lc_for_all();
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   ea->get_graph()->pick_root();
   ASSERT_EQ(ea->get_graph()->get_root(), nullptr);
   ea->compute_classes_entities_counts();
   ea->compute_Is_for_all();
   ea->compute_Ls_for_all();
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   delete ea;
 }
 
@@ -312,7 +312,22 @@ TEST(EntityTest, Scores) {
   Parser p(base_dir + "test_files/test1.csv");
   data = p.parse();
   candidates = ea->annotate_column(data, 2, 0.1);
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
+  ASSERT_STREQ(class_uri.c_str(), candidates->front().c_str());
+  delete ea;
+}
+
+TEST(EntityTest, ScoresSample) {
+  EntityAnn *ea = new EntityAnn(hdt_file, log_file);
+  std::list<string> *candidates;
+  string class_uri = dbo_prefix + "Boxer";
+  std::list<std::list<string>*> *data;
+  Parser p(base_dir + "test_files/test1.csv");
+  data = p.parse();
+  ea->set_sample_size(1);
+  candidates = ea->annotate_column(data, 2, 0.1);
+  //ea->get_graph()->print_nodes();
+  ASSERT_EQ(ea->get_m(), 1);
   ASSERT_STREQ(class_uri.c_str(), candidates->front().c_str());
   delete ea;
 }
@@ -325,7 +340,7 @@ TEST(EntityTest, ScoresExtraRoot) {
   Parser p(base_dir + "test_files/test2.csv");
   data = p.parse();
   candidates = ea->annotate_column(data, 2, 0.1);
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   ASSERT_STREQ(class_uri.c_str(), candidates->front().c_str());
   delete ea;
 }
@@ -346,9 +361,31 @@ TEST(EntityTest, Context) {
   ea = new EntityAnn(hdt_file, log_file, 0.1);
   data = p.parse_vertical();
   candidates = ea->annotate_column(data, 1, true, false);
-  ea->get_graph()->print_nodes();
+//  ea->get_graph()->print_nodes();
   ASSERT_STREQ(football_class_uri.c_str(), candidates->front().c_str());
   delete ea;
+}
+
+TEST(EntityTest, ContextSample) {
+  EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.1);
+  std::list<string> *candidates;
+  string volley_class_uri = dbo_prefix + "VolleyballPlayer";
+  string football_class_uri = dbo_prefix + "FootballPlayer";
+  std::list<std::list<string>*> *data;
+  Parser p(base_dir + "test_files/test3.csv");
+  data = p.parse();
+  candidates = ea->annotate_column(data, 1, 0.1);
+  ASSERT_STREQ(volley_class_uri.c_str(), candidates->front().c_str());
+  ASSERT_EQ(ea->get_m(), 3);
+  delete ea;
+
+  ea = new EntityAnn(hdt_file, log_file, 0.1);
+  ea->set_sample_size(2);
+  candidates = ea->annotate_column(data, 1, 0.1);
+  ASSERT_STREQ(volley_class_uri.c_str(), candidates->front().c_str());
+  ASSERT_EQ(ea->get_m(), 2);
+  delete ea;
+
 }
 
 TEST(EntityTest, DoubleLevel) {
@@ -360,7 +397,7 @@ TEST(EntityTest, DoubleLevel) {
   Parser p(base_dir + "test_files/test4.csv");
   data = p.parse_vertical();
   candidates = ea->annotate_column(data, 1, true, true);
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   ASSERT_STREQ(wrestler_class_uri.c_str(), candidates->front().c_str());
   delete ea;
 }
@@ -374,7 +411,7 @@ TEST(EntityTest, recomputef) {
   Parser p(base_dir + "test_files/test4.csv");
   data = p.parse_vertical();
   candidates = ea->annotate_column(data, 1, true, true);
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   delete candidates;
   candidates = ea->recompute_f(0.1);
   ASSERT_STREQ(wrestler_class_uri.c_str(), candidates->front().c_str());
@@ -390,7 +427,7 @@ TEST(EntityTest, LangTag) {
   Parser p(base_dir + "test_files/test5.csv");
   data = p.parse_vertical();
   candidates = ea->annotate_column(data, 0, true, true);
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   delete candidates;
   candidates = ea->recompute_f(0.1);
   ASSERT_STREQ(class_uri.c_str(), candidates->front().c_str());
@@ -418,7 +455,7 @@ TEST(EntityTest, TitleCase) {
   Parser p(base_dir + "test_files/test6.csv");
   data = p.parse_vertical();
   candidates = ea->annotate_column(data, 0, true, true);
-  ea->get_graph()->print_nodes();
+  //ea->get_graph()->print_nodes();
   delete candidates;
   candidates = ea->recompute_f(0.1);
   ASSERT_STREQ(class_uri.c_str(), candidates->front().c_str());
