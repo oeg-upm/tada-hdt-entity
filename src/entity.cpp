@@ -15,7 +15,13 @@ using namespace std;
 
 
 
-
+/**
+ *
+ *
+ *
+ *
+ *
+ */
 EntityAnn::EntityAnn() {
   m_logger = nullptr;
   m_hdt = nullptr;
