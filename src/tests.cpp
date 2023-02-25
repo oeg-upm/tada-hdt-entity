@@ -242,14 +242,14 @@ TEST(EntityTest, IcLcMulti) {
   ea->compute_Lc_for_all();
   //ea->get_graph()->print_nodes();
   tnode =  ea->get_tnode(class_uri);
-  cout << "class ic: " << tnode->ic << "Lc: " << tnode->lc << endl;
+  //cout << "class ic: " << tnode->ic << "Lc: " << tnode->lc << endl;
   ASSERT_NE(tnode, nullptr);
   ASSERT_DOUBLE_EQ(0.5, tnode->lc);
   tnode =  ea->get_tnode(parent_uri);
-  cout << "parent ic: " << tnode->ic << "Lc: " << tnode->lc << endl;
+  //cout << "parent ic: " << tnode->ic << "Lc: " << tnode->lc << endl;
   ASSERT_DOUBLE_EQ(1.0, tnode->lc);
   tnode =  ea->get_tnode(grand_uri);
-  cout << "grand ic: " << tnode->ic << "Lc: " << tnode->lc << endl;
+  //cout << "grand ic: " << tnode->ic << "Lc: " << tnode->lc << endl;
   ASSERT_DOUBLE_EQ(1.0, tnode->lc);
   delete ea;
 }
@@ -469,7 +469,21 @@ TEST(EntityTest, StripQ) {
   ASSERT_STREQ("ABC", ea->strip_quotes("\"ABC\"").c_str());
 }
 
-
+TEST(EntityTest, textColumn) {
+  string dbp_color = "http://dbpedia.org/property/color";
+  std::list<std::list<string>*> *data;
+  std::list<string> *properties;
+  Parser p(base_dir + "test_files/test10.csv");
+  data = p.parse_vertical();
+  EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.9);
+  ea->set_title_case(false);
+  properties = ea->annotate_entity_property_column(data, 1, 2);
+//        cout << "size: "<<properties->size()<<endl;
+//        cout << "front: <"<<properties->front()<<"> "<<endl;
+//        cout << "target: <"<<dbp_country<<"> "<<endl;
+  ASSERT_EQ(properties->size(), 1);
+  ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
+}
 
 TEST(EntityTest, nonSubjectColumns) {
   string dbp_country = "http://dbpedia.org/property/country";

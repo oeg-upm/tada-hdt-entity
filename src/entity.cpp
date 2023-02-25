@@ -163,15 +163,14 @@ std::list<string> *EntityAnn::annotate_column(std::list<std::list<string>*> *dat
 
         if (m_sample_size > 0 && m >= m_sample_size) {
           m_logger->log("annotate_column> sample size is reached");
+          delete prop;
           break;
         }
-
       }
 
       delete prop;
     }
 
-//    m_m = m;
     m_logger->log("annotate_column> m: " + to_string(m));
     return this->annotate_semi_scored_column(m);
   } else {
@@ -541,10 +540,10 @@ bool EntityAnn::compute_intermediate_coverage(string cell_value, std::list<strin
       if (tnode == nullptr) {
         m_logger->log("Error: in compute_intermediate_coverage, tnode <" + cell_value + "> is null\n\n");
         cout << "Error: in compute_intermediate_coverage, tnode <" << cell_value << "> is null\n\n";
+      } else {
+        tnode->tc += 1.0 / (Q_size * Z_size);
+        m_logger->log("compute_intermediate_coverage> " + tnode->uri + " tc: " + to_string(tnode->tc));
       }
-
-      tnode->tc += 1.0 / (Q_size * Z_size);
-      m_logger->log("compute_intermediate_coverage> " + tnode->uri + " tc: " + to_string(tnode->tc));
     }
   }
 
@@ -986,7 +985,6 @@ string EntityAnn::strip_quotes(string s) {
 std::list<string> *EntityAnn::annotate_entity_property_column(std::list<std::list<string>*> *data, long subject_idx,
     long property_idx) {
   std::list<string>::iterator col_iter;
-  std::list<string> *properties = new std::list<string>;
   string subject, class_uri, another, subject_uri;
   m_properties_counts = new std::unordered_map<string, unsigned long>;
 
@@ -1009,14 +1007,97 @@ std::list<string> *EntityAnn::annotate_entity_property_column(std::list<std::lis
       subject = *col_iter;
     }
 
-    annotate_entity_property_pair(subject, another);
+    if (!annotate_text_property_pair(subject, another)) {
+      annotate_entity_property_pair(subject, another);
+    }
+
   }
 
   return get_properties_from_map();
 }
 
+bool EntityAnn::annotate_text_property_pair(string subject, string another) {
+  hdt::IteratorTripleString *itt;
+  hdt::TripleString *triple;
+  hdt::IteratorTripleString *itt2;
+  hdt::TripleString *triple2;
+  hdt::IteratorTripleString *itt3;
+  hdt::TripleString *triple3;
+  string subject_uri;
+  string subject_tagged;
+  string another_tagged;
+  string t_cased_subject, t_cased_object;
+  string property_uri;
+  bool entity_found = false, property_found = false, another_found = false, found = false;
+  another_tagged = get_taged(get_quoted(strip_quotes(another)));
+  subject_tagged = get_taged(get_quoted(strip_quotes(subject)));
+  string label_uri;
 
-void EntityAnn::annotate_entity_property_pair(string subject, string another) {
+  for (auto it = m_labels_uris.cbegin(); it != m_labels_uris.cend(); it++) {
+
+    label_uri = *it;
+
+    // get subject uri
+    itt = m_hdt->search("", label_uri.c_str(), subject_tagged.c_str());
+
+    while (itt->hasNext()) {
+      triple = itt->next();
+      subject_uri = triple->getSubject();
+
+      // get relation entity
+      itt2 = m_hdt->search(subject_uri.c_str(), "", another_tagged.c_str());
+      property_found = false;
+
+      while (itt2->hasNext()) {
+        property_found = true;
+        found = true;
+        triple = itt2->next();
+        property_uri = triple->getPredicate();
+        m_logger->log("annotate_text_property_pair> triple: " + subject_uri + " - " + property_uri);
+
+        if (m_properties_counts->find(property_uri) != m_properties_counts->cend()) {
+          m_properties_counts->at(property_uri) += 1;
+        } else {
+          m_properties_counts->insert({property_uri, 1});
+        }
+
+      } // while
+
+      if (property_found == false && m_retry_with_title_case) {
+        t_cased_object = get_title_case(another);
+        t_cased_subject = get_title_case(subject);
+
+        if (t_cased_object != another) {
+          property_found = property_found || annotate_text_property_pair(subject, t_cased_object);
+        }
+
+        if (property_found == false && t_cased_subject != subject) {
+          property_found = property_found || annotate_text_property_pair(t_cased_subject, another);
+        }
+
+        if (property_found == false && t_cased_subject != subject && t_cased_object != another) {
+          property_found = property_found || annotate_text_property_pair(t_cased_subject, t_cased_object);
+        }
+
+        found = found || property_found;
+      }
+
+      delete itt2;
+    } // while
+
+    delete itt;
+
+    if (found) {
+      m_logger->log("annotate_text_property_pair> relation found: " + subject_uri + " - " + another_tagged);
+    } else {
+      m_logger->log("annotate_text_property_pair> relation NOT:" + subject_uri + " - " + another_tagged);
+    }
+  } // for labels
+
+  return found;
+}
+
+bool EntityAnn::annotate_entity_property_pair(string subject, string another) {
   hdt::IteratorTripleString *itt;
   hdt::TripleString *triple;
   hdt::IteratorTripleString *itt2;
@@ -1028,7 +1109,7 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
   string another_tagged;
   string t_cased;
   string property_uri, another_uri;
-  bool entity_found = false, property_found = false, another_found = false;
+  bool entity_found = false, property_found = false, another_found = false, found = false;
   another_tagged = get_taged(get_quoted(strip_quotes(another)));
   subject_tagged = get_taged(get_quoted(strip_quotes(subject)));
   //    m_logger->log("annotate_entity_property_pair> ("+subject+","+another+")");
@@ -1036,18 +1117,18 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
   string label_uri;
 
   for (auto it = m_labels_uris.cbegin(); it != m_labels_uris.cend(); it++) {
-    entity_found = false;
-    property_found = false;
-    another_found = false;
     label_uri = *it;
 
+    // get subject entity
     itt = m_hdt->search("", label_uri.c_str(), subject_tagged.c_str());
 
     while (itt->hasNext()) {
       entity_found = true;
-      //        m_logger->log("annotate_entity_property_pair> subject is found: "+subject_uri);
+      m_logger->log("annotate_entity_property_pair> subject is found: " + subject_uri);
       triple = itt->next();
       subject_uri = triple->getSubject();
+
+      // get entity from the property column
       itt2 = m_hdt->search("", label_uri.c_str(),  another_tagged.c_str());
       another_found = false;
 
@@ -1055,7 +1136,9 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
         another_found = true;
         triple2 = itt2->next();
         another_uri = triple2->getSubject();
-        //            m_logger->log("annotate_entity_property_pair> another is found: "+another_uri);
+        m_logger->log("annotate_entity_property_pair> another is found: " + another_uri);
+
+        // get relation between the entity in the subject column and the entity from the property column in the same row
         itt3 = m_hdt->search(subject_uri.c_str(), "", another_uri.c_str());
         property_found = false;
 
@@ -1063,7 +1146,7 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
           property_found = true;
           triple3 = itt3->next();
           property_uri = triple3->getPredicate();
-          m_logger->log("annotate_entity_property_pair> *** triple: " + subject_uri + " - " + property_uri + " - " + another_uri);
+          m_logger->log("annotate_entity_property_pair> triple: " + subject_uri + " - " + property_uri + " - " + another_uri);
 
           if (m_properties_counts->find(property_uri) != m_properties_counts->cend()) {
             m_properties_counts->at(property_uri) += 1;
@@ -1072,24 +1155,26 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
           }
         }// 3
 
+        delete itt3;
+
         if (property_found) {
           m_logger->log("annotate_entity_property_pair> relation found: " + subject_uri + " - " + another_uri);
+          found = true;
         } else {
           m_logger->log("annotate_entity_property_pair> relation NOT:" + subject_uri + " - " + another_uri);
         }
-
-        delete itt3;
       }// 2
+
+      delete itt2;
 
       if (another_found == false && m_retry_with_title_case) {
         t_cased = get_title_case(another);
 
         if (t_cased != another) {
-          annotate_entity_property_pair(subject, t_cased);
+          found = found || annotate_entity_property_pair(subject, t_cased);
         }
       }
 
-      delete itt2;
     }// 1
 
     delete itt;
@@ -1098,10 +1183,12 @@ void EntityAnn::annotate_entity_property_pair(string subject, string another) {
       t_cased = get_title_case(subject);
 
       if (t_cased != subject) {
-        annotate_entity_property_pair(t_cased, another);
+        found = found || annotate_entity_property_pair(t_cased, another);
       }
     }
   }
+
+  return found;
 }
 
 
@@ -1130,6 +1217,7 @@ std::list<string> *EntityAnn::annotate_entity_property_heuristic(std::list<std::
   std::list<string> *entities = new std::list<string>;
   std::list<string> *subjects;
   std::list<string> *ent;
+  string tcased;
   string another, subject_uri, entity_uri, property_uri;
   m_properties_counts = new std::unordered_map<string, unsigned long>;
 
@@ -1144,7 +1232,11 @@ std::list<string> *EntityAnn::annotate_entity_property_heuristic(std::list<std::
     ent = get_entities_of_value(another);
 
     if (ent->size() == 0 && m_retry_with_title_case) {
-      ent = get_entities_of_value(get_title_case(another));
+      tcased = get_title_case(another);
+
+      if (tcased != another) {
+        ent = get_entities_of_value(get_title_case(another));
+      }
     }
 
     entities->merge(*ent);

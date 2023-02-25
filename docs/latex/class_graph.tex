@@ -1,0 +1,59 @@
+\hypertarget{class_graph}{}\doxysection{Graph Class Reference}
+\label{class_graph}\index{Graph@{Graph}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_graph_a72bda4546487e7acd1b80b4914730bbe}\label{class_graph_a72bda4546487e7acd1b80b4914730bbe}} 
+{\bfseries Graph} (string logger\+\_\+fname)
+\item 
+\mbox{\Hypertarget{class_graph_a29d8cfabd8615136b2800e24c6a178c2}\label{class_graph_a29d8cfabd8615136b2800e24c6a178c2}} 
+{\bfseries Graph} (Easy\+Logger $\ast$)
+\item 
+\mbox{\Hypertarget{class_graph_a017d89d26c38258d428eebd7f6520f4d}\label{class_graph_a017d89d26c38258d428eebd7f6520f4d}} 
+bool {\bfseries add\+\_\+edge} (\mbox{\hyperlink{class_t_node}{TNode}} $\ast$from\+\_\+node, \mbox{\hyperlink{class_t_node}{TNode}} $\ast$to\+\_\+node)
+\item 
+\mbox{\Hypertarget{class_graph_ab22459ce06825407f107cd99f089ce4f}\label{class_graph_ab22459ce06825407f107cd99f089ce4f}} 
+bool {\bfseries add\+\_\+edge} (string from\+\_\+uri, string to\+\_\+uri)
+\item 
+\mbox{\Hypertarget{class_graph_a5c163051001911a8ec950ba01608eba8}\label{class_graph_a5c163051001911a8ec950ba01608eba8}} 
+\mbox{\hyperlink{class_t_node}{TNode}} $\ast$ {\bfseries get\+\_\+node} (string uri)
+\item 
+\mbox{\Hypertarget{class_graph_a4d248c777857f1a5bc7d91ec71a25ca4}\label{class_graph_a4d248c777857f1a5bc7d91ec71a25ca4}} 
+bool {\bfseries add\+\_\+node} (string uri)
+\item 
+\mbox{\Hypertarget{class_graph_a83dff63b3cf6137535e2cb953680602a}\label{class_graph_a83dff63b3cf6137535e2cb953680602a}} 
+bool {\bfseries add\+\_\+node} (\mbox{\hyperlink{class_t_node}{TNode}} $\ast$tnode)
+\item 
+\mbox{\Hypertarget{class_graph_acbbc18757807076d8a96026d1a6eef93}\label{class_graph_acbbc18757807076d8a96026d1a6eef93}} 
+std\+::list$<$ \mbox{\hyperlink{class_t_node}{TNode}} $\ast$ $>$ $\ast$ {\bfseries get\+\_\+candidate\+\_\+roots} ()
+\item 
+\mbox{\Hypertarget{class_graph_adef62060bc3438e228534322e54eb2d3}\label{class_graph_adef62060bc3438e228534322e54eb2d3}} 
+std\+::list$<$ \mbox{\hyperlink{class_t_node}{TNode}} $\ast$ $>$ $\ast$ {\bfseries get\+\_\+leaves} ()
+\item 
+\mbox{\Hypertarget{class_graph_a68936ec67a36b4a839064afe478b3fb4}\label{class_graph_a68936ec67a36b4a839064afe478b3fb4}} 
+void {\bfseries pick\+\_\+root} ()
+\item 
+\mbox{\Hypertarget{class_graph_ac1afff0f002170048a6f180b62e5b965}\label{class_graph_ac1afff0f002170048a6f180b62e5b965}} 
+void {\bfseries print\+\_\+nodes} ()
+\item 
+\mbox{\Hypertarget{class_graph_adea90dd13fd80f4feaac0cc64bba5379}\label{class_graph_adea90dd13fd80f4feaac0cc64bba5379}} 
+\mbox{\hyperlink{class_t_node}{TNode}} $\ast$ {\bfseries get\+\_\+root} ()
+\item 
+\mbox{\Hypertarget{class_graph_adb4e0f3eb8b1173360f51a4e17b76220}\label{class_graph_adb4e0f3eb8b1173360f51a4e17b76220}} 
+void {\bfseries set\+\_\+root} (\mbox{\hyperlink{class_t_node}{TNode}} $\ast$)
+\item 
+\mbox{\Hypertarget{class_graph_a7c62c0824364e9b61b9675dd90d0ae8c}\label{class_graph_a7c62c0824364e9b61b9675dd90d0ae8c}} 
+unsigned int {\bfseries get\+\_\+max\+\_\+depth} (\mbox{\hyperlink{class_t_node}{TNode}} $\ast$)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_graph_a276e841f1443256fa4acc5bf5a749ba7}\label{class_graph_a276e841f1443256fa4acc5bf5a749ba7}} 
+std\+::unordered\+\_\+map$<$ string, \mbox{\hyperlink{class_t_node}{TNode}} $\ast$ $>$ $\ast$ {\bfseries m\+\_\+graph}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/graph.\+h\item 
+src/graph.\+cpp\end{DoxyCompactItemize}

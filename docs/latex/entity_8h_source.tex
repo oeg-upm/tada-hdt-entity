@@ -1,0 +1,154 @@
+\hypertarget{entity_8h_source}{}\doxysection{entity.\+h}
+\label{entity_8h_source}\index{include/entity.h@{include/entity.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ENTITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ENTITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}graph.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <list>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <sys/stat.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <unistd.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <easy\_logger/easy\_logger.h>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <HDTManager.hpp>}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00020\ \textcolor{comment}{//using\ namespace\ hdt;}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{//const\ string\ rdf\_type\ =\ "{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{};}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//const\ string\ rdfs\_subclassof\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{};}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//const\ string\ rdfs\_label\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#label"{};}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_entity_ann}{EntityAnn}}\ \{}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}();}
+\DoxyCodeLine{00031\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string});}
+\DoxyCodeLine{00032\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}(hdt::HDT\ *,\ \textcolor{keywordtype}{string});}
+\DoxyCodeLine{00033\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}(hdt::HDT\ *,\ \textcolor{keywordtype}{string},\ \textcolor{keywordtype}{double});}
+\DoxyCodeLine{00034\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string},\ \textcolor{keywordtype}{double}\ alpha);}
+\DoxyCodeLine{00035\ \ \ \mbox{\hyperlink{class_entity_ann}{\string~EntityAnn}}();\ \ \ \ \ \ \textcolor{comment}{//\ destructor}}
+\DoxyCodeLine{00036\ \ \ \textcolor{keywordtype}{void}\ setHDT(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00037\ \ \ hdt::HDT\ *getHDT();}
+\DoxyCodeLine{00038\ \ \ \textcolor{keywordtype}{void}\ setLogger(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00050\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a73e2e2ea5ca75750360fe288f5c9299a}{annotate\_column}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{unsigned}\ idx);}
+\DoxyCodeLine{00063\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a73e2e2ea5ca75750360fe288f5c9299a}{annotate\_column}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{unsigned}\ idx,\ \textcolor{keywordtype}{double}\ alpha);}
+\DoxyCodeLine{00079\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a73e2e2ea5ca75750360fe288f5c9299a}{annotate\_column}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{unsigned}\ idx,\ \textcolor{keywordtype}{bool}\ use\_context,}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ double\_levels);}
+\DoxyCodeLine{00081\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ std::list<string>*\ annotate\_column(std::list<std::list<string>*>*\ data,\ unsigned\ idx,\ double\ alpha,\ bool);}}
+\DoxyCodeLine{00082\ \ \ std::list<string>\ *annotate\_semi\_scored\_column(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m,\ \textcolor{keywordtype}{double}\ alpha);}
+\DoxyCodeLine{00083\ \ \ std::list<string>\ *annotate\_semi\_scored\_column(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m);}
+\DoxyCodeLine{00084\ \ \ std::list<string>\ *get\_entities\_of\_value(\textcolor{keywordtype}{string}\ value);}
+\DoxyCodeLine{00085\ \ \ std::list<string>\ *get\_entities\_of\_value(\textcolor{keywordtype}{string}\ value,\ std::list<string>\ *,\ \textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00086\ \ \ std::list<string>\ *get\_leaf\_classes(\textcolor{keywordtype}{string}\ entity\_uri);}
+\DoxyCodeLine{00087\ \ \ \textcolor{keywordtype}{bool}\ is\_ancestor\_of(\textcolor{keywordtype}{string}\ a,\ \textcolor{keywordtype}{string}\ b);}
+\DoxyCodeLine{00088\ \ \ \mbox{\hyperlink{class_t_node}{TNode}}\ *get\_tnode(\textcolor{keywordtype}{string}\ uri);}
+\DoxyCodeLine{00089\ \ \ \textcolor{keywordtype}{bool}\ compute\_intermediate\_coverage(\textcolor{keywordtype}{string}\ cell\_value);}
+\DoxyCodeLine{00090\ \ \ \textcolor{keywordtype}{bool}\ compute\_intermediate\_coverage(\textcolor{keywordtype}{string}\ cell\_value,\ std::list<string>\ *,\ \textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00091\ \ \ \textcolor{keywordtype}{void}\ compute\_Ic\_for\_all();}
+\DoxyCodeLine{00092\ \ \ \textcolor{keywordtype}{void}\ compute\_Ic\_for\_node(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
+\DoxyCodeLine{00093\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ void\ propagate\_Is\_all();}}
+\DoxyCodeLine{00094\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ void\ propagate\_Is\_tnode(TNode\ *);}}
+\DoxyCodeLine{00095\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ double\ compute\_Lc\_for\_node(TNode*);}}
+\DoxyCodeLine{00096\ \ \ std::unordered\_map<string,\ bool>\ *compute\_Lc\_for\_node(\mbox{\hyperlink{class_t_node}{TNode}}\ *);}
+\DoxyCodeLine{00097\ \ \ \textcolor{keywordtype}{void}\ compute\_Lc\_for\_all();}
+\DoxyCodeLine{00098\ \ \ \textcolor{keywordtype}{void}\ compute\_Is\_for\_all();}
+\DoxyCodeLine{00099\ \ \ \textcolor{keywordtype}{void}\ compute\_Is\_for\_node(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
+\DoxyCodeLine{00100\ \ \ \textcolor{keywordtype}{void}\ compute\_Ls\_for\_all();}
+\DoxyCodeLine{00101\ \ \ \textcolor{keywordtype}{double}\ compute\_Ls\_for\_node(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
+\DoxyCodeLine{00102\ \ \ \mbox{\hyperlink{class_graph}{Graph}}\ *get\_graph();}
+\DoxyCodeLine{00103\ \ \ \mbox{\hyperlink{class_t_node}{TNode}}\ *update\_graph(\textcolor{keywordtype}{string}\ class\_uri);}
+\DoxyCodeLine{00104\ \ \ \textcolor{keywordtype}{void}\ update\_graph(std::list<string>\ *class\_uris);}
+\DoxyCodeLine{00105\ \ \ \textcolor{keywordtype}{void}\ compute\_classes\_entities\_counts();}
+\DoxyCodeLine{00106\ \ \ \textcolor{keywordtype}{void}\ propagate\_counts(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
+\DoxyCodeLine{00107\ \ \ \textcolor{keywordtype}{void}\ compute\_fs();}
+\DoxyCodeLine{00108\ \ \ \textcolor{keywordtype}{void}\ compute\_fc(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m);}
+\DoxyCodeLine{00109\ \ \ \textcolor{keywordtype}{void}\ compute\_f();}
+\DoxyCodeLine{00110\ \ \ std::list<string>\ *get\_candidates();}
+\DoxyCodeLine{00111\ \ \ \textcolor{keywordtype}{void}\ pick\_root();}
+\DoxyCodeLine{00112\ \ \ \textcolor{keywordtype}{void}\ set\_alpha(\textcolor{keywordtype}{double});}
+\DoxyCodeLine{00113\ \ \ \textcolor{keywordtype}{double}\ get\_alpha();}
+\DoxyCodeLine{00114\ \ \ \textcolor{keywordtype}{string}\ strip\_quotes(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00115\ \ \ \textcolor{keywordtype}{string}\ get\_quoted(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00116\ \ \ \textcolor{keywordtype}{string}\ get\_taged(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00117\ \ \ std::list<string>\ *recompute\_f(\textcolor{keywordtype}{double});}
+\DoxyCodeLine{00118\ \ \ \textcolor{keywordtype}{string}\ get\_title\_case(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00119\ \ \ \textcolor{keywordtype}{void}\ set\_title\_case(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00120\ \ \ \textcolor{keywordtype}{bool}\ get\_title\_case();}
+\DoxyCodeLine{00121\ \ \ \textcolor{keywordtype}{void}\ set\_language\_tag(\textcolor{keywordtype}{string}\ tag);}
+\DoxyCodeLine{00122\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ get\_m();}
+\DoxyCodeLine{00134\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_afd4cb21e827a362347de6cdfebb2c2cf}{annotate\_entity\_property\_column}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{long}\ subject\_idx,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ property\_idx);}
+\DoxyCodeLine{00136\ \ \ \textcolor{keywordtype}{bool}\ annotate\_entity\_property\_pair(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string});}
+\DoxyCodeLine{00137\ \ \ \textcolor{keywordtype}{bool}\ annotate\_text\_property\_pair(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string});}
+\DoxyCodeLine{00150\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_abe804865569c0eb4c499e45a85a236c6}{annotate\_entity\_property\_heuristic}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{string}\ class\_uri,}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ property\_idx);}
+\DoxyCodeLine{00152\ \ \ std::list<string>\ *get\_entities\_of\_class(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00153\ \ \ std::list<string>\ *get\_properties\_from\_map();}
+\DoxyCodeLine{00154\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ get\_counts\_of\_class(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00155\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdf\_type\ =\ "{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{};}}
+\DoxyCodeLine{00156\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdfs\_subclassof\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{};}}
+\DoxyCodeLine{00157\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdfs\_label\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#label"{};}}
+\DoxyCodeLine{00158\ \ \ \textcolor{keywordtype}{string}\ type\_uri\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{}};}
+\DoxyCodeLine{00159\ \ \ \textcolor{keywordtype}{string}\ subclassof\_uri\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{}};}
+\DoxyCodeLine{00160\ \textcolor{comment}{//\ \ string\ label\_uri\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#label"{};}}
+\DoxyCodeLine{00161\ \ \ \textcolor{keywordtype}{bool}\ delete\_hdt\_in\_destructor\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00162\ \ \ \textcolor{comment}{//double\ m\_ambiguitity\_penalty=2;}}
+\DoxyCodeLine{00163\ \ \ \textcolor{keywordtype}{double}\ m\_ambiguitity\_penalty\ =\ 1;\ \textcolor{comment}{//\ no\ penalty}}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \textcolor{keywordtype}{void}\ set\_sample\_size(\textcolor{keywordtype}{long}\ sample\_size);}
+\DoxyCodeLine{00166\ \ \ \textcolor{keywordtype}{long}\ get\_sample\_size();}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ std::list<string>\ get\_labels\_uris();}
+\DoxyCodeLine{00169\ \ \ \textcolor{keywordtype}{bool}\ append\_label\_uri(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00170\ \ \ \textcolor{keywordtype}{bool}\ clear\_label\_uri();}
+\DoxyCodeLine{00171\ \ \ \textcolor{comment}{//\ source:\ https://stackoverflow.com/questions/12774207/fastest-\/way-\/to-\/check-\/if-\/a-\/file-\/exists-\/using-\/standard-\/c-\/c11-\/14-\/17-\/c}}
+\DoxyCodeLine{00172\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ file\_exists(\textcolor{keyword}{const}\ std::string\ \&name)\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{struct\ }stat\ buffer;}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordflow}{return}\ (stat(name.c\_str(),\ \&buffer)\ ==\ 0);}
+\DoxyCodeLine{00175\ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00178\ \ \ EasyLogger\ *m\_logger;}
+\DoxyCodeLine{00179\ \ \ hdt::HDT\ *m\_hdt;}
+\DoxyCodeLine{00180\ \ \ \textcolor{comment}{//HDT::\ HDT::HDT*\ hdt;}}
+\DoxyCodeLine{00181\ \ \ \mbox{\hyperlink{class_graph}{Graph}}\ *m\_graph;}
+\DoxyCodeLine{00182\ \ \ std::unordered\_map<string,\ std::unordered\_map<string,\ bool>*>\ m\_ancestor\_lookup;}
+\DoxyCodeLine{00183\ \ \ std::unordered\_map<string,\ std::unordered\_map<string,\ bool>*>}
+\DoxyCodeLine{00184\ \ \ m\_descendents\_lookup;\ \textcolor{comment}{//\ to\ store\ all\ childs\ and\ their\ descendents}}
+\DoxyCodeLine{00185\ \ \ std::unordered\_map<string,\ bool>\ *add\_class\_to\_ancestor\_lookup(\textcolor{keywordtype}{string}\ tclass);}
+\DoxyCodeLine{00186\ \ \ std::unordered\_map<string,\ unsigned\ long>\ m\_classes\_entities\_count;}
+\DoxyCodeLine{00187\ \ \ std::unordered\_map<string,\ unsigned\ long>\ m\_classes\_propagated\_count;}
+\DoxyCodeLine{00188\ \ \ std::unordered\_map<string,\ unsigned\ long>\ *m\_properties\_counts;}
+\DoxyCodeLine{00189\ \ \ std::list<string>\ m\_labels\_uris;}
+\DoxyCodeLine{00190\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ bool\ m\_propagate\_Is=true;\ //\ should\ the\ parents\ also\ include\ the\ Is\ of\ their\ childred\ (true=yes)}}
+\DoxyCodeLine{00191\ \ \ \textcolor{keywordtype}{double}\ m\_alpha;}
+\DoxyCodeLine{00192\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m\_m;}
+\DoxyCodeLine{00193\ \ \ \textcolor{keywordtype}{bool}\ m\_retry\_with\_title\_case\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00194\ \ \ \textcolor{keywordtype}{string}\ m\_lang\_tag;}
+\DoxyCodeLine{00195\ \ \ \textcolor{keywordtype}{long}\ m\_sample\_size\ =\ 0;}
+\DoxyCodeLine{00196\ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keywordtype}{string}\ hdt\_file\_dir,\ \textcolor{keywordtype}{string}\ log\_file\_dir,\ \textcolor{keywordtype}{double}\ alpha);}
+\DoxyCodeLine{00197\ \ \ \textcolor{keywordtype}{void}\ init(hdt::HDT\ *hdt\_ptr,\ \textcolor{keywordtype}{string}\ log\_file\_dir,\ \textcolor{keywordtype}{double}\ alpha);}
+\DoxyCodeLine{00198\ \};}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \textcolor{comment}{//bool\ sort\_pair\_property(const\ pair<string,unsigned\ long>\ \&a,}}
+\DoxyCodeLine{00202\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ pair<string,unsigned\ long>\ \&b)\{}}
+\DoxyCodeLine{00203\ \textcolor{comment}{//\ \ \ \ \ \ \ return\ a.second>b.second;}}
+\DoxyCodeLine{00204\ \textcolor{comment}{//\}}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00209\ }
+
+\end{DoxyCode}

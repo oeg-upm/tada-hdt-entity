@@ -1,0 +1,68 @@
+\hypertarget{tnode_8h_source}{}\doxysection{tnode.\+h}
+\label{tnode_8h_source}\index{include/tnode.h@{include/tnode.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TNODE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TNODE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include<string>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include<list>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_t_node}{TNode}}\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_t_node}{TNode}}();}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_t_node}{TNode}}(\textcolor{keywordtype}{string}\ auri);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ uri;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ ic,\ lc,\ fc;\ \textcolor{comment}{//\ coverage\ related\ variables}}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ tc;\ \textcolor{comment}{//\ the\ variable\ used\ to\ compute\ the\ score\ fractions\ before\ the}}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ is,\ ls,\ fs;\ \textcolor{comment}{//\ specificity\ related\ variables}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ f;\ \textcolor{comment}{//\ the\ result\ of\ the\ final\ score}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ std::unordered\_map<string,TNode*>\ *parents;\ \textcolor{comment}{//\ sometimes\ there\ are\ multiple\ parents}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ std::unordered\_map<string,TNode*>\ *children;\ \textcolor{comment}{//\ childs}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ \ \ \ \ \ \ \ std::ostream\&\ operator<<(std::ostream\&\ out,\ const\ TNode\&\ tnode);}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\ \ \ \ \ \ \ \ TNode\&\ operator=(const\ TNode\&\ other)\{}}
+\DoxyCodeLine{00026\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ if\ (this\ !=\ \&other)\ \{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>uri\ =\ other.uri;}}
+\DoxyCodeLine{00028\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>fc\ =\ other.fc;}}
+\DoxyCodeLine{00029\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>fs\ =\ other.fs;}}
+\DoxyCodeLine{00030\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>children\ =\ other.children;}}
+\DoxyCodeLine{00031\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>ic\ =\ other.ic;}}
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>is\ =\ other.is;}}
+\DoxyCodeLine{00033\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>lc\ =\ other.lc;}}
+\DoxyCodeLine{00034\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>ls\ =\ other.ls;}}
+\DoxyCodeLine{00035\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>parents\ =\ other.parents;}}
+\DoxyCodeLine{00036\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>tc\ =\ other.tc;}}
+\DoxyCodeLine{00037\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00038\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ return\ *this;}}
+\DoxyCodeLine{00039\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00040\ \ \ \ \textcolor{comment}{//\ private:}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ std::ostream\&\ operator<<(std::ostream\&\ out,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_t_node}{TNode}}\&\ tnode);}
+\DoxyCodeLine{00044\ \textcolor{comment}{//bool\ operator<(const\ TNode\&\ l,\ const\ TNode\&\ r);}}
+\DoxyCodeLine{00045\ \textcolor{comment}{//std::ostream\&\ operator<<(std::ostream\&\ os,\ const\ T\&\ obj)}}
+\DoxyCodeLine{00046\ \textcolor{comment}{//std::ostream\&\ operator<<(std::ostream\&\ out,\ const\ TNode\&\ tnode)}}
+\DoxyCodeLine{00047\ \textcolor{comment}{//\{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{}\textcolor{comment}{//\ \ \ \ return\ out;}}
+\DoxyCodeLine{00050\ \textcolor{comment}{//\}}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{comment}{//inline\ bool\ operator==(const\ TNode\&\ lhs,\ const\ TNode\&\ rhs)\{}}
+\DoxyCodeLine{00053\ \textcolor{comment}{//\ \ \ \ return\ lhs.uri\ ==\ rhs.uri;}}
+\DoxyCodeLine{00054\ \textcolor{comment}{//\}}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{comment}{//inline\ bool\ operator!=(const\ TNode\&\ lhs,\ const\ TNode\&\ rhs)\{}}
+\DoxyCodeLine{00057\ \textcolor{comment}{//\ \ \ \ return\ !(lhs.uri\ ==\ rhs.uri);}}
+\DoxyCodeLine{00058\ \textcolor{comment}{//\}}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ TNODE\_H}}
+\DoxyCodeLine{00063\ }
+
+\end{DoxyCode}

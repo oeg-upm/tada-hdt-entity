@@ -1,0 +1,50 @@
+\hypertarget{graph_8h_source}{}\doxysection{graph.\+h}
+\label{graph_8h_source}\index{include/graph.h@{include/graph.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GRAPH\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GRAPH\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <list>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}tnode.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <easy\_logger/easy\_logger.h>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//typedef\ struct\ Node\ \{}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ \ \ \ string\ uri;}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ \ \ \ double\ ic,lc,fc;\ //\ coverage\ related\ variables}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ \ \ \ double\ is,ls,fs;\ //\ specificity\ related\ variables}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ \ \ \ struct\ Node*\ parent;\ //}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\}\ Node;}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ Graph\ as\ adjacency\ list\ with\ pointer\ to\ the\ parent}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_graph}{Graph}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_graph}{Graph}}(\textcolor{keywordtype}{string}\ logger\_fname);}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_graph}{Graph}}(EasyLogger*);}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ add\_edge(\mbox{\hyperlink{class_t_node}{TNode}}\ *from\_node,\ \mbox{\hyperlink{class_t_node}{TNode}}\ *to\_node);}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ add\_edge(\textcolor{keywordtype}{string}\ from\_uri,\ \textcolor{keywordtype}{string}\ to\_uri);}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_t_node}{TNode}}*\ get\_node(\textcolor{keywordtype}{string}\ uri);}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ add\_node(\textcolor{keywordtype}{string}\ uri);}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ add\_node(\mbox{\hyperlink{class_t_node}{TNode}}*\ tnode);}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ std::list<TNode*>*\ get\_candidate\_roots();}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ std::list<TNode*>*\ get\_leaves();}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ pick\_root();}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print\_nodes();}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_t_node}{TNode}}*\ get\_root();}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_root(\mbox{\hyperlink{class_t_node}{TNode}}*);}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ get\_max\_depth(\mbox{\hyperlink{class_t_node}{TNode}}*);}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ std::unordered\_map<string,TNode*>*\ m\_graph;}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ EasyLogger*\ m\_logger;}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_t_node}{TNode}}*\ m\_root;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00044\ }
+
+\end{DoxyCode}

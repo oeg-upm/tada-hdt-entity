@@ -54,14 +54,10 @@ dbr:basketballp4 rdf:type dbo:BasketballPlayer .
 dbr:footballp4 rdf:type dbo:FootballPlayer .
 
 
-
 dbr:footballp1 dbp:city "city1" .
 dbr:footballp2 dbp:city "city2" .
 
 dbr:footballp1 dbp:country "country1" .
-
-
-
 
 
 dbr:UK rdf:type dbo:Country .
@@ -71,13 +67,14 @@ dbr:Spain rdfs:label "Spain" .
 dbr:Italy rdf:type dbo:Country .
 dbr:Italy rdfs:label "Italy" .
 
-
 dbr:wrestler1 rdf:type dbo:Wrestler .
 dbr:wrestler1 rdfs:label "wr_common_1" .
 dbr:wrestler1 dbp:country dbr:UK .
+
 dbr:wrestler2 rdf:type dbo:Wrestler .
 dbr:wrestler2 rdfs:label "wr_common_2" .
 dbr:wrestler2 dbp:country dbr:Spain .
+
 dbr:wrestler3 rdf:type dbo:Wrestler .
 dbr:wrestler3 rdfs:label "wrestler3".
 
@@ -93,7 +90,6 @@ dbr:cyclist2 rdf:type dbo:Cyclist .
 
 dbr:cyclist1 rdfs:label "cyclist1"@en .
 dbr:cyclist2 rdfs:label "cyclist2"@en .
-
 
 
 dbr:boxer1 rdf:type dbo:Boxer  .
@@ -156,3 +152,15 @@ dbr:dmid1 rdfs:label "dmid1"  .
 dbr:dmid2 rdfs:label "dmid2" .
 dbr:dup rdfs:label "dup"  .
 dbr:dlow rdfs:label "dlow" .
+
+
+
+dbr:boot1 dbp:color "blue" .
+dbr:boot1 rdf:type dbo:Boot .
+dbr:boot1 rdfs:label "boot1" .
+
+dbr:boot2 dbp:color "red" .
+dbr:boot2 rdf:type dbo:Boot .
+dbr:boot2 rdfs:label "boot2" .
+
+dbo:Boot rdfs:subClassOf dbo:Organisation .

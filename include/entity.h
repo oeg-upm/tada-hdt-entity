@@ -36,9 +36,48 @@ class EntityAnn {
   void setHDT(string);
   hdt::HDT *getHDT();
   void setLogger(string);
+  /**
+   * Annotate the entity column.
+   *
+   *
+   * To annotate the entity column (using the given idx).
+   *
+   *
+   * @param data the tabular data read using the parser.
+   * @param idx the index of the entity column to be parsed
+   *
+   */
   std::list<string> *annotate_column(std::list<std::list<string>*> *data, unsigned idx);
+  /**
+   * Annotate the entity column.
+   *
+   *
+   * To annotate the entity column (using the given idx).
+   *
+   *
+   * @param data the tabular data read using the parser.
+   * @param idx the index of the entity column to be parsed
+   * @param alpha the alpha value which balances coverage and specificity
+   *
+   */
   std::list<string> *annotate_column(std::list<std::list<string>*> *data, unsigned idx, double alpha);
-  std::list<string> *annotate_column(std::list<std::list<string>*> *data, unsigned idx, bool, bool);
+  /**
+   * Annotate the entity column.
+   *
+   *
+   * To annotate the entity column (using the given idx).
+   *
+   *
+   * @param data the tabular data read using the parser.
+   * @param idx the index of the entity column to be parsed.
+   * @param user_context whether to use the context (the other properties) for the entity linking phase.
+   * For example Messi and Barcelona. It will look for the entity that has the label Messi and the value Barcelona.
+   * @param double_levels is user_context is true, it will also include the case: entity --(relation)--> entity.
+   * Using the same example, it will look for the entity with the label Messi that has a relation with another entity
+   * that has the label Barcelona.
+   */
+  std::list<string> *annotate_column(std::list<std::list<string>*> *data, unsigned idx, bool use_context,
+                                     bool double_levels);
   //        std::list<string>* annotate_column(std::list<std::list<string>*>* data, unsigned idx, double alpha, bool);
   std::list<string> *annotate_semi_scored_column(unsigned long m, double alpha);
   std::list<string> *annotate_semi_scored_column(unsigned long m);
@@ -81,10 +120,35 @@ class EntityAnn {
   bool get_title_case();
   void set_language_tag(string tag);
   unsigned long get_m();
-
-  std::list<string> *annotate_entity_property_column(std::list<std::list<string>*> *, long, long);
-  void annotate_entity_property_pair(string, string);
-  std::list<string> *annotate_entity_property_heuristic(std::list<std::list<string>*> *, string, long);
+  /**
+   * Annotate a property column.
+   *
+   * To annotate the property column.
+   *
+   *
+   * @param data the tabular data read using the parser.
+   * @param subject_idx the index of the subject column.
+   * @param property_idx the index of the property column to be indexed.
+   *
+   */
+  std::list<string> *annotate_entity_property_column(std::list<std::list<string>*> *data, long subject_idx,
+      long property_idx);
+  bool annotate_entity_property_pair(string, string);
+  bool annotate_text_property_pair(string, string);
+  /**
+   * Annotate a property column using an extensive bruteforce.
+   *
+   * It attempts to annotate the property column using all the subjects from the provided class with the entities from
+   * the property column.
+   *
+   *
+   * @param data the tabular data read using the parser.
+   * @param class_uri the class of the subject column.
+   * @param property_idx the index of the property column to be indexed.
+   *
+   */
+  std::list<string> *annotate_entity_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
+      long property_idx);
   std::list<string> *get_entities_of_class(string);
   std::list<string> *get_properties_from_map();
   unsigned long get_counts_of_class(string);
