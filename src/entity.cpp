@@ -15,13 +15,7 @@ using namespace std;
 
 
 
-/**
- *
- *
- *
- *
- *
- */
+
 EntityAnn::EntityAnn() {
   m_logger = nullptr;
   m_hdt = nullptr;
@@ -52,6 +46,15 @@ EntityAnn::~EntityAnn() {
   }
 }
 
+/**
+ * set HDT path.
+ *
+ * sets the path to the HDT file.
+ *
+ *
+ * @param hdt_file_dir the path to the HDT file.
+ *
+ */
 void EntityAnn::setHDT(string hdt_file_dir) {
   m_hdt = hdt::HDTManager::mapIndexedHDT(hdt_file_dir.c_str());
 }

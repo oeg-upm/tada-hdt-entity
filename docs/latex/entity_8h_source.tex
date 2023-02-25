@@ -1,11 +1,11 @@
 \hypertarget{entity_8h_source}{}\doxysection{entity.\+h}
 \label{entity_8h_source}\index{include/entity.h@{include/entity.h}}
-
+\mbox{\hyperlink{entity_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ENTITY\_H}}
 \DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ENTITY\_H}}
 \DoxyCodeLine{00003\ }
-\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}graph.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{graph_8h}{graph.h}}"{}}}
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <list>}}
 \DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <string>}}
@@ -31,88 +31,88 @@
 \DoxyCodeLine{00027\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_entity_ann}{EntityAnn}}\ \{}
 \DoxyCodeLine{00028\ }
 \DoxyCodeLine{00029\ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00030\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}();}
-\DoxyCodeLine{00031\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string});}
-\DoxyCodeLine{00032\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}(hdt::HDT\ *,\ \textcolor{keywordtype}{string});}
-\DoxyCodeLine{00033\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}(hdt::HDT\ *,\ \textcolor{keywordtype}{string},\ \textcolor{keywordtype}{double});}
-\DoxyCodeLine{00034\ \ \ \mbox{\hyperlink{class_entity_ann}{EntityAnn}}(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string},\ \textcolor{keywordtype}{double}\ alpha);}
-\DoxyCodeLine{00035\ \ \ \mbox{\hyperlink{class_entity_ann}{\string~EntityAnn}}();\ \ \ \ \ \ \textcolor{comment}{//\ destructor}}
-\DoxyCodeLine{00036\ \ \ \textcolor{keywordtype}{void}\ setHDT(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00037\ \ \ hdt::HDT\ *getHDT();}
-\DoxyCodeLine{00038\ \ \ \textcolor{keywordtype}{void}\ setLogger(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00030\ \ \ \mbox{\hyperlink{class_entity_ann_a67e2852ab62d76e6f7e7f8083699da76}{EntityAnn}}();}
+\DoxyCodeLine{00031\ \ \ \mbox{\hyperlink{class_entity_ann_a67e2852ab62d76e6f7e7f8083699da76}{EntityAnn}}(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string});}
+\DoxyCodeLine{00032\ \ \ \mbox{\hyperlink{class_entity_ann_a67e2852ab62d76e6f7e7f8083699da76}{EntityAnn}}(hdt::HDT\ *,\ \textcolor{keywordtype}{string});}
+\DoxyCodeLine{00033\ \ \ \mbox{\hyperlink{class_entity_ann_a67e2852ab62d76e6f7e7f8083699da76}{EntityAnn}}(hdt::HDT\ *,\ \textcolor{keywordtype}{string},\ \textcolor{keywordtype}{double});}
+\DoxyCodeLine{00034\ \ \ \mbox{\hyperlink{class_entity_ann_a67e2852ab62d76e6f7e7f8083699da76}{EntityAnn}}(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string},\ \textcolor{keywordtype}{double}\ alpha);}
+\DoxyCodeLine{00035\ \ \ \mbox{\hyperlink{class_entity_ann_aa5a034b9ba624734e022c8da99f3869f}{\string~EntityAnn}}();\ \ \ \ \ \ \textcolor{comment}{//\ destructor}}
+\DoxyCodeLine{00036\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_adfddaf5720e4a8df4630776886afe0bd}{setHDT}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00037\ \ \ hdt::HDT\ *\mbox{\hyperlink{class_entity_ann_afde8ad8a743b30a60135c4a3a1e7402a}{getHDT}}();}
+\DoxyCodeLine{00038\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_afe3f23b3a8a7bf87cb6a7828a6fda360}{setLogger}}(\textcolor{keywordtype}{string});}
 \DoxyCodeLine{00050\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a73e2e2ea5ca75750360fe288f5c9299a}{annotate\_column}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{unsigned}\ idx);}
 \DoxyCodeLine{00063\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a73e2e2ea5ca75750360fe288f5c9299a}{annotate\_column}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{unsigned}\ idx,\ \textcolor{keywordtype}{double}\ alpha);}
 \DoxyCodeLine{00079\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a73e2e2ea5ca75750360fe288f5c9299a}{annotate\_column}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{unsigned}\ idx,\ \textcolor{keywordtype}{bool}\ use\_context,}
 \DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ double\_levels);}
 \DoxyCodeLine{00081\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ std::list<string>*\ annotate\_column(std::list<std::list<string>*>*\ data,\ unsigned\ idx,\ double\ alpha,\ bool);}}
-\DoxyCodeLine{00082\ \ \ std::list<string>\ *annotate\_semi\_scored\_column(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m,\ \textcolor{keywordtype}{double}\ alpha);}
-\DoxyCodeLine{00083\ \ \ std::list<string>\ *annotate\_semi\_scored\_column(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m);}
-\DoxyCodeLine{00084\ \ \ std::list<string>\ *get\_entities\_of\_value(\textcolor{keywordtype}{string}\ value);}
-\DoxyCodeLine{00085\ \ \ std::list<string>\ *get\_entities\_of\_value(\textcolor{keywordtype}{string}\ value,\ std::list<string>\ *,\ \textcolor{keywordtype}{bool});}
-\DoxyCodeLine{00086\ \ \ std::list<string>\ *get\_leaf\_classes(\textcolor{keywordtype}{string}\ entity\_uri);}
-\DoxyCodeLine{00087\ \ \ \textcolor{keywordtype}{bool}\ is\_ancestor\_of(\textcolor{keywordtype}{string}\ a,\ \textcolor{keywordtype}{string}\ b);}
-\DoxyCodeLine{00088\ \ \ \mbox{\hyperlink{class_t_node}{TNode}}\ *get\_tnode(\textcolor{keywordtype}{string}\ uri);}
-\DoxyCodeLine{00089\ \ \ \textcolor{keywordtype}{bool}\ compute\_intermediate\_coverage(\textcolor{keywordtype}{string}\ cell\_value);}
-\DoxyCodeLine{00090\ \ \ \textcolor{keywordtype}{bool}\ compute\_intermediate\_coverage(\textcolor{keywordtype}{string}\ cell\_value,\ std::list<string>\ *,\ \textcolor{keywordtype}{bool});}
-\DoxyCodeLine{00091\ \ \ \textcolor{keywordtype}{void}\ compute\_Ic\_for\_all();}
-\DoxyCodeLine{00092\ \ \ \textcolor{keywordtype}{void}\ compute\_Ic\_for\_node(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
+\DoxyCodeLine{00082\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_ae3020633a72b6fb7134f8a2e74ce0a87}{annotate\_semi\_scored\_column}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m,\ \textcolor{keywordtype}{double}\ alpha);}
+\DoxyCodeLine{00083\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_ae3020633a72b6fb7134f8a2e74ce0a87}{annotate\_semi\_scored\_column}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m);}
+\DoxyCodeLine{00084\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_ad258954de479b0a664923675d6332dd4}{get\_entities\_of\_value}}(\textcolor{keywordtype}{string}\ value);}
+\DoxyCodeLine{00085\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_ad258954de479b0a664923675d6332dd4}{get\_entities\_of\_value}}(\textcolor{keywordtype}{string}\ value,\ std::list<string>\ *,\ \textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00086\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_ad9a57bb6b01b1b82bec7eca8b8a0dfc1}{get\_leaf\_classes}}(\textcolor{keywordtype}{string}\ entity\_uri);}
+\DoxyCodeLine{00087\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_aa183b30b6f2afc33e1c45b0a3c2c8540}{is\_ancestor\_of}}(\textcolor{keywordtype}{string}\ a,\ \textcolor{keywordtype}{string}\ b);}
+\DoxyCodeLine{00088\ \ \ \mbox{\hyperlink{class_t_node}{TNode}}\ *\mbox{\hyperlink{class_entity_ann_afb3df9229ad3d2879ae155541ddea039}{get\_tnode}}(\textcolor{keywordtype}{string}\ uri);}
+\DoxyCodeLine{00089\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_a3bd5aff0cabcdcfb4aa50e7624f9efcd}{compute\_intermediate\_coverage}}(\textcolor{keywordtype}{string}\ cell\_value);}
+\DoxyCodeLine{00090\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_a3bd5aff0cabcdcfb4aa50e7624f9efcd}{compute\_intermediate\_coverage}}(\textcolor{keywordtype}{string}\ cell\_value,\ std::list<string>\ *,\ \textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00091\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_aa6d09725cc0f1b81583c94ba3fd880a1}{compute\_Ic\_for\_all}}();}
+\DoxyCodeLine{00092\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a6dc03f1e8d1cc5b7258a450cc4da1c1c}{compute\_Ic\_for\_node}}(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
 \DoxyCodeLine{00093\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ void\ propagate\_Is\_all();}}
 \DoxyCodeLine{00094\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ void\ propagate\_Is\_tnode(TNode\ *);}}
 \DoxyCodeLine{00095\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ double\ compute\_Lc\_for\_node(TNode*);}}
-\DoxyCodeLine{00096\ \ \ std::unordered\_map<string,\ bool>\ *compute\_Lc\_for\_node(\mbox{\hyperlink{class_t_node}{TNode}}\ *);}
-\DoxyCodeLine{00097\ \ \ \textcolor{keywordtype}{void}\ compute\_Lc\_for\_all();}
-\DoxyCodeLine{00098\ \ \ \textcolor{keywordtype}{void}\ compute\_Is\_for\_all();}
-\DoxyCodeLine{00099\ \ \ \textcolor{keywordtype}{void}\ compute\_Is\_for\_node(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
-\DoxyCodeLine{00100\ \ \ \textcolor{keywordtype}{void}\ compute\_Ls\_for\_all();}
-\DoxyCodeLine{00101\ \ \ \textcolor{keywordtype}{double}\ compute\_Ls\_for\_node(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
-\DoxyCodeLine{00102\ \ \ \mbox{\hyperlink{class_graph}{Graph}}\ *get\_graph();}
-\DoxyCodeLine{00103\ \ \ \mbox{\hyperlink{class_t_node}{TNode}}\ *update\_graph(\textcolor{keywordtype}{string}\ class\_uri);}
-\DoxyCodeLine{00104\ \ \ \textcolor{keywordtype}{void}\ update\_graph(std::list<string>\ *class\_uris);}
-\DoxyCodeLine{00105\ \ \ \textcolor{keywordtype}{void}\ compute\_classes\_entities\_counts();}
-\DoxyCodeLine{00106\ \ \ \textcolor{keywordtype}{void}\ propagate\_counts(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
-\DoxyCodeLine{00107\ \ \ \textcolor{keywordtype}{void}\ compute\_fs();}
-\DoxyCodeLine{00108\ \ \ \textcolor{keywordtype}{void}\ compute\_fc(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m);}
-\DoxyCodeLine{00109\ \ \ \textcolor{keywordtype}{void}\ compute\_f();}
-\DoxyCodeLine{00110\ \ \ std::list<string>\ *get\_candidates();}
-\DoxyCodeLine{00111\ \ \ \textcolor{keywordtype}{void}\ pick\_root();}
-\DoxyCodeLine{00112\ \ \ \textcolor{keywordtype}{void}\ set\_alpha(\textcolor{keywordtype}{double});}
-\DoxyCodeLine{00113\ \ \ \textcolor{keywordtype}{double}\ get\_alpha();}
-\DoxyCodeLine{00114\ \ \ \textcolor{keywordtype}{string}\ strip\_quotes(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00115\ \ \ \textcolor{keywordtype}{string}\ get\_quoted(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00116\ \ \ \textcolor{keywordtype}{string}\ get\_taged(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00117\ \ \ std::list<string>\ *recompute\_f(\textcolor{keywordtype}{double});}
-\DoxyCodeLine{00118\ \ \ \textcolor{keywordtype}{string}\ get\_title\_case(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00119\ \ \ \textcolor{keywordtype}{void}\ set\_title\_case(\textcolor{keywordtype}{bool});}
-\DoxyCodeLine{00120\ \ \ \textcolor{keywordtype}{bool}\ get\_title\_case();}
-\DoxyCodeLine{00121\ \ \ \textcolor{keywordtype}{void}\ set\_language\_tag(\textcolor{keywordtype}{string}\ tag);}
-\DoxyCodeLine{00122\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ get\_m();}
+\DoxyCodeLine{00096\ \ \ std::unordered\_map<string,\ bool>\ *\mbox{\hyperlink{class_entity_ann_a4902b524fb9171b39434e71f6ad2d13d}{compute\_Lc\_for\_node}}(\mbox{\hyperlink{class_t_node}{TNode}}\ *);}
+\DoxyCodeLine{00097\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_af0a80a1c567fa5d5595ef074c36c319a}{compute\_Lc\_for\_all}}();}
+\DoxyCodeLine{00098\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a2d372a88ec9a97aa5123d69a675c10c9}{compute\_Is\_for\_all}}();}
+\DoxyCodeLine{00099\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_ad7bdfc8ec7e01422f902d8be7ca24de4}{compute\_Is\_for\_node}}(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
+\DoxyCodeLine{00100\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a96d603873dd51fc0a73a8e858e2a0a7b}{compute\_Ls\_for\_all}}();}
+\DoxyCodeLine{00101\ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_entity_ann_afe671cd48622b3240353f6c01ff1ef05}{compute\_Ls\_for\_node}}(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
+\DoxyCodeLine{00102\ \ \ \mbox{\hyperlink{class_graph}{Graph}}\ *\mbox{\hyperlink{class_entity_ann_af6e450f194c671b5d4387b00828d301d}{get\_graph}}();}
+\DoxyCodeLine{00103\ \ \ \mbox{\hyperlink{class_t_node}{TNode}}\ *\mbox{\hyperlink{class_entity_ann_aa61951413fe35b02abe5304160d61e8c}{update\_graph}}(\textcolor{keywordtype}{string}\ class\_uri);}
+\DoxyCodeLine{00104\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_aa61951413fe35b02abe5304160d61e8c}{update\_graph}}(std::list<string>\ *class\_uris);}
+\DoxyCodeLine{00105\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_af664fced06e0028b9dcd21ac6876518d}{compute\_classes\_entities\_counts}}();}
+\DoxyCodeLine{00106\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a568eef76bf8e505e36af5ad31e118824}{propagate\_counts}}(\mbox{\hyperlink{class_t_node}{TNode}}\ *tnode);}
+\DoxyCodeLine{00107\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a661c30b36cd5610d4dcea4801e8d1d68}{compute\_fs}}();}
+\DoxyCodeLine{00108\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a931fa7040e6c2e731634f2693d708cbf}{compute\_fc}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m);}
+\DoxyCodeLine{00109\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a563afd7e1ecf8d91cec025f25e53a83b}{compute\_f}}();}
+\DoxyCodeLine{00110\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a80c88b984aef5c7c5e9f9b5c9707dfd3}{get\_candidates}}();}
+\DoxyCodeLine{00111\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_ac737c381dbac015b56f6d363df5aa7ad}{pick\_root}}();}
+\DoxyCodeLine{00112\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a2c6921256787fb5a81a1864f00e8e2a2}{set\_alpha}}(\textcolor{keywordtype}{double});}
+\DoxyCodeLine{00113\ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_entity_ann_a55cb0f8081326f14928bf299f42baca0}{get\_alpha}}();}
+\DoxyCodeLine{00114\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_a9694b470f9f9881fbf508c541ead30e9}{strip\_quotes}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00115\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_a73e59cc5d259453a599b15fa4a9e1f0f}{get\_quoted}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00116\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_a8a5802db6f321e05f129282452ab335e}{get\_taged}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00117\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a35519297db66278978dc819d6d76b7bb}{recompute\_f}}(\textcolor{keywordtype}{double});}
+\DoxyCodeLine{00118\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_a7498f41fb6c2e0d8d3c4eeb35d559c79}{get\_title\_case}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00119\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a0ce8e6ec16975a854d0730ad47da66ad}{set\_title\_case}}(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00120\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_a7498f41fb6c2e0d8d3c4eeb35d559c79}{get\_title\_case}}();}
+\DoxyCodeLine{00121\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a038f978b3dcb39bb5c0f6c5a5e4d0b54}{set\_language\_tag}}(\textcolor{keywordtype}{string}\ tag);}
+\DoxyCodeLine{00122\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{class_entity_ann_a97d407543da0215a1d222c979e6bd480}{get\_m}}();}
 \DoxyCodeLine{00134\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_afd4cb21e827a362347de6cdfebb2c2cf}{annotate\_entity\_property\_column}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{long}\ subject\_idx,}
 \DoxyCodeLine{00135\ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ property\_idx);}
-\DoxyCodeLine{00136\ \ \ \textcolor{keywordtype}{bool}\ annotate\_entity\_property\_pair(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string});}
-\DoxyCodeLine{00137\ \ \ \textcolor{keywordtype}{bool}\ annotate\_text\_property\_pair(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string});}
+\DoxyCodeLine{00136\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_ac5bc6d386e30f58cf32f1682304db71b}{annotate\_entity\_property\_pair}}(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string});}
+\DoxyCodeLine{00137\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_a9a31fd628fdd9c1c42cfdbabd9ae228b}{annotate\_text\_property\_pair}}(\textcolor{keywordtype}{string},\ \textcolor{keywordtype}{string});}
 \DoxyCodeLine{00150\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_abe804865569c0eb4c499e45a85a236c6}{annotate\_entity\_property\_heuristic}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{string}\ class\_uri,}
 \DoxyCodeLine{00151\ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ property\_idx);}
-\DoxyCodeLine{00152\ \ \ std::list<string>\ *get\_entities\_of\_class(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00153\ \ \ std::list<string>\ *get\_properties\_from\_map();}
-\DoxyCodeLine{00154\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ get\_counts\_of\_class(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00152\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a27e62bd74cfeb606fa709e9336388db8}{get\_entities\_of\_class}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00153\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a9a4af4a60c6190cc3bde45fb8970d7e6}{get\_properties\_from\_map}}();}
+\DoxyCodeLine{00154\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{class_entity_ann_a07614bbb444dcdc8290b61503cfeab19}{get\_counts\_of\_class}}(\textcolor{keywordtype}{string});}
 \DoxyCodeLine{00155\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdf\_type\ =\ "{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{};}}
 \DoxyCodeLine{00156\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdfs\_subclassof\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{};}}
 \DoxyCodeLine{00157\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdfs\_label\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#label"{};}}
-\DoxyCodeLine{00158\ \ \ \textcolor{keywordtype}{string}\ type\_uri\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{}};}
-\DoxyCodeLine{00159\ \ \ \textcolor{keywordtype}{string}\ subclassof\_uri\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{}};}
+\DoxyCodeLine{00158\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_a14585c3beb7ef7f1464e5b4be1acc7ad}{type\_uri}}\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{}};}
+\DoxyCodeLine{00159\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_ae0e034594b82b0e8fe888419794c6abf}{subclassof\_uri}}\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{}};}
 \DoxyCodeLine{00160\ \textcolor{comment}{//\ \ string\ label\_uri\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#label"{};}}
-\DoxyCodeLine{00161\ \ \ \textcolor{keywordtype}{bool}\ delete\_hdt\_in\_destructor\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00161\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_aad8bb9226227fad3d2c961721e1056bb}{delete\_hdt\_in\_destructor}}\ =\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00162\ \ \ \textcolor{comment}{//double\ m\_ambiguitity\_penalty=2;}}
-\DoxyCodeLine{00163\ \ \ \textcolor{keywordtype}{double}\ m\_ambiguitity\_penalty\ =\ 1;\ \textcolor{comment}{//\ no\ penalty}}
+\DoxyCodeLine{00163\ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_entity_ann_aae16790045c102915ef123d538101f40}{m\_ambiguitity\_penalty}}\ =\ 1;\ \textcolor{comment}{//\ no\ penalty}}
 \DoxyCodeLine{00164\ }
-\DoxyCodeLine{00165\ \ \ \textcolor{keywordtype}{void}\ set\_sample\_size(\textcolor{keywordtype}{long}\ sample\_size);}
-\DoxyCodeLine{00166\ \ \ \textcolor{keywordtype}{long}\ get\_sample\_size();}
+\DoxyCodeLine{00165\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_af74f317e88a233d6df1a4d619a4ccf9b}{set\_sample\_size}}(\textcolor{keywordtype}{long}\ sample\_size);}
+\DoxyCodeLine{00166\ \ \ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{class_entity_ann_adc54801601191c86d3206512ffe6ee68}{get\_sample\_size}}();}
 \DoxyCodeLine{00167\ }
-\DoxyCodeLine{00168\ \ \ std::list<string>\ get\_labels\_uris();}
-\DoxyCodeLine{00169\ \ \ \textcolor{keywordtype}{bool}\ append\_label\_uri(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00170\ \ \ \textcolor{keywordtype}{bool}\ clear\_label\_uri();}
+\DoxyCodeLine{00168\ \ \ std::list<string>\ \mbox{\hyperlink{class_entity_ann_a7b0b0ba88a03c0c734789565166856bc}{get\_labels\_uris}}();}
+\DoxyCodeLine{00169\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_a0d78ca8e90af761b1b57052675e3532b}{append\_label\_uri}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00170\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_af9e197777db7f5e3f530a1c0aa656480}{clear\_label\_uri}}();}
 \DoxyCodeLine{00171\ \ \ \textcolor{comment}{//\ source:\ https://stackoverflow.com/questions/12774207/fastest-\/way-\/to-\/check-\/if-\/a-\/file-\/exists-\/using-\/standard-\/c-\/c11-\/14-\/17-\/c}}
-\DoxyCodeLine{00172\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ file\_exists(\textcolor{keyword}{const}\ std::string\ \&name)\ \{}
+\DoxyCodeLine{00172\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_ae182a4ea3f3e3bb76945311f87307a00}{file\_exists}}(\textcolor{keyword}{const}\ std::string\ \&name)\ \{}
 \DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{struct\ }stat\ buffer;}
 \DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordflow}{return}\ (stat(name.c\_str(),\ \&buffer)\ ==\ 0);}
 \DoxyCodeLine{00175\ \ \ \}}

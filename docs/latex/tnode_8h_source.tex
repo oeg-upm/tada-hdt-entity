@@ -1,6 +1,6 @@
 \hypertarget{tnode_8h_source}{}\doxysection{tnode.\+h}
 \label{tnode_8h_source}\index{include/tnode.h@{include/tnode.h}}
-
+\mbox{\hyperlink{tnode_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TNODE\_H}}
 \DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TNODE\_H}}
@@ -15,16 +15,16 @@
 \DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_t_node}{TNode}}\ \{}
 \DoxyCodeLine{00012\ }
 \DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_t_node}{TNode}}();}
-\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_t_node}{TNode}}(\textcolor{keywordtype}{string}\ auri);}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_t_node_a5d7ab5171cd0dfb220b01778e2804225}{TNode}}();}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_t_node_a5d7ab5171cd0dfb220b01778e2804225}{TNode}}(\textcolor{keywordtype}{string}\ auri);}
 \DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ uri;}
-\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ ic,\ lc,\ fc;\ \textcolor{comment}{//\ coverage\ related\ variables}}
-\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ tc;\ \textcolor{comment}{//\ the\ variable\ used\ to\ compute\ the\ score\ fractions\ before\ the}}
-\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ is,\ ls,\ fs;\ \textcolor{comment}{//\ specificity\ related\ variables}}
-\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ f;\ \textcolor{comment}{//\ the\ result\ of\ the\ final\ score}}
-\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ std::unordered\_map<string,TNode*>\ *parents;\ \textcolor{comment}{//\ sometimes\ there\ are\ multiple\ parents}}
-\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ std::unordered\_map<string,TNode*>\ *children;\ \textcolor{comment}{//\ childs}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_t_node_a13f16a7ca8d9b9de86fbe2a539637f20}{uri}};}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_t_node_a3ec851cb89877cdadd0a1a2bb79bbc3e}{ic}},\ \mbox{\hyperlink{class_t_node_a089216838df873114fc94231f229c00a}{lc}},\ \mbox{\hyperlink{class_t_node_a4a6363ff25d8a0e038feeff7c5a72006}{fc}};\ \textcolor{comment}{//\ coverage\ related\ variables}}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_t_node_af4b0196eea607e6c0e60b480c5f57278}{tc}};\ \textcolor{comment}{//\ the\ variable\ used\ to\ compute\ the\ score\ fractions\ before\ the}}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_t_node_abb5714f8ac09fa84d6abc141b08907a1}{is}},\ \mbox{\hyperlink{class_t_node_af8bf980288eca5c42c829240ed4dbcd6}{ls}},\ \mbox{\hyperlink{class_t_node_a48b1422278d169dac52294c24cf68567}{fs}};\ \textcolor{comment}{//\ specificity\ related\ variables}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_t_node_a46ab491cac1374501fe1628939c885d0}{f}};\ \textcolor{comment}{//\ the\ result\ of\ the\ final\ score}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ std::unordered\_map<string,TNode*>\ *\mbox{\hyperlink{class_t_node_ad3394c6a289ecf72be87a14f50b277ba}{parents}};\ \textcolor{comment}{//\ sometimes\ there\ are\ multiple\ parents}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ std::unordered\_map<string,TNode*>\ *\mbox{\hyperlink{class_t_node_a6256d1a7ed6d62b5fbeab2d1e4e674d0}{children}};\ \textcolor{comment}{//\ childs}}
 \DoxyCodeLine{00024\ \textcolor{comment}{//\ \ \ \ \ \ \ \ std::ostream\&\ operator<<(std::ostream\&\ out,\ const\ TNode\&\ tnode);}}
 \DoxyCodeLine{00025\ \textcolor{comment}{//\ \ \ \ \ \ \ \ TNode\&\ operator=(const\ TNode\&\ other)\{}}
 \DoxyCodeLine{00026\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ if\ (this\ !=\ \&other)\ \{}}
@@ -44,7 +44,7 @@
 \DoxyCodeLine{00040\ \ \ \ \textcolor{comment}{//\ private:}}
 \DoxyCodeLine{00041\ }
 \DoxyCodeLine{00042\ \};}
-\DoxyCodeLine{00043\ std::ostream\&\ operator<<(std::ostream\&\ out,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_t_node}{TNode}}\&\ tnode);}
+\DoxyCodeLine{00043\ std::ostream\&\ \mbox{\hyperlink{tnode_8h_ae1de4ddc0593fe2197e8cd958b8fbcaa}{operator<<}}(std::ostream\&\ out,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_t_node}{TNode}}\&\ tnode);}
 \DoxyCodeLine{00044\ \textcolor{comment}{//bool\ operator<(const\ TNode\&\ l,\ const\ TNode\&\ r);}}
 \DoxyCodeLine{00045\ \textcolor{comment}{//std::ostream\&\ operator<<(std::ostream\&\ os,\ const\ T\&\ obj)}}
 \DoxyCodeLine{00046\ \textcolor{comment}{//std::ostream\&\ operator<<(std::ostream\&\ out,\ const\ TNode\&\ tnode)}}
