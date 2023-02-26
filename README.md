@@ -4,7 +4,7 @@
 
 **Annotate entity and textual columns using HDT**
 
-# tada-hdt-entity
+# TADA HDT Entity
 
 This library offers several techniques to annotate entity and textual properties. It user HDT-compressed knowledge base as the training set to annotated a given table. 
 
