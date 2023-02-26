@@ -15,7 +15,9 @@ This library offers several techniques to annotate entity and textual properties
 * [hdt-cpp](https://github.com/rdfhdt/hdt-cpp)
 * [getopt](https://github.com/ahmad88me/getoptpp)
 
-# Two options to compile
+# Compile
+We offer two options to compile:
+
 ## Make
 ```
 make
@@ -33,3 +35,6 @@ inside the `build` directory
 ```
 ./tests
 ```
+
+# Technical documentation
+The technical documentation can be found on [https://oeg-upm.github.io/tada-hdt-entity](https://oeg-upm.github.io/tada-hdt-entity)
