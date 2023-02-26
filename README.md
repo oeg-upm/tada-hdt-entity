@@ -2,8 +2,12 @@
 [![codecov](https://codecov.io/gh/oeg-upm/tada-hdt-entity/branch/master/graph/badge.svg)](https://codecov.io/gh/oeg-upm/tada-hdt-entity)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3732626.svg)](https://doi.org/10.5281/zenodo.3732626)
 
+**Annotate entity and textual columns using HDT**
+
 # tada-hdt-entity
-Add classes to entity columns in tabular data using HDT as the knowledge source
+
+This library offers several techniques to annotate entity and textual properties. It user HDT-compressed knowledge base as the training set to annotated a given table. 
+
 
 # requirements
 * [easy-logger](https://github.com/ahmad88me/easy-logger)
