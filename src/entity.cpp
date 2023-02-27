@@ -1335,7 +1335,6 @@ void EntityAnn::search_and_append_relations_with_objects(std::list<string> *subj
       property_found = false;
 
       while (itt->hasNext()) {
-        cout << "property found: " << object_text << endl;
         property_found = true;
         triple = itt->next();
         property_uri = triple->getPredicate();
@@ -1345,7 +1344,6 @@ void EntityAnn::search_and_append_relations_with_objects(std::list<string> *subj
       delete itt;
 
       if (!property_found && m_retry_with_title_case) {
-        cout << "Not found: " << object_tagged << endl;
         object_cased = get_title_case(object_text);
 
         if (object_cased != object_text) {
