@@ -32,5 +32,9 @@ inside the {\ttfamily build} directory
 \DoxyCodeLine{./tests}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md6}{}\doxysection{Technical documentation}\label{index_autotoc_md6}
+\hypertarget{index_autotoc_md6}{}\doxysubsection{Known Issues}\label{index_autotoc_md6}
+
+\begin{DoxyEnumerate}
+\item If all the tests fail, it could be related to the index file. Updating the file {\ttfamily test.\+ttl} would results in an error when loading the test.\+hdt. To resolved this just delete the index file and run the tests again. An updated index file would then be generated and the tests should pass.
+\end{DoxyEnumerate}\hypertarget{index_autotoc_md7}{}\doxysection{Technical documentation}\label{index_autotoc_md7}
 The technical documentation can be found on \href{https://oeg-upm.github.io/tada-hdt-entity}{\texttt{ https\+://oeg-\/upm.\+github.\+io/tada-\/hdt-\/entity}} 

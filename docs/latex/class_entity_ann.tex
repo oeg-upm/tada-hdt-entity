@@ -115,6 +115,14 @@ bool \mbox{\hyperlink{class_entity_ann_a9a31fd628fdd9c1c42cfdbabd9ae228b}{annota
 \item 
 std\+::list$<$ string $>$ $\ast$ \mbox{\hyperlink{class_entity_ann_abe804865569c0eb4c499e45a85a236c6}{annotate\+\_\+entity\+\_\+property\+\_\+heuristic}} (std\+::list$<$ std\+::list$<$ string $>$ $\ast$ $>$ $\ast$data, string class\+\_\+uri, long property\+\_\+idx)
 \item 
+std\+::list$<$ string $>$ $\ast$ \mbox{\hyperlink{class_entity_ann_aa2330e7461ecd0f987aa08fbd913226f}{annotate\+\_\+text\+\_\+property\+\_\+heuristic}} (std\+::list$<$ std\+::list$<$ string $>$ $\ast$ $>$ $\ast$data, string class\+\_\+uri, long property\+\_\+idx)
+\item 
+void \mbox{\hyperlink{class_entity_ann_a91e3c0aad5a7aa609f34022dae35bfeb}{search\+\_\+and\+\_\+append\+\_\+relations\+\_\+with\+\_\+entities}} (std\+::list$<$ string $>$ $\ast$subjects, std\+::list$<$ string $>$ $\ast$entities)
+\item 
+void \mbox{\hyperlink{class_entity_ann_a5d467669c517005a59dcf3035e493ac8}{search\+\_\+and\+\_\+append\+\_\+relations\+\_\+with\+\_\+objects}} (std\+::list$<$ string $>$ $\ast$subjects, std\+::list$<$ string $>$ $\ast$entities)
+\item 
+bool \mbox{\hyperlink{class_entity_ann_aa08cf4892cf8e925204faf340e7aa705}{add\+\_\+property\+\_\+count}} (string property\+\_\+uri)
+\item 
 std\+::list$<$ string $>$ $\ast$ \mbox{\hyperlink{class_entity_ann_a27e62bd74cfeb606fa709e9336388db8}{get\+\_\+entities\+\_\+of\+\_\+class}} (string)
 \item 
 std\+::list$<$ string $>$ $\ast$ \mbox{\hyperlink{class_entity_ann_a9a4af4a60c6190cc3bde45fb8970d7e6}{get\+\_\+properties\+\_\+from\+\_\+map}} ()
@@ -189,6 +197,12 @@ double \mbox{\hyperlink{class_entity_ann_aae16790045c102915ef123d538101f40}{m\+\
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_entity_ann_aa08cf4892cf8e925204faf340e7aa705}\label{class_entity_ann_aa08cf4892cf8e925204faf340e7aa705}} 
+\index{EntityAnn@{EntityAnn}!add\_property\_count@{add\_property\_count}}
+\index{add\_property\_count@{add\_property\_count}!EntityAnn@{EntityAnn}}
+\doxysubsubsection{\texorpdfstring{add\_property\_count()}{add\_property\_count()}}
+{\footnotesize\ttfamily bool Entity\+Ann\+::add\+\_\+property\+\_\+count (\begin{DoxyParamCaption}\item[{string}]{property\+\_\+uri }\end{DoxyParamCaption})}
+
 \mbox{\Hypertarget{class_entity_ann_a73e2e2ea5ca75750360fe288f5c9299a}\label{class_entity_ann_a73e2e2ea5ca75750360fe288f5c9299a}} 
 \index{EntityAnn@{EntityAnn}!annotate\_column@{annotate\_column}}
 \index{annotate\_column@{annotate\_column}!EntityAnn@{EntityAnn}}
@@ -271,7 +285,7 @@ To annotate the property column.
 \doxysubsubsection{\texorpdfstring{annotate\_entity\_property\_heuristic()}{annotate\_entity\_property\_heuristic()}}
 {\footnotesize\ttfamily std\+::list$<$ string $>$ $\ast$ Entity\+Ann\+::annotate\+\_\+entity\+\_\+property\+\_\+heuristic (\begin{DoxyParamCaption}\item[{std\+::list$<$ std\+::list$<$ string $>$ $\ast$ $>$ $\ast$}]{data,  }\item[{string}]{class\+\_\+uri,  }\item[{long}]{property\+\_\+idx }\end{DoxyParamCaption})}
 
-Annotate a property column using an extensive bruteforce.
+Annotate a property column of entities using an extensive bruteforce.
 
 It attempts to annotate the property column using all the subjects from the provided class with the entities from the property column.
 
@@ -302,6 +316,25 @@ It attempts to annotate the property column using all the subjects from the prov
 \doxysubsubsection{\texorpdfstring{annotate\_semi\_scored\_column()}{annotate\_semi\_scored\_column()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily std\+::list$<$ string $>$ $\ast$ Entity\+Ann\+::annotate\+\_\+semi\+\_\+scored\+\_\+column (\begin{DoxyParamCaption}\item[{unsigned long}]{m,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
 
+\mbox{\Hypertarget{class_entity_ann_aa2330e7461ecd0f987aa08fbd913226f}\label{class_entity_ann_aa2330e7461ecd0f987aa08fbd913226f}} 
+\index{EntityAnn@{EntityAnn}!annotate\_text\_property\_heuristic@{annotate\_text\_property\_heuristic}}
+\index{annotate\_text\_property\_heuristic@{annotate\_text\_property\_heuristic}!EntityAnn@{EntityAnn}}
+\doxysubsubsection{\texorpdfstring{annotate\_text\_property\_heuristic()}{annotate\_text\_property\_heuristic()}}
+{\footnotesize\ttfamily std\+::list$<$ string $>$ $\ast$ Entity\+Ann\+::annotate\+\_\+text\+\_\+property\+\_\+heuristic (\begin{DoxyParamCaption}\item[{std\+::list$<$ std\+::list$<$ string $>$ $\ast$ $>$ $\ast$}]{data,  }\item[{string}]{class\+\_\+uri,  }\item[{long}]{property\+\_\+idx }\end{DoxyParamCaption})}
+
+Annotate a textual property column (not an entity column) using an extensive bruteforce.
+
+It attempts to annotate the property column using all the subjects from the provided class with the texts from the property column.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & the tabular data read using the parser. \\
+\hline
+{\em class\+\_\+uri} & the class of the subject column. \\
+\hline
+{\em property\+\_\+idx} & the index of the property column to be indexed. \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_entity_ann_a9a31fd628fdd9c1c42cfdbabd9ae228b}\label{class_entity_ann_a9a31fd628fdd9c1c42cfdbabd9ae228b}} 
 \index{EntityAnn@{EntityAnn}!annotate\_text\_property\_pair@{annotate\_text\_property\_pair}}
 \index{annotate\_text\_property\_pair@{annotate\_text\_property\_pair}!EntityAnn@{EntityAnn}}
@@ -542,6 +575,40 @@ It attempts to annotate the property column using all the subjects from the prov
 \doxysubsubsection{\texorpdfstring{recompute\_f()}{recompute\_f()}}
 {\footnotesize\ttfamily std\+::list$<$ string $>$ $\ast$ Entity\+Ann\+::recompute\+\_\+f (\begin{DoxyParamCaption}\item[{double}]{alpha }\end{DoxyParamCaption})}
 
+\mbox{\Hypertarget{class_entity_ann_a91e3c0aad5a7aa609f34022dae35bfeb}\label{class_entity_ann_a91e3c0aad5a7aa609f34022dae35bfeb}} 
+\index{EntityAnn@{EntityAnn}!search\_and\_append\_relations\_with\_entities@{search\_and\_append\_relations\_with\_entities}}
+\index{search\_and\_append\_relations\_with\_entities@{search\_and\_append\_relations\_with\_entities}!EntityAnn@{EntityAnn}}
+\doxysubsubsection{\texorpdfstring{search\_and\_append\_relations\_with\_entities()}{search\_and\_append\_relations\_with\_entities()}}
+{\footnotesize\ttfamily void Entity\+Ann\+::search\+\_\+and\+\_\+append\+\_\+relations\+\_\+with\+\_\+entities (\begin{DoxyParamCaption}\item[{std\+::list$<$ string $>$ $\ast$}]{subjects,  }\item[{std\+::list$<$ string $>$ $\ast$}]{entities }\end{DoxyParamCaption})}
+
+Extract relations between subjects and entities using bruteforce.
+
+Given a list of strings, subjects and entities, it will search for all possible relations using all combinations.
+
+
+\begin{DoxyParams}{Parameters}
+{\em subjects} & a list of subject uris. \\
+\hline
+{\em entities} & list of entity uris. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_entity_ann_a5d467669c517005a59dcf3035e493ac8}\label{class_entity_ann_a5d467669c517005a59dcf3035e493ac8}} 
+\index{EntityAnn@{EntityAnn}!search\_and\_append\_relations\_with\_objects@{search\_and\_append\_relations\_with\_objects}}
+\index{search\_and\_append\_relations\_with\_objects@{search\_and\_append\_relations\_with\_objects}!EntityAnn@{EntityAnn}}
+\doxysubsubsection{\texorpdfstring{search\_and\_append\_relations\_with\_objects()}{search\_and\_append\_relations\_with\_objects()}}
+{\footnotesize\ttfamily void Entity\+Ann\+::search\+\_\+and\+\_\+append\+\_\+relations\+\_\+with\+\_\+objects (\begin{DoxyParamCaption}\item[{std\+::list$<$ string $>$ $\ast$}]{subjects,  }\item[{std\+::list$<$ string $>$ $\ast$}]{entities }\end{DoxyParamCaption})}
+
+Extract relations between subjects and objects using bruteforce.
+
+Given a list of strings, subjects and objects, it will search for all possible relations using all combinations.
+
+
+\begin{DoxyParams}{Parameters}
+{\em subjects} & a list of subject uris. \\
+\hline
+{\em objects} & list of objects uris. \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_entity_ann_a2c6921256787fb5a81a1864f00e8e2a2}\label{class_entity_ann_a2c6921256787fb5a81a1864f00e8e2a2}} 
 \index{EntityAnn@{EntityAnn}!set\_alpha@{set\_alpha}}
 \index{set\_alpha@{set\_alpha}!EntityAnn@{EntityAnn}}

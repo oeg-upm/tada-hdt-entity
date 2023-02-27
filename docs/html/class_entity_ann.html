@@ -190,6 +190,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9a31fd628fdd9c1c42cfdbabd9ae228b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe804865569c0eb4c499e45a85a236c6"><td class="memItemLeft" align="right" valign="top">std::list&lt; string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#abe804865569c0eb4c499e45a85a236c6">annotate_entity_property_heuristic</a> (std::list&lt; std::list&lt; string &gt; * &gt; *data, string class_uri, long property_idx)</td></tr>
 <tr class="separator:abe804865569c0eb4c499e45a85a236c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2330e7461ecd0f987aa08fbd913226f"><td class="memItemLeft" align="right" valign="top">std::list&lt; string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#aa2330e7461ecd0f987aa08fbd913226f">annotate_text_property_heuristic</a> (std::list&lt; std::list&lt; string &gt; * &gt; *data, string class_uri, long property_idx)</td></tr>
+<tr class="separator:aa2330e7461ecd0f987aa08fbd913226f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91e3c0aad5a7aa609f34022dae35bfeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#a91e3c0aad5a7aa609f34022dae35bfeb">search_and_append_relations_with_entities</a> (std::list&lt; string &gt; *subjects, std::list&lt; string &gt; *entities)</td></tr>
+<tr class="separator:a91e3c0aad5a7aa609f34022dae35bfeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d467669c517005a59dcf3035e493ac8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#a5d467669c517005a59dcf3035e493ac8">search_and_append_relations_with_objects</a> (std::list&lt; string &gt; *subjects, std::list&lt; string &gt; *entities)</td></tr>
+<tr class="separator:a5d467669c517005a59dcf3035e493ac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa08cf4892cf8e925204faf340e7aa705"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#aa08cf4892cf8e925204faf340e7aa705">add_property_count</a> (string property_uri)</td></tr>
+<tr class="separator:aa08cf4892cf8e925204faf340e7aa705"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27e62bd74cfeb606fa709e9336388db8"><td class="memItemLeft" align="right" valign="top">std::list&lt; string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#a27e62bd74cfeb606fa709e9336388db8">get_entities_of_class</a> (string)</td></tr>
 <tr class="separator:a27e62bd74cfeb606fa709e9336388db8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a4af4a60c6190cc3bde45fb8970d7e6"><td class="memItemLeft" align="right" valign="top">std::list&lt; string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#a9a4af4a60c6190cc3bde45fb8970d7e6">get_properties_from_map</a> ()</td></tr>
@@ -383,6 +391,24 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa08cf4892cf8e925204faf340e7aa705" name="aa08cf4892cf8e925204faf340e7aa705"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa08cf4892cf8e925204faf340e7aa705">&#9670;&#160;</a></span>add_property_count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool EntityAnn::add_property_count </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>property_uri</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a73e2e2ea5ca75750360fe288f5c9299a" name="a73e2e2ea5ca75750360fe288f5c9299a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a73e2e2ea5ca75750360fe288f5c9299a">&#9670;&#160;</a></span>annotate_column() <span class="overload">[1/3]</span></h2>
 
@@ -590,7 +616,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Annotate a property column using an extensive bruteforce.</p>
+<p>Annotate a property column of entities using an extensive bruteforce.</p>
 <p>It attempts to annotate the property column using all the subjects from the provided class with the entities from the property column.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -674,6 +700,50 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa2330e7461ecd0f987aa08fbd913226f" name="aa2330e7461ecd0f987aa08fbd913226f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2330e7461ecd0f987aa08fbd913226f">&#9670;&#160;</a></span>annotate_text_property_heuristic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt; string &gt; * EntityAnn::annotate_text_property_heuristic </td>
+          <td>(</td>
+          <td class="paramtype">std::list&lt; std::list&lt; string &gt; * &gt; *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>class_uri</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>property_idx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Annotate a textual property column (not an entity column) using an extensive bruteforce.</p>
+<p>It attempts to annotate the property column using all the subjects from the provided class with the texts from the property column.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>the tabular data read using the parser. </td></tr>
+    <tr><td class="paramname">class_uri</td><td>the class of the subject column. </td></tr>
+    <tr><td class="paramname">property_idx</td><td>the index of the property column to be indexed. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1436,6 +1506,80 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a91e3c0aad5a7aa609f34022dae35bfeb" name="a91e3c0aad5a7aa609f34022dae35bfeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91e3c0aad5a7aa609f34022dae35bfeb">&#9670;&#160;</a></span>search_and_append_relations_with_entities()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EntityAnn::search_and_append_relations_with_entities </td>
+          <td>(</td>
+          <td class="paramtype">std::list&lt; string &gt; *&#160;</td>
+          <td class="paramname"><em>subjects</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; string &gt; *&#160;</td>
+          <td class="paramname"><em>entities</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Extract relations between subjects and entities using bruteforce.</p>
+<p>Given a list of strings, subjects and entities, it will search for all possible relations using all combinations.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">subjects</td><td>a list of subject uris. </td></tr>
+    <tr><td class="paramname">entities</td><td>list of entity uris. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5d467669c517005a59dcf3035e493ac8" name="a5d467669c517005a59dcf3035e493ac8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d467669c517005a59dcf3035e493ac8">&#9670;&#160;</a></span>search_and_append_relations_with_objects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EntityAnn::search_and_append_relations_with_objects </td>
+          <td>(</td>
+          <td class="paramtype">std::list&lt; string &gt; *&#160;</td>
+          <td class="paramname"><em>subjects</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; string &gt; *&#160;</td>
+          <td class="paramname"><em>entities</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Extract relations between subjects and objects using bruteforce.</p>
+<p>Given a list of strings, subjects and objects, it will search for all possible relations using all combinations.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">subjects</td><td>a list of subject uris. </td></tr>
+    <tr><td class="paramname">objects</td><td>list of objects uris. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
