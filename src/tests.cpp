@@ -500,6 +500,21 @@ TEST(EntityTest, nonSubjectColumns) {
   ASSERT_STREQ(properties->front().c_str(), dbp_country.c_str());
 }
 
+TEST(EntityTest, textColumnsHeuristic) {
+  string dbp_color = "http://dbpedia.org/property/color";
+  string class_uri = "http://dbpedia.org/ontology/Boot";
+  std::list<std::list<string>*> *data;
+  std::list<string> *properties;
+  Parser p(base_dir + "test_files/test11.csv");
+  data = p.parse_vertical();
+  EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.9);
+  ea->set_title_case(false);
+  properties = ea->annotate_entity_property_column(data, 1, 2);
+  ASSERT_EQ(0, properties->size());
+  properties = ea->annotate_text_property_heuristic(data, class_uri, 2);
+  ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
+}
+
 TEST(EntityTest, nonSubjectColumnsHeuristic) {
   string dbp_country = "http://dbpedia.org/property/country";
   string class_uri = "http://dbpedia.org/ontology/Wrestler";
@@ -510,9 +525,6 @@ TEST(EntityTest, nonSubjectColumnsHeuristic) {
   EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.9);
   ea->set_title_case(false);
   properties = ea->annotate_entity_property_column(data, 1, 2);
-//        cout << "size: "<<properties->size()<<endl;
-//        cout << "front: <"<<properties->front()<<"> "<<endl;
-//        cout << "target: <"<<dbp_country<<"> "<<endl;
   ASSERT_EQ(0, properties->size());
   properties = ea->annotate_entity_property_heuristic(data, class_uri, 2);
   ASSERT_STREQ(properties->front().c_str(), dbp_country.c_str());

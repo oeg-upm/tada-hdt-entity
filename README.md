@@ -36,5 +36,9 @@ inside the `build` directory
 ./tests
 ```
 
+## Known Issues
+1. If all the tests fail, it could be related to the index file. Updating the file `test.ttl` would results in an error when loading the test.hdt. To resolved this just delete the index file and run the tests again. An updated index file would then be generated and the tests should pass. 
+
+
 # Technical documentation
 The technical documentation can be found on [https://oeg-upm.github.io/tada-hdt-entity](https://oeg-upm.github.io/tada-hdt-entity)

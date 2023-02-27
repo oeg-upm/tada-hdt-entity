@@ -136,7 +136,7 @@ class EntityAnn {
   bool annotate_entity_property_pair(string, string);
   bool annotate_text_property_pair(string, string);
   /**
-   * Annotate a property column using an extensive bruteforce.
+   * Annotate a property column of entities using an extensive bruteforce.
    *
    * It attempts to annotate the property column using all the subjects from the provided class with the entities from
    * the property column.
@@ -149,6 +149,45 @@ class EntityAnn {
    */
   std::list<string> *annotate_entity_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
       long property_idx);
+  /**
+   * Annotate a textual property column (not an entity column) using an extensive bruteforce.
+   *
+   * It attempts to annotate the property column using all the subjects from the provided class with the texts from
+   * the property column.
+   *
+   *
+   * @param data the tabular data read using the parser.
+   * @param class_uri the class of the subject column.
+   * @param property_idx the index of the property column to be indexed.
+   *
+   */
+  std::list<string> *annotate_text_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
+      long property_idx);
+  /**
+   * Extract relations between subjects and entities using bruteforce.
+   *
+   * Given a list of strings, subjects and entities, it will search for all possible relations
+   * using all combinations.
+   *
+   *
+   * @param subjects a list of subject uris.
+   * @param entities list of entity uris.
+   *
+   */
+  void search_and_append_relations_with_entities(std::list<string> *subjects, std::list<string> *entities);
+  /**
+   * Extract relations between subjects and objects using bruteforce.
+   *
+   * Given a list of strings, subjects and objects, it will search for all possible relations
+   * using all combinations.
+   *
+   *
+   * @param subjects a list of subject uris.
+   * @param objects list of objects uris.
+   *
+   */
+  void search_and_append_relations_with_objects(std::list<string> *subjects, std::list<string> *entities);
+  bool add_property_count(string property_uri);
   std::list<string> *get_entities_of_class(string);
   std::list<string> *get_properties_from_map();
   unsigned long get_counts_of_class(string);
