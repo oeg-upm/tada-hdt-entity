@@ -94,66 +94,70 @@
 \DoxyCodeLine{00151\ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ property\_idx);}
 \DoxyCodeLine{00164\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_aa2330e7461ecd0f987aa08fbd913226f}{annotate\_text\_property\_heuristic}}(std::list<std::list<string>*>\ *data,\ \textcolor{keywordtype}{string}\ class\_uri,}
 \DoxyCodeLine{00165\ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ property\_idx);}
-\DoxyCodeLine{00177\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a91e3c0aad5a7aa609f34022dae35bfeb}{search\_and\_append\_relations\_with\_entities}}(std::list<string>\ *subjects,\ std::list<string>\ *entities);}
-\DoxyCodeLine{00189\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a5d467669c517005a59dcf3035e493ac8}{search\_and\_append\_relations\_with\_objects}}(std::list<string>\ *subjects,\ std::list<string>\ *entities);}
-\DoxyCodeLine{00190\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_aa08cf4892cf8e925204faf340e7aa705}{add\_property\_count}}(\textcolor{keywordtype}{string}\ property\_uri);}
-\DoxyCodeLine{00191\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a27e62bd74cfeb606fa709e9336388db8}{get\_entities\_of\_class}}(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00192\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a9a4af4a60c6190cc3bde45fb8970d7e6}{get\_properties\_from\_map}}();}
-\DoxyCodeLine{00193\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{class_entity_ann_a07614bbb444dcdc8290b61503cfeab19}{get\_counts\_of\_class}}(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00194\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdf\_type\ =\ "{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{};}}
-\DoxyCodeLine{00195\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdfs\_subclassof\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{};}}
-\DoxyCodeLine{00196\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdfs\_label\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#label"{};}}
-\DoxyCodeLine{00197\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_a14585c3beb7ef7f1464e5b4be1acc7ad}{type\_uri}}\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{}};}
-\DoxyCodeLine{00198\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_ae0e034594b82b0e8fe888419794c6abf}{subclassof\_uri}}\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{}};}
-\DoxyCodeLine{00199\ \textcolor{comment}{//\ \ string\ label\_uri\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#label"{};}}
-\DoxyCodeLine{00200\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_aad8bb9226227fad3d2c961721e1056bb}{delete\_hdt\_in\_destructor}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00201\ \ \ \textcolor{comment}{//double\ m\_ambiguitity\_penalty=2;}}
-\DoxyCodeLine{00202\ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_entity_ann_aae16790045c102915ef123d538101f40}{m\_ambiguitity\_penalty}}\ =\ 1;\ \textcolor{comment}{//\ no\ penalty}}
-\DoxyCodeLine{00203\ }
-\DoxyCodeLine{00204\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_af74f317e88a233d6df1a4d619a4ccf9b}{set\_sample\_size}}(\textcolor{keywordtype}{long}\ sample\_size);}
-\DoxyCodeLine{00205\ \ \ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{class_entity_ann_adc54801601191c86d3206512ffe6ee68}{get\_sample\_size}}();}
-\DoxyCodeLine{00206\ }
-\DoxyCodeLine{00207\ \ \ std::list<string>\ \mbox{\hyperlink{class_entity_ann_a7b0b0ba88a03c0c734789565166856bc}{get\_labels\_uris}}();}
-\DoxyCodeLine{00208\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_a0d78ca8e90af761b1b57052675e3532b}{append\_label\_uri}}(\textcolor{keywordtype}{string});}
-\DoxyCodeLine{00209\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_af9e197777db7f5e3f530a1c0aa656480}{clear\_label\_uri}}();}
-\DoxyCodeLine{00210\ \ \ \textcolor{comment}{//\ source:\ https://stackoverflow.com/questions/12774207/fastest-\/way-\/to-\/check-\/if-\/a-\/file-\/exists-\/using-\/standard-\/c-\/c11-\/14-\/17-\/c}}
-\DoxyCodeLine{00211\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_ae182a4ea3f3e3bb76945311f87307a00}{file\_exists}}(\textcolor{keyword}{const}\ std::string\ \&name)\ \{}
-\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keyword}{struct\ }stat\ buffer;}
-\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keywordflow}{return}\ (stat(name.c\_str(),\ \&buffer)\ ==\ 0);}
-\DoxyCodeLine{00214\ \ \ \}}
-\DoxyCodeLine{00215\ }
-\DoxyCodeLine{00216\ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00217\ \ \ EasyLogger\ *m\_logger;}
-\DoxyCodeLine{00218\ \ \ hdt::HDT\ *m\_hdt;}
-\DoxyCodeLine{00219\ \ \ \textcolor{comment}{//HDT::\ HDT::HDT*\ hdt;}}
-\DoxyCodeLine{00220\ \ \ \mbox{\hyperlink{class_graph}{Graph}}\ *m\_graph;}
-\DoxyCodeLine{00221\ \ \ std::unordered\_map<string,\ std::unordered\_map<string,\ bool>*>\ m\_ancestor\_lookup;}
-\DoxyCodeLine{00222\ \ \ std::unordered\_map<string,\ std::unordered\_map<string,\ bool>*>}
-\DoxyCodeLine{00223\ \ \ m\_descendents\_lookup;\ \textcolor{comment}{//\ to\ store\ all\ childs\ and\ their\ descendents}}
-\DoxyCodeLine{00224\ \ \ std::unordered\_map<string,\ bool>\ *add\_class\_to\_ancestor\_lookup(\textcolor{keywordtype}{string}\ tclass);}
-\DoxyCodeLine{00225\ \ \ std::unordered\_map<string,\ unsigned\ long>\ m\_classes\_entities\_count;}
-\DoxyCodeLine{00226\ \ \ std::unordered\_map<string,\ unsigned\ long>\ m\_classes\_propagated\_count;}
-\DoxyCodeLine{00227\ \ \ std::unordered\_map<string,\ unsigned\ long>\ *m\_properties\_counts;}
-\DoxyCodeLine{00228\ \ \ std::list<string>\ m\_labels\_uris;}
-\DoxyCodeLine{00229\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ bool\ m\_propagate\_Is=true;\ //\ should\ the\ parents\ also\ include\ the\ Is\ of\ their\ childred\ (true=yes)}}
-\DoxyCodeLine{00230\ \ \ \textcolor{keywordtype}{double}\ m\_alpha;}
-\DoxyCodeLine{00231\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m\_m;}
-\DoxyCodeLine{00232\ \ \ \textcolor{keywordtype}{bool}\ m\_retry\_with\_title\_case\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00233\ \ \ \textcolor{keywordtype}{string}\ m\_lang\_tag;}
-\DoxyCodeLine{00234\ \ \ \textcolor{keywordtype}{long}\ m\_sample\_size\ =\ 0;}
-\DoxyCodeLine{00235\ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keywordtype}{string}\ hdt\_file\_dir,\ \textcolor{keywordtype}{string}\ log\_file\_dir,\ \textcolor{keywordtype}{double}\ alpha);}
-\DoxyCodeLine{00236\ \ \ \textcolor{keywordtype}{void}\ init(hdt::HDT\ *hdt\_ptr,\ \textcolor{keywordtype}{string}\ log\_file\_dir,\ \textcolor{keywordtype}{double}\ alpha);}
-\DoxyCodeLine{00237\ \};}
-\DoxyCodeLine{00238\ }
-\DoxyCodeLine{00239\ }
-\DoxyCodeLine{00240\ \textcolor{comment}{//bool\ sort\_pair\_property(const\ pair<string,unsigned\ long>\ \&a,}}
-\DoxyCodeLine{00241\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ pair<string,unsigned\ long>\ \&b)\{}}
-\DoxyCodeLine{00242\ \textcolor{comment}{//\ \ \ \ \ \ \ return\ a.second>b.second;}}
-\DoxyCodeLine{00243\ \textcolor{comment}{//\}}}
-\DoxyCodeLine{00244\ }
-\DoxyCodeLine{00245\ }
-\DoxyCodeLine{00246\ }
-\DoxyCodeLine{00247\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00166\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a0651ceee7b0b818a96b32e1e8689e67f}{text\_property\_heuristic\_intermediate}}(std::list<std::list<string>*>\ *data,}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ std::list<string>\ \ *subjects,\ \textcolor{keywordtype}{long}\ property\_idx);}
+\DoxyCodeLine{00168\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a01d62220088f2f65f66afc7e3b3ae0ba}{entity\_property\_heuristic\_intermediate}}(std::list<std::list<string>*>\ *data,}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ std::list<string>\ *subjects,\ \textcolor{keywordtype}{long}\ property\_idx);}
+\DoxyCodeLine{00181\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a91e3c0aad5a7aa609f34022dae35bfeb}{search\_and\_append\_relations\_with\_entities}}(std::list<string>\ *subjects,\ std::list<string>\ *entities);}
+\DoxyCodeLine{00193\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_a5d467669c517005a59dcf3035e493ac8}{search\_and\_append\_relations\_with\_objects}}(std::list<string>\ *subjects,\ std::list<string>\ *entities);}
+\DoxyCodeLine{00194\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_aa08cf4892cf8e925204faf340e7aa705}{add\_property\_count}}(\textcolor{keywordtype}{string}\ property\_uri);}
+\DoxyCodeLine{00195\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a27e62bd74cfeb606fa709e9336388db8}{get\_entities\_of\_class}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00196\ \ \ std::list<string>\ *\mbox{\hyperlink{class_entity_ann_a9a4af4a60c6190cc3bde45fb8970d7e6}{get\_properties\_from\_map}}();}
+\DoxyCodeLine{00197\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{class_entity_ann_a07614bbb444dcdc8290b61503cfeab19}{get\_counts\_of\_class}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00198\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdf\_type\ =\ "{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{};}}
+\DoxyCodeLine{00199\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdfs\_subclassof\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{};}}
+\DoxyCodeLine{00200\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ const\ string\ rdfs\_label\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#label"{};}}
+\DoxyCodeLine{00201\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_a14585c3beb7ef7f1464e5b4be1acc7ad}{type\_uri}}\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/1999/02/22-\/rdf-\/syntax-\/ns\#type"{}};}
+\DoxyCodeLine{00202\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_entity_ann_ae0e034594b82b0e8fe888419794c6abf}{subclassof\_uri}}\ =\ \textcolor{stringliteral}{"{}http://www.w3.org/2000/01/rdf-\/schema\#subClassOf"{}};}
+\DoxyCodeLine{00203\ \textcolor{comment}{//\ \ string\ label\_uri\ =\ "{}http://www.w3.org/2000/01/rdf-\/schema\#label"{};}}
+\DoxyCodeLine{00204\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_aad8bb9226227fad3d2c961721e1056bb}{delete\_hdt\_in\_destructor}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00205\ \ \ \textcolor{comment}{//double\ m\_ambiguitity\_penalty=2;}}
+\DoxyCodeLine{00206\ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_entity_ann_aae16790045c102915ef123d538101f40}{m\_ambiguitity\_penalty}}\ =\ 1;\ \textcolor{comment}{//\ no\ penalty}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_entity_ann_af74f317e88a233d6df1a4d619a4ccf9b}{set\_sample\_size}}(\textcolor{keywordtype}{long}\ sample\_size);}
+\DoxyCodeLine{00209\ \ \ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{class_entity_ann_adc54801601191c86d3206512ffe6ee68}{get\_sample\_size}}();}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ std::list<string>\ \mbox{\hyperlink{class_entity_ann_a7b0b0ba88a03c0c734789565166856bc}{get\_labels\_uris}}();}
+\DoxyCodeLine{00212\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_a0d78ca8e90af761b1b57052675e3532b}{append\_label\_uri}}(\textcolor{keywordtype}{string});}
+\DoxyCodeLine{00213\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_af9e197777db7f5e3f530a1c0aa656480}{clear\_label\_uri}}();}
+\DoxyCodeLine{00214\ \ \ \textcolor{comment}{//\ source:\ https://stackoverflow.com/questions/12774207/fastest-\/way-\/to-\/check-\/if-\/a-\/file-\/exists-\/using-\/standard-\/c-\/c11-\/14-\/17-\/c}}
+\DoxyCodeLine{00215\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_entity_ann_ae182a4ea3f3e3bb76945311f87307a00}{file\_exists}}(\textcolor{keyword}{const}\ std::string\ \&name)\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keyword}{struct\ }stat\ buffer;}
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordflow}{return}\ (stat(name.c\_str(),\ \&buffer)\ ==\ 0);}
+\DoxyCodeLine{00218\ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00221\ \ \ EasyLogger\ *m\_logger;}
+\DoxyCodeLine{00222\ \ \ hdt::HDT\ *m\_hdt;}
+\DoxyCodeLine{00223\ \ \ \textcolor{comment}{//HDT::\ HDT::HDT*\ hdt;}}
+\DoxyCodeLine{00224\ \ \ \mbox{\hyperlink{class_graph}{Graph}}\ *m\_graph;}
+\DoxyCodeLine{00225\ \ \ std::unordered\_map<string,\ std::unordered\_map<string,\ bool>*>\ m\_ancestor\_lookup;}
+\DoxyCodeLine{00226\ \ \ std::unordered\_map<string,\ std::unordered\_map<string,\ bool>*>}
+\DoxyCodeLine{00227\ \ \ m\_descendents\_lookup;\ \textcolor{comment}{//\ to\ store\ all\ childs\ and\ their\ descendents}}
+\DoxyCodeLine{00228\ \ \ std::unordered\_map<string,\ bool>\ *add\_class\_to\_ancestor\_lookup(\textcolor{keywordtype}{string}\ tclass);}
+\DoxyCodeLine{00229\ \ \ std::unordered\_map<string,\ unsigned\ long>\ m\_classes\_entities\_count;}
+\DoxyCodeLine{00230\ \ \ std::unordered\_map<string,\ unsigned\ long>\ m\_classes\_propagated\_count;}
+\DoxyCodeLine{00231\ \ \ std::unordered\_map<string,\ unsigned\ long>\ *m\_properties\_counts;}
+\DoxyCodeLine{00232\ \ \ std::list<string>\ m\_labels\_uris;}
+\DoxyCodeLine{00233\ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ bool\ m\_propagate\_Is=true;\ //\ should\ the\ parents\ also\ include\ the\ Is\ of\ their\ childred\ (true=yes)}}
+\DoxyCodeLine{00234\ \ \ \textcolor{keywordtype}{double}\ m\_alpha;}
+\DoxyCodeLine{00235\ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ m\_m;}
+\DoxyCodeLine{00236\ \ \ \textcolor{keywordtype}{bool}\ m\_retry\_with\_title\_case\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00237\ \ \ \textcolor{keywordtype}{string}\ m\_lang\_tag;}
+\DoxyCodeLine{00238\ \ \ \textcolor{keywordtype}{long}\ m\_sample\_size\ =\ 0;}
+\DoxyCodeLine{00239\ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keywordtype}{string}\ hdt\_file\_dir,\ \textcolor{keywordtype}{string}\ log\_file\_dir,\ \textcolor{keywordtype}{double}\ alpha);}
+\DoxyCodeLine{00240\ \ \ \textcolor{keywordtype}{void}\ init(hdt::HDT\ *hdt\_ptr,\ \textcolor{keywordtype}{string}\ log\_file\_dir,\ \textcolor{keywordtype}{double}\ alpha);}
+\DoxyCodeLine{00241\ \};}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \textcolor{comment}{//bool\ sort\_pair\_property(const\ pair<string,unsigned\ long>\ \&a,}}
+\DoxyCodeLine{00245\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ pair<string,unsigned\ long>\ \&b)\{}}
+\DoxyCodeLine{00246\ \textcolor{comment}{//\ \ \ \ \ \ \ return\ a.second>b.second;}}
+\DoxyCodeLine{00247\ \textcolor{comment}{//\}}}
 \DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00252\ }
 
 \end{DoxyCode}

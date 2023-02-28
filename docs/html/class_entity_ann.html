@@ -192,6 +192,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abe804865569c0eb4c499e45a85a236c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2330e7461ecd0f987aa08fbd913226f"><td class="memItemLeft" align="right" valign="top">std::list&lt; string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#aa2330e7461ecd0f987aa08fbd913226f">annotate_text_property_heuristic</a> (std::list&lt; std::list&lt; string &gt; * &gt; *data, string class_uri, long property_idx)</td></tr>
 <tr class="separator:aa2330e7461ecd0f987aa08fbd913226f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0651ceee7b0b818a96b32e1e8689e67f"><td class="memItemLeft" align="right" valign="top">std::list&lt; string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#a0651ceee7b0b818a96b32e1e8689e67f">text_property_heuristic_intermediate</a> (std::list&lt; std::list&lt; string &gt; * &gt; *data, std::list&lt; string &gt; *subjects, long property_idx)</td></tr>
+<tr class="separator:a0651ceee7b0b818a96b32e1e8689e67f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01d62220088f2f65f66afc7e3b3ae0ba"><td class="memItemLeft" align="right" valign="top">std::list&lt; string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#a01d62220088f2f65f66afc7e3b3ae0ba">entity_property_heuristic_intermediate</a> (std::list&lt; std::list&lt; string &gt; * &gt; *data, std::list&lt; string &gt; *subjects, long property_idx)</td></tr>
+<tr class="separator:a01d62220088f2f65f66afc7e3b3ae0ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91e3c0aad5a7aa609f34022dae35bfeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#a91e3c0aad5a7aa609f34022dae35bfeb">search_and_append_relations_with_entities</a> (std::list&lt; string &gt; *subjects, std::list&lt; string &gt; *entities)</td></tr>
 <tr class="separator:a91e3c0aad5a7aa609f34022dae35bfeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d467669c517005a59dcf3035e493ac8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity_ann.html#a5d467669c517005a59dcf3035e493ac8">search_and_append_relations_with_objects</a> (std::list&lt; string &gt; *subjects, std::list&lt; string &gt; *entities)</td></tr>
@@ -1071,6 +1075,40 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a01d62220088f2f65f66afc7e3b3ae0ba" name="a01d62220088f2f65f66afc7e3b3ae0ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01d62220088f2f65f66afc7e3b3ae0ba">&#9670;&#160;</a></span>entity_property_heuristic_intermediate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt; string &gt; * EntityAnn::entity_property_heuristic_intermediate </td>
+          <td>(</td>
+          <td class="paramtype">std::list&lt; std::list&lt; string &gt; * &gt; *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; string &gt; *&#160;</td>
+          <td class="paramname"><em>subjects</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>property_idx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae182a4ea3f3e3bb76945311f87307a00" name="ae182a4ea3f3e3bb76945311f87307a00"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae182a4ea3f3e3bb76945311f87307a00">&#9670;&#160;</a></span>file_exists()</h2>
 
@@ -1711,6 +1749,40 @@ Public Attributes</h2></td></tr>
           <td class="paramtype">string&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0651ceee7b0b818a96b32e1e8689e67f" name="a0651ceee7b0b818a96b32e1e8689e67f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0651ceee7b0b818a96b32e1e8689e67f">&#9670;&#160;</a></span>text_property_heuristic_intermediate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt; string &gt; * EntityAnn::text_property_heuristic_intermediate </td>
+          <td>(</td>
+          <td class="paramtype">std::list&lt; std::list&lt; string &gt; * &gt; *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; string &gt; *&#160;</td>
+          <td class="paramname"><em>subjects</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>property_idx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

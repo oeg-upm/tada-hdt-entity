@@ -117,6 +117,10 @@ std\+::list$<$ string $>$ $\ast$ \mbox{\hyperlink{class_entity_ann_abe804865569c
 \item 
 std\+::list$<$ string $>$ $\ast$ \mbox{\hyperlink{class_entity_ann_aa2330e7461ecd0f987aa08fbd913226f}{annotate\+\_\+text\+\_\+property\+\_\+heuristic}} (std\+::list$<$ std\+::list$<$ string $>$ $\ast$ $>$ $\ast$data, string class\+\_\+uri, long property\+\_\+idx)
 \item 
+std\+::list$<$ string $>$ $\ast$ \mbox{\hyperlink{class_entity_ann_a0651ceee7b0b818a96b32e1e8689e67f}{text\+\_\+property\+\_\+heuristic\+\_\+intermediate}} (std\+::list$<$ std\+::list$<$ string $>$ $\ast$ $>$ $\ast$data, std\+::list$<$ string $>$ $\ast$subjects, long property\+\_\+idx)
+\item 
+std\+::list$<$ string $>$ $\ast$ \mbox{\hyperlink{class_entity_ann_a01d62220088f2f65f66afc7e3b3ae0ba}{entity\+\_\+property\+\_\+heuristic\+\_\+intermediate}} (std\+::list$<$ std\+::list$<$ string $>$ $\ast$ $>$ $\ast$data, std\+::list$<$ string $>$ $\ast$subjects, long property\+\_\+idx)
+\item 
 void \mbox{\hyperlink{class_entity_ann_a91e3c0aad5a7aa609f34022dae35bfeb}{search\+\_\+and\+\_\+append\+\_\+relations\+\_\+with\+\_\+entities}} (std\+::list$<$ string $>$ $\ast$subjects, std\+::list$<$ string $>$ $\ast$entities)
 \item 
 void \mbox{\hyperlink{class_entity_ann_a5d467669c517005a59dcf3035e493ac8}{search\+\_\+and\+\_\+append\+\_\+relations\+\_\+with\+\_\+objects}} (std\+::list$<$ string $>$ $\ast$subjects, std\+::list$<$ string $>$ $\ast$entities)
@@ -437,6 +441,12 @@ It attempts to annotate the property column using all the subjects from the prov
 \doxysubsubsection{\texorpdfstring{compute\_Ls\_for\_node()}{compute\_Ls\_for\_node()}}
 {\footnotesize\ttfamily double Entity\+Ann\+::compute\+\_\+\+Ls\+\_\+for\+\_\+node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_t_node}{TNode}} $\ast$}]{tnode }\end{DoxyParamCaption})}
 
+\mbox{\Hypertarget{class_entity_ann_a01d62220088f2f65f66afc7e3b3ae0ba}\label{class_entity_ann_a01d62220088f2f65f66afc7e3b3ae0ba}} 
+\index{EntityAnn@{EntityAnn}!entity\_property\_heuristic\_intermediate@{entity\_property\_heuristic\_intermediate}}
+\index{entity\_property\_heuristic\_intermediate@{entity\_property\_heuristic\_intermediate}!EntityAnn@{EntityAnn}}
+\doxysubsubsection{\texorpdfstring{entity\_property\_heuristic\_intermediate()}{entity\_property\_heuristic\_intermediate()}}
+{\footnotesize\ttfamily std\+::list$<$ string $>$ $\ast$ Entity\+Ann\+::entity\+\_\+property\+\_\+heuristic\+\_\+intermediate (\begin{DoxyParamCaption}\item[{std\+::list$<$ std\+::list$<$ string $>$ $\ast$ $>$ $\ast$}]{data,  }\item[{std\+::list$<$ string $>$ $\ast$}]{subjects,  }\item[{long}]{property\+\_\+idx }\end{DoxyParamCaption})}
+
 \mbox{\Hypertarget{class_entity_ann_ae182a4ea3f3e3bb76945311f87307a00}\label{class_entity_ann_ae182a4ea3f3e3bb76945311f87307a00}} 
 \index{EntityAnn@{EntityAnn}!file\_exists@{file\_exists}}
 \index{file\_exists@{file\_exists}!EntityAnn@{EntityAnn}}
@@ -659,6 +669,12 @@ sets the path to the HDT file.
 \index{strip\_quotes@{strip\_quotes}!EntityAnn@{EntityAnn}}
 \doxysubsubsection{\texorpdfstring{strip\_quotes()}{strip\_quotes()}}
 {\footnotesize\ttfamily string Entity\+Ann\+::strip\+\_\+quotes (\begin{DoxyParamCaption}\item[{string}]{s }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_entity_ann_a0651ceee7b0b818a96b32e1e8689e67f}\label{class_entity_ann_a0651ceee7b0b818a96b32e1e8689e67f}} 
+\index{EntityAnn@{EntityAnn}!text\_property\_heuristic\_intermediate@{text\_property\_heuristic\_intermediate}}
+\index{text\_property\_heuristic\_intermediate@{text\_property\_heuristic\_intermediate}!EntityAnn@{EntityAnn}}
+\doxysubsubsection{\texorpdfstring{text\_property\_heuristic\_intermediate()}{text\_property\_heuristic\_intermediate()}}
+{\footnotesize\ttfamily std\+::list$<$ string $>$ $\ast$ Entity\+Ann\+::text\+\_\+property\+\_\+heuristic\+\_\+intermediate (\begin{DoxyParamCaption}\item[{std\+::list$<$ std\+::list$<$ string $>$ $\ast$ $>$ $\ast$}]{data,  }\item[{std\+::list$<$ string $>$ $\ast$}]{subjects,  }\item[{long}]{property\+\_\+idx }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_entity_ann_adbad57fe87fa40343a6d989bf71a79c7}\label{class_entity_ann_adbad57fe87fa40343a6d989bf71a79c7}} 
 \index{EntityAnn@{EntityAnn}!update\_graph@{update\_graph}}
