@@ -1224,11 +1224,21 @@ std::list<string> *EntityAnn::get_entities_of_class(string class_uri) {
 
 std::list<string> *EntityAnn::annotate_entity_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
     long property_idx) {
+  std::list<string> *subjects;
+  std::list<string> *annotations;
+
+  subjects = get_entities_of_class(class_uri);
+  annotations =  entity_property_heuristic_intermediate(data, subjects, property_idx);
+  delete subjects;
+  return annotations;
+}
+
+std::list<string> *EntityAnn::entity_property_heuristic_intermediate(std::list<std::list<string>*> *data,
+    std::list<string> *subjects, long property_idx) {
   std::list<string>::iterator col_iter;
   hdt::IteratorTripleString *itt;
   hdt::TripleString *triple;
   std::list<string> *entities = new std::list<string>;
-  std::list<string> *subjects;
   std::list<string> *ent;
   string tcased;
   string another, subject_uri, entity_uri, property_uri;
@@ -1256,21 +1266,30 @@ std::list<string> *EntityAnn::annotate_entity_property_heuristic(std::list<std::
     delete ent;
   }
 
-  subjects = get_entities_of_class(class_uri);
   this->search_and_append_relations_with_entities(subjects, entities);
 
-  delete subjects;
+//  delete subjects;
   delete entities;
   return get_properties_from_map();
 }
 
 std::list<string> *EntityAnn::annotate_text_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
     long property_idx) {
+  std::list<string> *annotations;
+  std::list<string> *subjects;
+
+  subjects = get_entities_of_class(class_uri);
+  annotations = text_property_heuristic_intermediate(data, subjects, property_idx);
+  delete subjects;
+  return annotations;
+}
+
+std::list<string> *EntityAnn::text_property_heuristic_intermediate(std::list<std::list<string>*> *data,
+    std::list<string>  *subjects, long property_idx) {
   std::list<string>::iterator col_iter;
   hdt::IteratorTripleString *itt;
   hdt::TripleString *triple;
   std::list<string> *objects = new std::list<string>;
-  std::list<string> *subjects;
   std::list<string> *ent;
   string tcased;
   string another, subject_uri, entity_uri, property_uri;
@@ -1287,11 +1306,10 @@ std::list<string> *EntityAnn::annotate_text_property_heuristic(std::list<std::li
     objects->push_back(another);
   }
 
-  subjects = get_entities_of_class(class_uri);
   m_logger->log("annotate_text_property_heuristic> num subjects: " + to_string(subjects->size()));
   this->search_and_append_relations_with_objects(subjects, objects);
 
-  delete subjects;
+//  delete subjects;
   delete objects;
   return get_properties_from_map();
 }

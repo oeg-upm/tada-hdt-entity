@@ -163,6 +163,10 @@ class EntityAnn {
    */
   std::list<string> *annotate_text_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
       long property_idx);
+  std::list<string> *text_property_heuristic_intermediate(std::list<std::list<string>*> *data,
+      std::list<string>  *subjects, long property_idx);
+  std::list<string> *entity_property_heuristic_intermediate(std::list<std::list<string>*> *data,
+      std::list<string> *subjects, long property_idx);
   /**
    * Extract relations between subjects and entities using bruteforce.
    *
