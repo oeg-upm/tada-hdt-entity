@@ -163,15 +163,19 @@ dbr:boot2 dbp:color "red" .
 dbr:boot2 rdf:type dbo:Boot .
 dbr:boot2 rdfs:label "boot2" .
 
-dbr:boot1 dbp:color "blue" .
-dbr:boot1 rdf:type dbo:Boot .
-dbr:boot1 rdfs:label "boot1" .
-
 dbr:boot3 rdf:type dbo:Boot .
 dbr:boot3 rdfs:label "boot3" .
 
 dbr:boot4 rdf:type dbo:Boot .
 dbr:boot4 rdfs:label "boot4" .
+
+dbr:boot5 dbp:color "Green" .
+dbr:boot5 rdf:type dbo:Boot .
+dbr:boot5 rdfs:label "boot5" .
+
+dbr:boot6 dbp:color "Pink" .
+dbr:boot6 rdf:type dbo:Boot .
+dbr:boot6 rdfs:label "boot6" .
 
 
 dbo:Boot rdfs:subClassOf dbo:Organisation .

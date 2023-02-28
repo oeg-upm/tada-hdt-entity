@@ -86,6 +86,7 @@ set(others
     test_files/test9.csv
     test_files/test10.csv
     test_files/test11.csv
+    test_files/test12.csv
     test.ttl
 )
 
