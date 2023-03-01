@@ -15,7 +15,6 @@
 #include <easy_logger/easy_logger.h>
 #include <HDTManager.hpp>
 
-
 using namespace std;
 //using namespace hdt;
 
@@ -121,9 +120,10 @@ class EntityAnn {
   void set_language_tag(string tag);
   unsigned long get_m();
   /**
-   * Annotate a property column.
+   * Annotate a property column using heuristics.
    *
-   * To annotate the property column.
+   * To annotate the property column by first detecting the relations between the subject column
+   *  and the property column. If no enough relations are detected, the permissive technique will be used.
    *
    *
    * @param data the tabular data read using the parser.
@@ -131,7 +131,20 @@ class EntityAnn {
    * @param property_idx the index of the property column to be indexed.
    *
    */
-  std::list<string> *annotate_entity_property_column(std::list<std::list<string>*> *data, long subject_idx,
+  std::list<string> *annotate_property_column_heuristic(std::list<std::list<string>*> *data, long subject_idx,
+      long property_idx, string class_uri);
+  /**
+   * Annotate a property column by detecting the relation between subject column and the property column.
+   *
+   * To annotate the property column by detection the relation between the subject column and the property column.
+   *
+   *
+   * @param data the tabular data read using the parser.
+   * @param subject_idx the index of the subject column.
+   * @param property_idx the index of the property column to be indexed.
+   *
+   */
+  std::list<string> *annotate_property_column_restrictive(std::list<std::list<string>*> *data, long subject_idx,
       long property_idx);
   bool annotate_entity_property_pair(string, string);
   bool annotate_text_property_pair(string, string);
@@ -147,7 +160,7 @@ class EntityAnn {
    * @param property_idx the index of the property column to be indexed.
    *
    */
-  std::list<string> *annotate_entity_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
+  std::list<string> *annotate_entity_property_permissive(std::list<std::list<string>*> *data, string class_uri,
       long property_idx);
   /**
    * Annotate a textual property column (not an entity column) using an extensive bruteforce.
@@ -161,11 +174,11 @@ class EntityAnn {
    * @param property_idx the index of the property column to be indexed.
    *
    */
-  std::list<string> *annotate_text_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
+  std::list<string> *annotate_text_property_permissive(std::list<std::list<string>*> *data, string class_uri,
       long property_idx);
-  std::list<string> *text_property_heuristic_intermediate(std::list<std::list<string>*> *data,
+  std::list<string> *text_property_permissive_intermediate(std::list<std::list<string>*> *data,
       std::list<string>  *subjects, long property_idx);
-  std::list<string> *entity_property_heuristic_intermediate(std::list<std::list<string>*> *data,
+  std::list<string> *entity_property_permissive_intermediate(std::list<std::list<string>*> *data,
       std::list<string> *subjects, long property_idx);
   /**
    * Extract relations between subjects and entities using bruteforce.
@@ -233,6 +246,7 @@ class EntityAnn {
   //        bool m_propagate_Is=true; // should the parents also include the Is of their childred (true=yes)
   double m_alpha;
   unsigned long m_m;
+  unsigned long m_annotated_prop_cells;
   bool m_retry_with_title_case = false;
   string m_lang_tag;
   long m_sample_size = 0;

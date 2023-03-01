@@ -13,9 +13,6 @@
 
 using namespace std;
 
-
-
-
 EntityAnn::EntityAnn() {
   m_logger = nullptr;
   m_hdt = nullptr;
@@ -63,7 +60,6 @@ hdt::HDT *EntityAnn::getHDT() {
   return m_hdt;
 }
 
-
 void EntityAnn::setLogger(string log_file_dir) {
   m_logger = new EasyLogger(log_file_dir);
 }
@@ -91,8 +87,6 @@ void EntityAnn::init(hdt::HDT *hdt_ptr, string log_file_dir, double alpha) {
   m_properties_counts = nullptr;
   m_labels_uris.push_back("http://www.w3.org/2000/01/rdf-schema#label");
 }
-
-
 
 EntityAnn::EntityAnn(hdt::HDT *hdt_ptr, string log_file_dir) {
   m_logger = nullptr;
@@ -991,11 +985,36 @@ string EntityAnn::strip_quotes(string s) {
 }
 
 
-std::list<string> *EntityAnn::annotate_entity_property_column(std::list<std::list<string>*> *data, long subject_idx,
+std::list<string> *EntityAnn::annotate_property_column_heuristic(std::list<std::list<string>*> *data,
+    long subject_idx, long property_idx, string class_uri) {
+  std::list<string> *annotations;
+  std::list<string> *subjects;
+
+  annotations = annotate_property_column_restrictive(data, subject_idx, property_idx);
+
+  if (annotations->size() == 0) {
+    subjects = get_entities_of_class(class_uri);
+    annotations = text_property_permissive_intermediate(data, subjects, property_idx);
+
+    if (annotations->size() == 0) {
+      annotations = entity_property_permissive_intermediate(data, subjects, property_idx);
+    }
+
+    delete subjects;
+  }
+
+  return annotations;
+
+}
+
+std::list<string> *EntityAnn::annotate_property_column_restrictive(std::list<std::list<string>*> *data,
+    long subject_idx,
     long property_idx) {
   std::list<string>::iterator col_iter;
   string subject, class_uri, another, subject_uri;
   m_properties_counts = new std::unordered_map<string, unsigned long>;
+
+  m_annotated_prop_cells = 0;
 
   for (auto it = data->cbegin(); it != data->cend(); it++) {
     if (it == data->cbegin()) { // to skip the header
@@ -1017,7 +1036,11 @@ std::list<string> *EntityAnn::annotate_entity_property_column(std::list<std::lis
     }
 
     if (!annotate_text_property_pair(subject, another)) {
-      annotate_entity_property_pair(subject, another);
+      if (annotate_entity_property_pair(subject, another)) {
+        m_annotated_prop_cells += 1;
+      }
+    } else {
+      m_annotated_prop_cells += 1;
     }
 
   }
@@ -1222,18 +1245,18 @@ std::list<string> *EntityAnn::get_entities_of_class(string class_uri) {
 }
 
 
-std::list<string> *EntityAnn::annotate_entity_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
+std::list<string> *EntityAnn::annotate_entity_property_permissive(std::list<std::list<string>*> *data, string class_uri,
     long property_idx) {
   std::list<string> *subjects;
   std::list<string> *annotations;
 
   subjects = get_entities_of_class(class_uri);
-  annotations =  entity_property_heuristic_intermediate(data, subjects, property_idx);
+  annotations =  entity_property_permissive_intermediate(data, subjects, property_idx);
   delete subjects;
   return annotations;
 }
 
-std::list<string> *EntityAnn::entity_property_heuristic_intermediate(std::list<std::list<string>*> *data,
+std::list<string> *EntityAnn::entity_property_permissive_intermediate(std::list<std::list<string>*> *data,
     std::list<string> *subjects, long property_idx) {
   std::list<string>::iterator col_iter;
   hdt::IteratorTripleString *itt;
@@ -1273,18 +1296,18 @@ std::list<string> *EntityAnn::entity_property_heuristic_intermediate(std::list<s
   return get_properties_from_map();
 }
 
-std::list<string> *EntityAnn::annotate_text_property_heuristic(std::list<std::list<string>*> *data, string class_uri,
+std::list<string> *EntityAnn::annotate_text_property_permissive(std::list<std::list<string>*> *data, string class_uri,
     long property_idx) {
   std::list<string> *annotations;
   std::list<string> *subjects;
 
   subjects = get_entities_of_class(class_uri);
-  annotations = text_property_heuristic_intermediate(data, subjects, property_idx);
+  annotations = text_property_permissive_intermediate(data, subjects, property_idx);
   delete subjects;
   return annotations;
 }
 
-std::list<string> *EntityAnn::text_property_heuristic_intermediate(std::list<std::list<string>*> *data,
+std::list<string> *EntityAnn::text_property_permissive_intermediate(std::list<std::list<string>*> *data,
     std::list<string>  *subjects, long property_idx) {
   std::list<string>::iterator col_iter;
   hdt::IteratorTripleString *itt;
@@ -1306,7 +1329,7 @@ std::list<string> *EntityAnn::text_property_heuristic_intermediate(std::list<std
     objects->push_back(another);
   }
 
-  m_logger->log("annotate_text_property_heuristic> num subjects: " + to_string(subjects->size()));
+  m_logger->log("annotate_text_property_permissive> num subjects: " + to_string(subjects->size()));
   this->search_and_append_relations_with_objects(subjects, objects);
 
 //  delete subjects;
@@ -1369,7 +1392,6 @@ void EntityAnn::search_and_append_relations_with_objects(std::list<string> *subj
           itt = m_hdt->search(subject_uri.c_str(), "", object_tagged.c_str());
 
           while (itt->hasNext()) {
-            property_found = true;
             triple = itt->next();
             property_uri = triple->getPredicate();
             add_property_count(property_uri);
