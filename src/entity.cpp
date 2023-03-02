@@ -1043,6 +1043,10 @@ std::list<string> *EntityAnn::annotate_property_column_restrictive(std::list<std
       m_annotated_prop_cells += 1;
     }
 
+    if (m_sample_size > 0 && m_annotated_prop_cells >= m_sample_size) {
+      break;
+    }
+
   }
 
   return get_properties_from_map();
@@ -1266,6 +1270,7 @@ std::list<string> *EntityAnn::entity_property_permissive_intermediate(std::list<
   string tcased;
   string another, subject_uri, entity_uri, property_uri;
   m_properties_counts = new std::unordered_map<string, unsigned long>;
+  m_annotated_prop_cells = 0;
 
   for (auto it = data->cbegin(); it != data->cend(); it++) {
     if (it == data->cbegin()) { // to skip the header
@@ -1285,11 +1290,16 @@ std::list<string> *EntityAnn::entity_property_permissive_intermediate(std::list<
       }
     }
 
+//    if (ent->size() > 0) {
+//      m_annotated_prop_cells += 1;
+//    }
+
     entities->merge(*ent);
+
     delete ent;
   }
 
-  this->search_and_append_relations_with_entities(subjects, entities);
+  m_annotated_prop_cells = this->search_and_append_relations_with_entities(subjects, entities);
 
 //  delete subjects;
   delete entities;
@@ -1318,6 +1328,8 @@ std::list<string> *EntityAnn::text_property_permissive_intermediate(std::list<st
   string another, subject_uri, entity_uri, property_uri;
   m_properties_counts = new std::unordered_map<string, unsigned long>;
 
+  m_annotated_prop_cells = 0;
+
   for (auto it = data->cbegin(); it != data->cend(); it++) {
     if (it == data->cbegin()) { // to skip the header
       continue;
@@ -1327,10 +1339,16 @@ std::list<string> *EntityAnn::text_property_permissive_intermediate(std::list<st
     std::advance(col_iter, property_idx);
     another = *col_iter;
     objects->push_back(another);
+    m_annotated_prop_cells++;
+
+    if (m_sample_size > 0 && m_annotated_prop_cells >= m_sample_size) {
+      break;
+    }
+
   }
 
   m_logger->log("annotate_text_property_permissive> num subjects: " + to_string(subjects->size()));
-  this->search_and_append_relations_with_objects(subjects, objects);
+  m_annotated_prop_cells = this->search_and_append_relations_with_objects(subjects, objects);
 
 //  delete subjects;
   delete objects;
@@ -1338,18 +1356,24 @@ std::list<string> *EntityAnn::text_property_permissive_intermediate(std::list<st
 }
 
 
-void EntityAnn::search_and_append_relations_with_entities(std::list<string> *subjects, std::list<string> *objects) {
+unsigned long EntityAnn::search_and_append_relations_with_entities(std::list<string> *subjects,
+    std::list<string> *objects) {
   string another, subject_uri, entity_uri, property_uri;
   hdt::IteratorTripleString *itt;
   hdt::TripleString *triple;
+  bool found;
+  unsigned long annotated = 0;
 
   for (auto it = objects->cbegin(); it != objects->cend(); it++) {
+    found = false;
+
     for (auto it2 = subjects->cbegin(); it2 != subjects->cend(); it2++) {
       subject_uri = (*it2);
       entity_uri = (*it);
       itt = m_hdt->search(subject_uri.c_str(), "", entity_uri.c_str());
 
       while (itt->hasNext()) {
+        found = true;
         triple = itt->next();
         property_uri = triple->getPredicate();
         add_property_count(property_uri);
@@ -1357,14 +1381,22 @@ void EntityAnn::search_and_append_relations_with_entities(std::list<string> *sub
 
       delete itt;
     }
+
+    if (found) {
+      annotated++;
+    }
   }
+
+  return annotated;
 }
 
-void EntityAnn::search_and_append_relations_with_objects(std::list<string> *subjects, std::list<string> *objects) {
+unsigned long EntityAnn::search_and_append_relations_with_objects(std::list<string> *subjects,
+    std::list<string> *objects) {
   string another, subject_uri, object_text, object_cased, object_tagged, property_uri;
   bool property_found;
   hdt::IteratorTripleString *itt;
   hdt::TripleString *triple;
+  unsigned long annotated = 0;
 
   for (auto it = objects->cbegin(); it != objects->cend(); it++) {
     for (auto it2 = subjects->cbegin(); it2 != subjects->cend(); it2++) {
@@ -1392,6 +1424,7 @@ void EntityAnn::search_and_append_relations_with_objects(std::list<string> *subj
           itt = m_hdt->search(subject_uri.c_str(), "", object_tagged.c_str());
 
           while (itt->hasNext()) {
+            property_found = true;
             triple = itt->next();
             property_uri = triple->getPredicate();
             add_property_count(property_uri);
@@ -1399,10 +1432,17 @@ void EntityAnn::search_and_append_relations_with_objects(std::list<string> *subj
 
           delete itt;
 
+          if (property_found) {
+            annotated++;
+          }
         }
+      } else if (property_found) {
+        annotated++;
       }
     }
   }
+
+  return annotated;
 }
 
 bool EntityAnn::add_property_count(string property_uri) {
@@ -1479,5 +1519,9 @@ long EntityAnn::get_sample_size() {
 
 unsigned long EntityAnn::get_m() {
   return m_m;
+}
+
+unsigned long EntityAnn::get_num_annotated_property_cells() {
+  return m_annotated_prop_cells;
 }
 

@@ -191,7 +191,7 @@ class EntityAnn {
    * @param entities list of entity uris.
    *
    */
-  void search_and_append_relations_with_entities(std::list<string> *subjects, std::list<string> *entities);
+  unsigned long search_and_append_relations_with_entities(std::list<string> *subjects, std::list<string> *entities);
   /**
    * Extract relations between subjects and objects using bruteforce.
    *
@@ -203,7 +203,7 @@ class EntityAnn {
    * @param objects list of objects uris.
    *
    */
-  void search_and_append_relations_with_objects(std::list<string> *subjects, std::list<string> *entities);
+  unsigned long search_and_append_relations_with_objects(std::list<string> *subjects, std::list<string> *entities);
   bool add_property_count(string property_uri);
   std::list<string> *get_entities_of_class(string);
   std::list<string> *get_properties_from_map();
@@ -230,6 +230,7 @@ class EntityAnn {
     return (stat(name.c_str(), &buffer) == 0);
   }
 
+  unsigned long get_num_annotated_property_cells();
  private:
   EasyLogger *m_logger;
   hdt::HDT *m_hdt;

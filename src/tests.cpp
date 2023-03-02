@@ -485,7 +485,7 @@ TEST(EntityTest, textColumn) {
   ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
 }
 
-TEST(EntityTest, textTitlecaseColumn) {
+TEST(EntityTest, textTitlecaseColumnRestrictive) {
   string dbp_color = "http://dbpedia.org/property/color";
   std::list<std::list<string>*> *data;
   std::list<string> *properties;
@@ -499,6 +499,22 @@ TEST(EntityTest, textTitlecaseColumn) {
 //        cout << "target: <"<<dbp_country<<"> "<<endl;
   ASSERT_EQ(properties->size(), 1);
   ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
+  ASSERT_EQ(ea->get_num_annotated_property_cells(), 2);
+}
+
+TEST(EntityTest, textTitlecaseColumnRestrictiveLimit) {
+  string dbp_color = "http://dbpedia.org/property/color";
+  std::list<std::list<string>*> *data;
+  std::list<string> *properties;
+  Parser p(base_dir + "test_files/test12.csv");
+  data = p.parse_vertical();
+  EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.9);
+  ea->set_title_case(true);
+  ea->set_sample_size(1);
+  properties = ea->annotate_property_column_restrictive(data, 1, 2);
+  ASSERT_EQ(properties->size(), 1);
+  ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
+  ASSERT_EQ(ea->get_num_annotated_property_cells(), 1);
 }
 
 TEST(EntityTest, textTitlecaseHeuristicColumn) {
@@ -514,7 +530,7 @@ TEST(EntityTest, textTitlecaseHeuristicColumn) {
   ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
 }
 
-TEST(EntityTest, nonSubjectColumns) {
+TEST(EntityTest, nonSubjectColumnsRestrictive) {
   string dbp_country = "http://dbpedia.org/property/country";
   std::list<std::list<string>*> *data;
   std::list<string> *properties;
@@ -542,9 +558,26 @@ TEST(EntityTest, textColumnspermissive) {
   ASSERT_EQ(0, properties->size());
   properties = ea->annotate_text_property_permissive(data, class_uri, 2);
   ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
+  ASSERT_EQ(ea->get_num_annotated_property_cells(), 2);
 }
 
-TEST(EntityTest, textTitlecaseColumnspermissive) {
+TEST(EntityTest, textColumnspermissiveLimit) {
+  string dbp_color = "http://dbpedia.org/property/color";
+  string class_uri = "http://dbpedia.org/ontology/Boot";
+  std::list<std::list<string>*> *data;
+  std::list<string> *properties;
+  Parser p(base_dir + "test_files/test11.csv");
+  data = p.parse_vertical();
+  EntityAnn *ea = new EntityAnn(hdt_file, log_file, 0.9);
+  ea->set_title_case(false);
+  ea->set_sample_size(1);
+  properties = ea->annotate_text_property_permissive(data, class_uri, 2);
+  ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
+  ASSERT_EQ(ea->get_num_annotated_property_cells(), 1);
+}
+
+
+TEST(EntityTest, textTitlecaseColumnsPermissive) {
   string dbp_color = "http://dbpedia.org/property/color";
   string class_uri = "http://dbpedia.org/ontology/Boot";
   std::list<std::list<string>*> *data;
@@ -559,7 +592,7 @@ TEST(EntityTest, textTitlecaseColumnspermissive) {
   ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
 }
 
-TEST(EntityTest, textTitlecaseColumnsheuristic) {
+TEST(EntityTest, textTitlecaseColumnsHeuristic) {
   string dbp_color = "http://dbpedia.org/property/color";
   string class_uri = "http://dbpedia.org/ontology/Boot";
   std::list<std::list<string>*> *data;
@@ -572,7 +605,7 @@ TEST(EntityTest, textTitlecaseColumnsheuristic) {
   ASSERT_STREQ(properties->front().c_str(), dbp_color.c_str());
 }
 
-TEST(EntityTest, nonSubjectColumnspermissive) {
+TEST(EntityTest, nonSubjectColumnsPermissive) {
   string dbp_country = "http://dbpedia.org/property/country";
   string class_uri = "http://dbpedia.org/ontology/Wrestler";
   std::list<std::list<string>*> *data;
