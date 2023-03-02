@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['search_5fand_5fappend_5frelations_5fwith_5fentities_0',['search_and_append_relations_with_entities',['../class_entity_ann.html#a91e3c0aad5a7aa609f34022dae35bfeb',1,'EntityAnn']]],
-  ['search_5fand_5fappend_5frelations_5fwith_5fobjects_1',['search_and_append_relations_with_objects',['../class_entity_ann.html#a5d467669c517005a59dcf3035e493ac8',1,'EntityAnn']]],
+  ['search_5fand_5fappend_5frelations_5fwith_5fentities_0',['search_and_append_relations_with_entities',['../class_entity_ann.html#ad15cebb25fde006ffa3bfe40ced4777a',1,'EntityAnn']]],
+  ['search_5fand_5fappend_5frelations_5fwith_5fobjects_1',['search_and_append_relations_with_objects',['../class_entity_ann.html#ad52d4943e7c94a901796cb01da9a3249',1,'EntityAnn']]],
   ['set_5falpha_2',['set_alpha',['../class_entity_ann.html#a2c6921256787fb5a81a1864f00e8e2a2',1,'EntityAnn']]],
   ['set_5flanguage_5ftag_3',['set_language_tag',['../class_entity_ann.html#a038f978b3dcb39bb5c0f6c5a5e4d0b54',1,'EntityAnn']]],
   ['set_5froot_4',['set_root',['../class_graph.html#adb4e0f3eb8b1173360f51a4e17b76220',1,'Graph']]],
