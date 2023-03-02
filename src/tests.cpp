@@ -576,7 +576,6 @@ TEST(EntityTest, textColumnspermissiveLimit) {
   ASSERT_EQ(ea->get_num_annotated_property_cells(), 1);
 }
 
-
 TEST(EntityTest, textTitlecaseColumnsPermissive) {
   string dbp_color = "http://dbpedia.org/property/color";
   string class_uri = "http://dbpedia.org/ontology/Boot";
